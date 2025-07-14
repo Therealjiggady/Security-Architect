@@ -1,4 +1,3 @@
-8
 import random
 
 # Random number between 1 and 10
