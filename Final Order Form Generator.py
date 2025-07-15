@@ -186,3 +186,99 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Clover Line E-Commerce App
+# Master Python File (all modules integrated)
+
+# You can copy modules from each individual file into this script to build a complete app.
+# Starting template:
+
+# Imports
+import tkinter as tk
+from tkinter import messagebox, ttk
+
+# Data and Global Variables
+products = [
+    {"name": "High-Waist Biker Shorts", "category": "Biker Shorts", "price": 35, "popularity": 4},
+    {"name": "Slim Scrubs Set", "category": "Scrubs", "price": 50, "popularity": 5},
+    {"name": "Padded Sports Bra", "category": "Sports Bras", "price": 30, "popularity": 3},
+]
+
+wishlist = []
+cart = {}
+
+# Functions
+
+def filter_and_sort():
+    category = category_filter.get()
+    sort_key = sort_option.get()
+
+    filtered = [p for p in products if category == "All" or p["category"] == category]
+    sorted_products = sorted(filtered, key=lambda x: x[sort_key.lower()], reverse=(sort_key != "price"))
+
+    listbox.delete(0, tk.END)
+    for p in sorted_products:
+        listbox.insert(tk.END, f"{p['name']} - ${p['price']}")
+
+def add_to_wishlist():
+    item = product_entry.get()
+    if item:
+        wishlist.append(item)
+        wishlist_listbox.insert(tk.END, item)
+        product_entry.delete(0, tk.END)
+
+def add_to_cart():
+    item = cart_item_entry.get()
+    price = cart_price_entry.get()
+    if item and price:
+        try:
+            cart[item] = float(price)
+            update_cart()
+        except ValueError:
+            messagebox.showerror("Invalid Input", "Price must be a number")
+
+def update_cart():
+    cart_listbox.delete(0, tk.END)
+    for item, price in cart.items():
+        cart_listbox.insert(tk.END, f"{item} - ${price:.2f}")
+    total_label.config(text=f"Total: ${sum(cart.values()):.2f}")
+
+# GUI Setup
+root = tk.Tk()
+root.title("Clover Line - E-Commerce GUI")
+
+# Product Catalog
+tk.Label(root, text="\nProduct Catalog").pack()
+category_filter = tk.StringVar(value="All")
+sort_option = tk.StringVar(value="price")
+
+ttk.Combobox(root, textvariable=category_filter, values=["All", "Biker Shorts", "Scrubs", "Sports Bras"]).pack()
+ttk.Combobox(root, textvariable=sort_option, values=["price", "popularity"]).pack()
+tk.Button(root, text="Apply Filter", command=filter_and_sort).pack()
+
+listbox = tk.Listbox(root, width=50)
+listbox.pack()
+
+# Wishlist
+tk.Label(root, text="\nAdd to Wishlist").pack()
+product_entry = tk.Entry(root)
+product_entry.pack()
+tk.Button(root, text="Add", command=add_to_wishlist).pack()
+wishlist_listbox = tk.Listbox(root)
+wishlist_listbox.pack()
+
+# Cart System
+tk.Label(root, text="\nShopping Cart").pack()
+cart_item_entry = tk.Entry(root)
+cart_item_entry.pack()
+cart_price_entry = tk.Entry(root)
+cart_price_entry.pack()
+tk.Button(root, text="Add to Cart", command=add_to_cart).pack()
+
+cart_listbox = tk.Listbox(root)
+cart_listbox.pack()
+total_label = tk.Label(root, text="Total: $0.00")
+total_label.pack()
+
+# Start
+filter_and_sort()
+root.mainloop()
