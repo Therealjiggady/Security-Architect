@@ -276,8 +276,8 @@ class ClothingSizeApp:
             return
         
         filename = filedialog.asksaveasfilename(
-            defaultextension=".csv",
-            filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
+            defaultextension=".txt",
+            filetypes=[("text files", "*.txt"), ("All files", "*.*")],
             title="Save Recommendation"
         )
         
