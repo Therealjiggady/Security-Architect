@@ -8,7 +8,7 @@ class ClothingSizeApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Clothing Size Recommendation System")
-        self.root.geometry("600x700")
+        self.root.geometry("600x780")
         self.root.resizable(True, True)
         
         # Variables
@@ -16,6 +16,8 @@ class ClothingSizeApp:
         self.waist_var = tk.StringVar()
         self.hips_var = tk.StringVar()
         self.inseam_var = tk.StringVar()
+        self.height_var = tk.StringVar()
+        self.weight_var = tk.StringVar()
         self.product_var = tk.StringVar()
         self.activity_var = tk.StringVar()
         
@@ -56,6 +58,14 @@ class ClothingSizeApp:
         ttk.Label(measurements_frame, text="Inseam:").grid(row=3, column=0, sticky=tk.W, padx=(0, 10), pady=(5, 0))
         ttk.Entry(measurements_frame, textvariable=self.inseam_var, width=15).grid(row=3, column=1, sticky=tk.W, pady=(5, 0))
         
+        ttk.Separator(measurements_frame, orient=tk.HORIZONTAL).grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=10)
+        
+        ttk.Label(measurements_frame, text="Height (inches):").grid(row=5, column=0, sticky=tk.W, padx=(0, 10))
+        ttk.Entry(measurements_frame, textvariable=self.height_var, width=15).grid(row=5, column=1, sticky=tk.W)
+        
+        ttk.Label(measurements_frame, text="Weight (pounds):").grid(row=6, column=0, sticky=tk.W, padx=(0, 10), pady=(5, 0))
+        ttk.Entry(measurements_frame, textvariable=self.weight_var, width=15).grid(row=6, column=1, sticky=tk.W, pady=(5, 0))
+        
         # Product selection section
         product_frame = ttk.LabelFrame(main_frame, text="Product Information", padding="10")
         product_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
@@ -81,7 +91,7 @@ class ClothingSizeApp:
         results_frame = ttk.LabelFrame(main_frame, text="Recommendation", padding="10")
         results_frame.grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10))
         
-        self.result_text = tk.Text(results_frame, height=8, width=60, wrap=tk.WORD)
+        self.result_text = tk.Text(results_frame, height=10, width=60, wrap=tk.WORD)
         scrollbar = ttk.Scrollbar(results_frame, orient="vertical", command=self.result_text.yview)
         self.result_text.configure(yscrollcommand=scrollbar.set)
         
@@ -138,20 +148,73 @@ class ClothingSizeApp:
                                        state="readonly", width=15)
             padding_combo.grid(row=0, column=1, sticky=tk.W)
     
-    def validate_inputs(self):
+    def estimate_size_from_height_weight(self, height, weight):
+        """Estimate size based on BMI from height (inches) and weight (pounds)."""
         try:
-            bust = float(self.bust_var.get())
-            waist = float(self.waist_var.get())
-            hips = float(self.hips_var.get())
-            inseam = float(self.inseam_var.get())
-            
-            if bust <= 0 or waist <= 0 or hips <= 0 or inseam <= 0:
-                raise ValueError("Measurements must be positive numbers")
-                
-        except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter valid positive numbers for all measurements.")
+            height_m = float(height) * 0.0254
+            weight_kg = float(weight) * 0.453592
+            bmi = weight_kg / (height_m ** 2)
+            if bmi < 18.5:
+                return "XS"
+            elif bmi < 21:
+                return "S"
+            elif bmi < 25:
+                return "M"
+            elif bmi < 29:
+                return "L"
+            else:
+                return "XL"
+        except Exception as e:
+            print("Error estimating size:", e)
+            return "Unknown"
+    
+    def validate_inputs(self):
+        # Validate bust, waist, hips, inseam if present
+        # At least either full measurements or height & weight required
+        
+        bust = self.bust_var.get().strip()
+        waist = self.waist_var.get().strip()
+        hips = self.hips_var.get().strip()
+        inseam = self.inseam_var.get().strip()
+        height = self.height_var.get().strip()
+        weight = self.weight_var.get().strip()
+        
+        # Check that either bust/waist/hips all filled or height & weight filled
+        has_full_measurements = all([bust, waist, hips])
+        has_height_weight = all([height, weight])
+        
+        if not has_full_measurements and not has_height_weight:
+            messagebox.showwarning("Missing Info", "Please enter either full measurements (bust, waist, hips) OR height and weight.")
             return False
         
+        # Validate numeric and positive for filled fields
+        def is_positive_float(value):
+            try:
+                val = float(value)
+                return val > 0
+            except:
+                return False
+        
+        # Validate full measurements if present
+        if has_full_measurements:
+            for val, name in [(bust, "Bust"), (waist, "Waist"), (hips, "Hips")]:
+                if not is_positive_float(val):
+                    messagebox.showerror("Invalid Input", f"Please enter a valid positive number for {name}.")
+                    return False
+        
+        # Validate inseam if entered
+        if inseam and not is_positive_float(inseam):
+            messagebox.showerror("Invalid Input", "Please enter a valid positive number for Inseam.")
+            return False
+        
+        # Validate height & weight if present
+        if has_height_weight:
+            for val, name in [(height, "Height"), (weight, "Weight")]:
+                if not is_positive_float(val):
+                    messagebox.showerror("Invalid Input", f"Please enter a valid positive number for {name}.")
+                    return False
+        
+        # Validate product and activity selections
         if not self.product_var.get():
             messagebox.showerror("Missing Information", "Please select a product type.")
             return False
@@ -175,7 +238,7 @@ class ClothingSizeApp:
         return True
     
     def calculate_size(self, bust, waist, hips):
-        # Basic size calculation logic
+        # Basic size calculation logic based on average measurements
         measurements = [bust, waist, hips]
         avg_measurement = sum(measurements) / len(measurements)
         
@@ -196,29 +259,54 @@ class ClothingSizeApp:
         if not self.validate_inputs():
             return
         
-        bust = float(self.bust_var.get())
-        waist = float(self.waist_var.get())
-        hips = float(self.hips_var.get())
-        inseam = float(self.inseam_var.get())
+        # Parse inputs safely
+        bust = self.bust_var.get().strip()
+        waist = self.waist_var.get().strip()
+        hips = self.hips_var.get().strip()
+        inseam = self.inseam_var.get().strip()
+        height = self.height_var.get().strip()
+        weight = self.weight_var.get().strip()
         product = self.product_var.get()
         activity = self.activity_var.get()
         
-        # Calculate base size
-        base_size = self.calculate_size(bust, waist, hips)
+        # Convert to floats where possible
+        bust_val = float(bust) if bust else None
+        waist_val = float(waist) if waist else None
+        hips_val = float(hips) if hips else None
+        inseam_val = float(inseam) if inseam else None
+        height_val = float(height) if height else None
+        weight_val = float(weight) if weight else None
+        
+        # Determine base size by measurements or fallback to height/weight
+        if bust_val and waist_val and hips_val:
+            base_size = self.calculate_size(bust_val, waist_val, hips_val)
+        else:
+            base_size = self.estimate_size_from_height_weight(height_val, weight_val)
+        
         recommended_size = base_size
         
-        # Product-specific logic
+        # Build recommendation text
         recommendation_text = f"=== SIZE RECOMMENDATION ===\n\n"
         recommendation_text += f"Product: {product}\n"
         recommendation_text += f"Activity: {activity}\n"
-        recommendation_text += f"Measurements: Bust {bust}\", Waist {waist}\", Hips {hips}\", Inseam {inseam}\"\n\n"
         
+        meas_list = []
+        if bust_val: meas_list.append(f"Bust {bust_val}\"")
+        if waist_val: meas_list.append(f"Waist {waist_val}\"")
+        if hips_val: meas_list.append(f"Hips {hips_val}\"")
+        if inseam_val: meas_list.append(f"Inseam {inseam_val}\"")
+        if height_val: meas_list.append(f"Height {height_val}\"")
+        if weight_val: meas_list.append(f"Weight {weight_val} lbs")
+        
+        recommendation_text += "Measurements: " + ", ".join(meas_list) + "\n\n"
+        
+        # Product-specific logic
         if product == "Scrubs":
             fit = self.fit_var.get()
             layers = self.layers_var.get()
             
             if fit == "Loose" or layers:
-                # Size up for loose fit or layers
+                # Size up for loose fit or layering
                 size_map = {"XS": "S", "S": "M", "M": "L", "L": "XL", "XL": "XXL", "XXL": "XXL"}
                 recommended_size = size_map.get(base_size, base_size)
             elif fit == "Slim":
@@ -238,12 +326,15 @@ class ClothingSizeApp:
             recommendation_text += f"Recommended Size: {recommended_size}\n"
             recommendation_text += f"Padding: {padding}\n"
             
-            if bust >= 38 and padding == "Padded":
-                recommendation_text += "\n⚠️  Tip: For larger bust sizes, consider unpadded options for better support and comfort during high-impact activities."
-            elif activity in ["Running", "Gym/Fitness"] and bust >= 36:
-                recommendation_text += "\n💡 Tip: For high-impact activities with your bust size, look for sports bras with additional support features."
+            if bust_val is not None:
+                if bust_val >= 38 and padding == "Padded":
+                    recommendation_text += "\n⚠️  Tip: For larger bust sizes, consider unpadded options for better support and comfort during high-impact activities."
+                elif activity in ["Running", "Gym/Fitness"] and bust_val >= 36:
+                    recommendation_text += "\n💡 Tip: For high-impact activities with your bust size, look for sports bras with additional support features."
+                else:
+                    recommendation_text += f"\n💡 Tip: {padding} option works well for your measurements and {activity.lower()} activities."
             else:
-                recommendation_text += f"\n💡 Tip: {padding} option works well for your measurements and {activity.lower()} activities."
+                recommendation_text += f"\n💡 Tip: {padding} option works well for your selected activity."
                 
         elif product == "Biker Shorts":
             length = self.length_var.get()
@@ -258,8 +349,8 @@ class ClothingSizeApp:
             elif length == "Above-Knee":
                 recommendation_text += "\n💡 Tip: Above-knee length offers maximum freedom of movement for high-intensity activities."
             
-            if inseam < 28:
-                recommendation_text += f"\n📏 Note: With your {inseam}\" inseam, consider the {length.lower()} length for optimal fit."
+            if inseam_val is not None and inseam_val < 28:
+                recommendation_text += f"\n📏 Note: With your {inseam_val}\" inseam, consider the {length.lower()} length for optimal fit."
         
         recommendation_text += f"\n\n=== SUMMARY ===\n"
         recommendation_text += f"Final Recommendation: {recommended_size}\n"
@@ -288,7 +379,7 @@ class ClothingSizeApp:
                 
                 with open(filename, 'a', newline='', encoding='utf-8') as csvfile:
                     fieldnames = ['timestamp', 'product', 'activity', 'bust', 'waist', 'hips', 
-                                'inseam', 'recommended_size', 'product_options', 'full_recommendation']
+                                'inseam', 'height', 'weight', 'recommended_size', 'product_options', 'full_recommendation']
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     
                     if not file_exists:
@@ -318,6 +409,8 @@ class ClothingSizeApp:
                         'waist': self.waist_var.get(),
                         'hips': self.hips_var.get(),
                         'inseam': self.inseam_var.get(),
+                        'height': self.height_var.get(),
+                        'weight': self.weight_var.get(),
                         'recommended_size': rec_size,
                         'product_options': options,
                         'full_recommendation': self.recommendation.replace('\n', ' | ')
@@ -334,6 +427,8 @@ class ClothingSizeApp:
         self.waist_var.set("")
         self.hips_var.set("")
         self.inseam_var.set("")
+        self.height_var.set("")
+        self.weight_var.set("")
         self.product_var.set("")
         self.activity_var.set("")
         self.length_var.set("")
