@@ -2,10 +2,13 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import csv
 import os
+import re
 from datetime import datetime
 
 class ClothingSizeApp:
+    """GUI application to recommend clothing sizes based on user input."""
     def __init__(self, root):
+        """Initialize the main application window and variables."""
         self.root = root
         self.root.title("Clothing Size Recommendation System")
         self.root.geometry("600x780")
@@ -33,7 +36,7 @@ class ClothingSizeApp:
         self.setup_ui()
         
     def setup_ui(self):
-        # Main frame
+        """Build the GUI layout including all input fields and buttons."""
         main_frame = ttk.Frame(self.root, padding="20")
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
@@ -60,7 +63,7 @@ class ClothingSizeApp:
         
         ttk.Separator(measurements_frame, orient=tk.HORIZONTAL).grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=10)
         
-        ttk.Label(measurements_frame, text="Height (inches):").grid(row=5, column=0, sticky=tk.W, padx=(0, 10))
+        ttk.Label(measurements_frame, text="Height (e.g., 5'8):").grid(row=5, column=0, sticky=tk.W, padx=(0, 10))
         ttk.Entry(measurements_frame, textvariable=self.height_var, width=15).grid(row=5, column=1, sticky=tk.W)
         
         ttk.Label(measurements_frame, text="Weight (pounds):").grid(row=6, column=0, sticky=tk.W, padx=(0, 10), pady=(5, 0))
@@ -118,7 +121,7 @@ class ClothingSizeApp:
         results_frame.rowconfigure(0, weight=1)
         
     def on_product_change(self, event=None):
-        # Clear previous options
+        """Dynamically show product-specific options based on selection."""
         for widget in self.options_frame.winfo_children():
             widget.destroy()
             
@@ -148,10 +151,37 @@ class ClothingSizeApp:
                                        state="readonly", width=15)
             padding_combo.grid(row=0, column=1, sticky=tk.W)
     
-    def estimate_size_from_height_weight(self, height, weight):
-        """Estimate size based on BMI from height (inches) and weight (pounds)."""
+    def parse_height(self, height_str):
+        """Convert height in format like 5'8 into total inches."""
         try:
-            height_m = float(height) * 0.0254
+            height_str = height_str.strip()
+            # Use regex to match patterns like 6'2, 5'8, etc.
+            match = re.match(r"(\d+)'(\d+)", height_str)
+            if match:
+                feet = int(match.group(1))
+                inches = int(match.group(2))
+                total_inches = feet * 12 + inches
+                return total_inches
+            else:
+                # Try to match just feet without inches like 6' or 5
+                match_feet_only = re.match(r"(\d+)'?$", height_str)
+                if match_feet_only:
+                    feet = int(match_feet_only.group(1))
+                    return feet * 12
+                else:
+                    return None
+        except Exception as e:
+            print("Error parsing height:", e)
+            return None
+    
+    def estimate_size_from_height_weight(self, height_str, weight):
+        """Estimate clothing size using BMI from height/weight."""
+        try:
+            height_inches = self.parse_height(height_str)
+            if height_inches is None:
+                return "Unknown"
+            
+            height_m = height_inches * 0.0254
             weight_kg = float(weight) * 0.453592
             bmi = weight_kg / (height_m ** 2)
             if bmi < 18.5:
@@ -169,8 +199,7 @@ class ClothingSizeApp:
             return "Unknown"
     
     def validate_inputs(self):
-        # Validate bust, waist, hips, inseam if present
-        # At least either full measurements or height & weight required
+        """Validate form inputs before generating recommendation."""
         
         bust = self.bust_var.get().strip()
         waist = self.waist_var.get().strip()
@@ -209,10 +238,22 @@ class ClothingSizeApp:
         
         # Validate height & weight if present
         if has_height_weight:
-            for val, name in [(height, "Height"), (weight, "Weight")]:
-                if not is_positive_float(val):
-                    messagebox.showerror("Invalid Input", f"Please enter a valid positive number for {name}.")
+            # Validate height format
+            if height and self.parse_height(height) is None:
+                messagebox.showerror("Invalid Input", "Please enter height in format like 5'8 or 6'2.")
+                return False
+            
+            # Validate height range (between 3' and 8' seems reasonable)
+            if height:
+                height_inches = self.parse_height(height)
+                if height_inches and (height_inches < 36 or height_inches > 96):
+                    messagebox.showerror("Invalid Input", "Height seems unrealistic. Please enter a height between 3'0 and 8'0.")
                     return False
+            
+            # Validate weight
+            if weight and not is_positive_float(weight):
+                messagebox.showerror("Invalid Input", "Please enter a valid positive number for Weight.")
+                return False
         
         # Validate product and activity selections
         if not self.product_var.get():
@@ -238,7 +279,7 @@ class ClothingSizeApp:
         return True
     
     def calculate_size(self, bust, waist, hips):
-        # Basic size calculation logic based on average measurements
+        """Calculate clothing size using average of bust/waist/hips."""
         measurements = [bust, waist, hips]
         avg_measurement = sum(measurements) / len(measurements)
         
@@ -256,6 +297,7 @@ class ClothingSizeApp:
             return "XXL"
     
     def calculate_recommendation(self):
+        """Generate recommendation and display it in the result box."""
         if not self.validate_inputs():
             return
         
@@ -274,14 +316,13 @@ class ClothingSizeApp:
         waist_val = float(waist) if waist else None
         hips_val = float(hips) if hips else None
         inseam_val = float(inseam) if inseam else None
-        height_val = float(height) if height else None
         weight_val = float(weight) if weight else None
         
         # Determine base size by measurements or fallback to height/weight
         if bust_val and waist_val and hips_val:
             base_size = self.calculate_size(bust_val, waist_val, hips_val)
         else:
-            base_size = self.estimate_size_from_height_weight(height_val, weight_val)
+            base_size = self.estimate_size_from_height_weight(height, weight_val)
         
         recommended_size = base_size
         
@@ -295,7 +336,7 @@ class ClothingSizeApp:
         if waist_val: meas_list.append(f"Waist {waist_val}\"")
         if hips_val: meas_list.append(f"Hips {hips_val}\"")
         if inseam_val: meas_list.append(f"Inseam {inseam_val}\"")
-        if height_val: meas_list.append(f"Height {height_val}\"")
+        if height: meas_list.append(f"Height {height}")
         if weight_val: meas_list.append(f"Weight {weight_val} lbs")
         
         recommendation_text += "Measurements: " + ", ".join(meas_list) + "\n\n"
@@ -362,6 +403,7 @@ class ClothingSizeApp:
         self.result_text.insert(1.0, recommendation_text)
     
     def save_to_csv(self):
+        """Export recommendation to a CSV file."""
         if not self.recommendation:
             messagebox.showwarning("No Recommendation", "Please generate a recommendation first.")
             return
@@ -422,7 +464,7 @@ class ClothingSizeApp:
                 messagebox.showerror("Error", f"Failed to save file: {str(e)}")
     
     def reset_form(self):
-        # Clear all variables
+        """Clear all fields and reset the form to its initial state."""
         self.bust_var.set("")
         self.waist_var.set("")
         self.hips_var.set("")
@@ -445,6 +487,7 @@ class ClothingSizeApp:
             widget.destroy()
 
 def main():
+    """Run the application."""
     root = tk.Tk()
     app = ClothingSizeApp(root)
     root.mainloop()
