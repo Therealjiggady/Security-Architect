@@ -11,7 +11,7 @@
   <!-- Header -->
   <header>
     <h1>James Johnson</h1>
-    <p>Security Architect | Full Stack Developer</p>
+    <p>Full Stack Developer</p>
   </header>
 
   <!-- About -->
