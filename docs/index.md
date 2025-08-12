@@ -26,19 +26,7 @@
     <div class="skill-group">
       <h3>Frontend Development</h3>
       <ul>
-        <li>Proficient in React, TailwindCSS, and Python Tkinter for creating responsive and user-friendly interfaces.</li>
-      </ul>
-      <h3>Backend Development</h3>
-      <ul>
-        <li>Experienced in Python frameworks (Flask/Django) with expertise in building scalable server-side applications.</li>
-      </ul>
-      <h3>Database Management</h3>
-      <ul>
-        <li>Skilled in SQLAlchemy, PostgreSQL, and designing optimized database structures with CRUD functionality.</li>
-      </ul>
-      <h3>API Development</h3>
-      <ul>
-        <li>Capable of designing and integrating RESTful APIs with secure JWT-based authentication.</li>
+        <li>Python Tkinter for creating responsive and user-friendly interfaces.</li>
       </ul>
       <h3>Version Control</h3>
       <ul>
@@ -47,8 +35,6 @@
       <h3>UI/UX Design</h3>
       <ul>
         <li>Adept at crafting intuitive layouts that enhance user experience across devices.</li>
-      </ul>
-      <h3>Deployment & Hosting</h3>
       <ul>
         <li>Familiar with GitHub Pages and cloud-based deployment workflows.</li>
       </ul>
