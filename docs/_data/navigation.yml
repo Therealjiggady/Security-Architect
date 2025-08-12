@@ -1,12 +1,12 @@
 # Main navigation links
 main:
   - title: "Home"
-    url: /
+    url: /Security-Architect/
   - title: "About"
-    url: /about
+    url: /Security-Architect/about
   - title: "Projects"
-    url: /projects
+    url: /Security-Architect/projects
   - title: "Resume"
-    url: /resume
+    url: /Security-Architect/resume
   - title: "Contact"
-    url: /contact
+    url: /Security-Architect/contact

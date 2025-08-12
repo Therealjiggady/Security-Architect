@@ -9,7 +9,7 @@ title: Projects
   
   <div class="project-card">
     <h3>SmartFit Size Recommender</h3>
-    <img src="/assets/img/project1.png" alt="SmartFit Project" class="project-image" />
+    <img src="/Security-Architect/assets/img/project1.png" alt="SmartFit Project" class="project-image" />
     <p>Python Tkinter app for personalized clothing size recommendations based on user measurements and brand-specific sizing charts.</p>
     <p><strong>Features:</strong></p>
     <ul>
@@ -23,7 +23,7 @@ title: Projects
   
   <div class="project-card">
     <h3>Weather Dashboard</h3>
-    <img src="/assets/img/project2.png" alt="Weather Dashboard" class="project-image" />
+    <img src="/Security-Architect/assets/img/project2.png" alt="Weather Dashboard" class="project-image" />
     <p>Interactive weather application that provides real-time forecasts and historical weather data visualization.</p>
     <p><strong>Features:</strong></p>
     <ul>
@@ -38,7 +38,7 @@ title: Projects
   
   <div class="project-card">
     <h3>Task Management System</h3>
-    <img src="/assets/img/project3.png" alt="Task Management System" class="project-image" />
+    <img src="/Security-Architect/assets/img/project3.png" alt="Task Management System" class="project-image" />
     <p>Full-stack application for organizing and tracking tasks with team collaboration features.</p>
     <p><strong>Features:</strong></p>
     <ul>
@@ -54,5 +54,5 @@ title: Projects
 
 <footer>
   <p>&copy; 2024 James Johnson. All rights reserved.</p>
-  <img src="/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
+  <img src="/Security-Architect/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
 </footer>

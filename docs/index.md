@@ -6,7 +6,7 @@ title: James Johnson | Portfolio
 <!-- Header -->
 <header>
   <div class="header-content">
-    <img src="/docs/assets/img/dae.png" alt="dae logo" class="dae" />
+    <img src="/Security-Architect/assets/img/dae.png" alt="dae logo" class="dae-logo" />
     <h1>James Johnson</h1>
     <p>Full Stack Developer</p>
     <p>Graduation Date: June 2024</p>
@@ -16,7 +16,7 @@ title: James Johnson | Portfolio
   <!-- About -->
 <section id="about">
   <h2>About Me</h2>
-  <img src="/docs/assets/img/headshot.png" alt="James Johnson" width="200" class="profile-image" />
+  <img src="/Security-Architect/assets/img/headshot.png" alt="James Johnson" width="200" class="profile-image" />
   <p>
     I am a passionate Full Stack Developer dedicated to creating seamless, user-friendly applications by building and integrating both front-end interfaces and back-end systems. I bring strong attributes to every project, including clear communication, accountability, active listening, and adaptability.
   </p>
@@ -93,5 +93,5 @@ title: James Johnson | Portfolio
   <!-- Footer -->
   <footer>
     <p>&copy; 2024 James Johnson. All rights reserved.</p>
-    <img src="/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
+    <img src="/Security-Architect/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
   </footer>

@@ -80,11 +80,11 @@ title: Resume
   </div>
   
   <div class="resume-download">
-    <a href="/assets/files/james_johnson_resume.pdf" class="download-button">Download Full Resume (PDF)</a>
+    <a href="/Security-Architect/assets/files/james_johnson_resume.pdf" class="download-button">Download Full Resume (PDF)</a>
   </div>
 </section>
 
 <footer>
   <p>&copy; 2024 James Johnson. All rights reserved.</p>
-  <img src="/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
+  <img src="/Security-Architect/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
 </footer>
