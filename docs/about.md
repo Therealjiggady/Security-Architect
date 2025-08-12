@@ -5,7 +5,7 @@ title: About Me
 
 <section id="about">
   <h2>About Me</h2>
-  <img src="/docs/assets/img/headshot.png" alt="James Johnson" class="profile-image" />
+  <img src="/assets/img/headshot.png" alt="James Johnson" class="profile-image" />
   <p>
     I am a passionate Full Stack Developer dedicated to creating seamless, user-friendly applications by building and integrating both front-end interfaces and back-end systems. I bring strong attributes to every project, including clear communication, accountability, active listening, and adaptability.
   </p>
