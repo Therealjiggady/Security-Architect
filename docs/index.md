@@ -57,26 +57,10 @@ title: James Johnson | Portfolio
     <h2>Projects</h2>
     <div class="project-card">
       <h3>SmartFit Size Recommender</h3>
-      <img src="/assets/img/project1.png" alt="SmartFit Project" class="project-image" />
+      <img src="/Security-Architect/assets/img/project1.png" alt="SmartFit Project" class="project-image" />
       <p>Python Tkinter app for personalized clothing size recommendations.</p>
       <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
       <a href="https://github.com/example/smartfit" class="project-link">View Code</a>
-    </div>
-    
-    <div class="project-card">
-      <h3>Weather Dashboard</h3>
-      <img src="/assets/img/project2.png" alt="Weather Dashboard" class="project-image" />
-      <p>Interactive weather application that provides real-time forecasts.</p>
-      <p><strong>Tech:</strong> JavaScript, HTML5, CSS3, Weather API</p>
-      <a href="https://github.com/example/weather-dashboard" class="project-link">View Code</a>
-    </div>
-    
-    <div class="project-card">
-      <h3>Task Management System</h3>
-      <img src="/assets/img/project3.png" alt="Task Management System" class="project-image" />
-      <p>Full-stack application for organizing and tracking tasks.</p>
-      <p><strong>Tech:</strong> React, Node.js, MongoDB</p>
-      <a href="https://github.com/example/task-manager" class="project-link">View Code</a>
     </div>
   </section>
 

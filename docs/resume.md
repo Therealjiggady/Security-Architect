@@ -55,16 +55,6 @@ title: Resume
       <h4>SmartFit Size Recommender</h4>
       <p>Python application for personalized clothing size recommendations</p>
     </div>
-    
-    <div class="resume-item">
-      <h4>Weather Dashboard</h4>
-      <p>Interactive weather application with real-time forecasts</p>
-    </div>
-    
-    <div class="resume-item">
-      <h4>Task Management System</h4>
-      <p>Full-stack application for organizing and tracking tasks</p>
-    </div>
   </div>
   
   <div class="resume-section">
