@@ -15,11 +15,15 @@
   </header>
 
   <!-- About -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>James Johnson – Full Stack Developer
-I am a passionate Full Stack Developer dedicated to creating seamless, user-friendly applications by building and integrating both front-end interfaces and back-end systems. I bring strong attributes to every project, including clear communication, accountability, active listening, and adaptability.</p>
-  </section>
+<section id="about">
+  <h2>About Me</h2>
+  <img src="/assets/img/professional_picture.png" alt="James Johnson" width="200" style="border-radius: 50%; display: block; margin: 0 auto;" />
+  <p>
+    James Johnson – Full Stack Developer  
+    I am a passionate Full Stack Developer dedicated to creating seamless, user-friendly applications by building and integrating both front-end interfaces and back-end systems. I bring strong attributes to every project, including clear communication, accountability, active listening, and adaptability.
+  </p>
+</section>
+
 
   <!-- Skills -->
   <section id="skills">
