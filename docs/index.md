@@ -57,10 +57,23 @@ title: James Johnson | Portfolio
     <h2>Projects</h2>
     <div class="project-card">
       <h3>SmartFit Size Recommender</h3>
-      <img src="/Security-Architect/assets/img/project1.png" alt="SmartFit Project" class="project-image" />
+      <img src="/Security-Architect/assets/img/broke-n-beauty/smartfit.svg" alt="SmartFit Project" class="project-image" />
       <p>Python Tkinter app for personalized clothing size recommendations.</p>
       <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
       <a href="https://github.com/example/smartfit" class="project-link">View Code</a>
+    </div>
+    
+    <div class="project-card">
+      <h3>Broke N Beauty Collection</h3>
+      <p>A collection of Python applications for the Broke N Beauty clothing line:</p>
+      <ul>
+        <li><a href="/Security-Architect/projects">Contact Form System</a></li>
+        <li><a href="/Security-Architect/projects">Delivery Tracker</a></li>
+        <li><a href="/Security-Architect/projects">Wishlist Application</a></li>
+        <li><a href="/Security-Architect/projects">Help Center & FAQs</a></li>
+      </ul>
+      <p><strong>Tech:</strong> Python, Tkinter, CSV, File I/O</p>
+      <a href="/Security-Architect/projects" class="project-link">View All Projects</a>
     </div>
   </section>
 
