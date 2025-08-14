@@ -57,8 +57,9 @@
         
         <div class="run-instructions">
             <h3>How to Run This Project:</h3>
+            <p><strong>Note:</strong> GitHub Pages cannot run Python files directly. To run this project:</p>
             <ol>
-                <li>Download the Python file using the button below</li>
+                <li>Download the Python file by clicking the button below</li>
                 <li>Make sure you have Python installed on your computer</li>
                 <li>Open a terminal or command prompt</li>
                 <li>Navigate to the folder where you downloaded the file</li>
@@ -66,7 +67,7 @@
             </ol>
         </div>
 
-        <a href="/Security-Architect/projects/Delivery Tracker.py" download class="download-btn">Download Python File</a>
+        <a href="https://raw.githubusercontent.com/Therealjiggady/Security-Architect/main/docs/projects/Delivery%20Tracker.py" download class="download-btn">Download Python File</a>
         
         <h3>Source Code:</h3>
         <pre><code id="source-code">Loading code...</code></pre>
@@ -74,7 +75,7 @@
 
     <script>
         // Fetch and display the source code
-        fetch('/Security-Architect/projects/Delivery Tracker.py')
+        fetch('https://raw.githubusercontent.com/Therealjiggady/Security-Architect/main/docs/projects/Delivery%20Tracker.py')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('source-code').textContent = data;
