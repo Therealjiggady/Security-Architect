@@ -18,7 +18,7 @@ title: Projects
       <li>Personalized recommendations with confidence ratings</li>
     </ul>
     <p><strong>Tech:</strong> Python, Tkinter, CSV, Data Analysis</p>
-    <a href="https://github.com/example/smartfit" class="project-link">View Code</a>
+    <a href="/Security-Architect/projects/smartfit.html" class="project-link">View Code</a>
   </div>
   
   <div class="project-card">
@@ -32,7 +32,7 @@ title: Projects
       <li>Timestamp tracking for support requests</li>
     </ul>
     <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
-    <a href="https://github.com/example/contact-form" class="project-link">View Code</a>
+    <a href="/Security-Architect/projects/contact-form.html" class="project-link">View Code</a>
   </div>
   
   <div class="project-card">
@@ -46,7 +46,7 @@ title: Projects
       <li>Date formatting and display</li>
     </ul>
     <p><strong>Tech:</strong> Python, Tkinter, Datetime</p>
-    <a href="https://github.com/example/delivery-tracker" class="project-link">View Code</a>
+    <a href="/Security-Architect/projects/delivery-tracker.html" class="project-link">View Code</a>
   </div>
   
   <div class="project-card">
@@ -60,7 +60,7 @@ title: Projects
       <li>Export wishlist to text file</li>
     </ul>
     <p><strong>Tech:</strong> Python, Tkinter, File I/O</p>
-    <a href="https://github.com/example/wishlist" class="project-link">View Code</a>
+    <a href="/Security-Architect/projects/wishlist.html" class="project-link">View Code</a>
   </div>
   
   <div class="project-card">
@@ -74,7 +74,7 @@ title: Projects
       <li>User-friendly navigation</li>
     </ul>
     <p><strong>Tech:</strong> Python, Tkinter, Messagebox</p>
-    <a href="https://github.com/example/help-center" class="project-link">View Code</a>
+    <a href="/Security-Architect/projects/faqs.html" class="project-link">View Code</a>
   </div>
 </section>
 
