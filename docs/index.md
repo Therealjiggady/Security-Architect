@@ -9,7 +9,7 @@ title: James Johnson | Portfolio
     <img src="/Security-Architect/assets/img/dae.png" alt="dae logo" class="dae-logo" />
     <h1>James Johnson</h1>
     <p>Full Stack Developer</p>
-    <p>Graduation Date: June 2024</p>
+    <p>Graduation Date: June 2025</p>
   </div>
 </header>
 
@@ -57,23 +57,42 @@ title: James Johnson | Portfolio
     <h2>Projects</h2>
     <div class="project-card">
       <h3>SmartFit Size Recommender</h3>
-      <img src="/Security-Architect/assets/img/broke-n-beauty/smartfit.svg" alt="SmartFit Project" class="project-image" />
+      <img src="/Security-Architect/assets/img/size-guide-screenshot.png" alt="SmartFit Size Recommender Screenshot" class="project-image" style="max-width:100%; height:auto;" />
       <p>Python Tkinter app for personalized clothing size recommendations.</p>
       <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
       <a href="/Security-Architect/projects/smartfit.html" class="project-link">View Code</a>
     </div>
-    
+
     <div class="project-card">
-      <h3>Broke N Beauty Collection</h3>
-      <p>A collection of Python applications for the Broke N Beauty clothing line:</p>
-      <ul>
-        <li><a href="/Security-Architect/projects/contact-form.html">Contact Form System</a></li>
-        <li><a href="/Security-Architect/projects/delivery-tracker.html">Delivery Tracker</a></li>
-        <li><a href="/Security-Architect/projects/wishlist.html">Wishlist Application</a></li>
-        <li><a href="/Security-Architect/projects/faqs.html">Help Center & FAQs</a></li>
-      </ul>
-      <p><strong>Tech:</strong> Python, Tkinter, CSV, File I/O</p>
-      <a href="/Security-Architect/projects" class="project-link">View All Projects</a>
+      <h3>Contact Form System</h3>
+      <img src="/Security-Architect/assets/img/contact-form-screenshot.png" alt="Contact Form Screenshot" class="project-image" style="max-width:100%; height:auto;" />
+      <p>Python Tkinter app for customer inquiries and feedback submission.</p>
+      <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
+      <a href="/Security-Architect/projects/contact-form.html" class="project-link">View Code</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Delivery Tracker</h3>
+      <img src="/Security-Architect/assets/img/delivery-tracker-screenshot.png" alt="Delivery Tracker Screenshot" class="project-image" style="max-width:100%; height:auto;" />
+      <p>Python Tkinter app for tracking order deliveries and status updates.</p>
+      <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
+      <a href="/Security-Architect/projects/delivery-tracker.html" class="project-link">View Code</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Wishlist Application</h3>
+      <img src="/Security-Architect/assets/img/wishlist-screenshot.png" alt="Wishlist App Screenshot" class="project-image" style="max-width:100%; height:auto;" />
+      <p>Python Tkinter app allowing customers to save and manage their product wishlist.</p>
+      <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
+      <a href="/Security-Architect/projects/wishlist.html" class="project-link">View Code</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Help Center & FAQs</h3>
+      <img src="/Security-Architect/assets/img/FAQs-screenshot.png" alt="FAQs App Screenshot" class="project-image" style="max-width:100%; height:auto;" />
+      <p>Interactive Tkinter help center with frequently asked questions and search functionality.</p>
+      <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
+      <a href="/Security-Architect/projects/faqs.html" class="project-link">View Code</a>
     </div>
   </section>
 
@@ -81,14 +100,13 @@ title: James Johnson | Portfolio
   <section id="contact">
     <h2>Contact</h2>
     <div class="contact-info">
-      <p>Email: <a href="mailto:james.johnson@example.com">james.johnson@example.com</a></p>
+      <p>Email: <a href="mailto:1997Jamesjjohnson@gmail.com">1997Jamesjjohnson@gmail.com</a></p>
       <p>GitHub: <a href="https://github.com/therealjiggady">therealjiggady</a></p>
-      <p>LinkedIn: <a href="https://linkedin.com/in/jamesjohnson">linkedin.com/in/jamesjohnson</a></p>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2024 James Johnson. All rights reserved.</p>
+    <p>&copy; 2025 James Johnson. All rights reserved.</p>
     <img src="/Security-Architect/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
   </footer>
