@@ -65,7 +65,7 @@ title: James Johnson | Portfolio
 
     <div class="project-card">
       <h3>Contact Form System</h3>
-      <img src="/Security-Architect/assets/img/contact-form-screenshot.png" alt="Contact Form Screenshot" class="project-image" style="max-width:100%; height:auto;" />
+      <img src="assets/img/contact-form-screenshot.png" alt="Contact Form Screenshot" class="project-image" style="max-width:100%; height:auto;" />
       <p>Python Tkinter app for customer inquiries and feedback submission.</p>
       <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
       <a href="/Security-Architect/projects/contact-form.html" class="project-link">View Code</a>
@@ -73,7 +73,7 @@ title: James Johnson | Portfolio
 
     <div class="project-card">
       <h3>Delivery Tracker</h3>
-      <img src="/Security-Architect/assets/img/delivery-tracker-screenshot.png" alt="Delivery Tracker Screenshot" class="project-image" style="max-width:100%; height:auto;" />
+      <img src="assets/img/delivery-tracker-screenshot.png" alt="Delivery Tracker Screenshot" class="project-image" style="max-width:100%; height:auto;" />
       <p>Python Tkinter app for tracking order deliveries and status updates.</p>
       <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
       <a href="/Security-Architect/projects/delivery-tracker.html" class="project-link">View Code</a>
@@ -81,7 +81,7 @@ title: James Johnson | Portfolio
 
     <div class="project-card">
       <h3>Wishlist Application</h3>
-      <img src="/Security-Architect/assets/img/wishlist-screenshot.png" alt="Wishlist App Screenshot" class="project-image" style="max-width:100%; height:auto;" />
+      <img src="assets/img/wishlist-screenshot.png" alt="Wishlist App Screenshot" class="project-image" style="max-width:100%; height:auto;" />
       <p>Python Tkinter app allowing customers to save and manage their product wishlist.</p>
       <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
       <a href="/Security-Architect/projects/wishlist.html" class="project-link">View Code</a>
@@ -89,7 +89,7 @@ title: James Johnson | Portfolio
 
     <div class="project-card">
       <h3>Help Center & FAQs</h3>
-      <img src="/Security-Architect/assets/img/FAQs-screenshot.png" alt="FAQs App Screenshot" class="project-image" style="max-width:100%; height:auto;" />
+      <img src="assets/img/FAQs-screenshot.png" alt="FAQs App Screenshot" class="project-image" style="max-width:100%; height:auto;" />
       <p>Interactive Tkinter help center with frequently asked questions and search functionality.</p>
       <p><strong>Tech:</strong> Python, Tkinter, CSV</p>
       <a href="/Security-Architect/projects/faqs.html" class="project-link">View Code</a>
