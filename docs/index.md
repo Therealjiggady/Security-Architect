@@ -3,6 +3,36 @@ layout: default
 title: James Johnson | Portfolio
 ---
 
+<head>
+  <style>
+    /* Header styling */
+    header {
+      background-color: #222; /* Dark background */
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header-content h1,
+    .header-content p {
+      color: white; /* White text for header words */
+      margin: 5px 0;
+    }
+
+    /* Optional: footer style for consistency */
+    footer {
+      background-color: #222;
+      text-align: center;
+      padding: 10px;
+      color: white;
+    }
+
+    footer img {
+      max-height: 40px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
 <!-- Header -->
 <header>
   <div class="header-content">
