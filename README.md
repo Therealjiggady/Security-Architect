@@ -74,3 +74,5 @@ Security-Architect/
 ├── faqs_popup.py                 # Displays FAQs in messagebox
 ├── user_profiles.json            # Stores past user accounts
 ├── README.md                     # You are here!
+[LinkedIn](https://www.linkedin.com/in/james-johnson-63b381367/?profileId=ACoAAFsAZk8B3pLdPd51n0dPIWEbm-1pqNeIGog)
+[Github](https://therealjiggady.github.io/Security-Architect/)
