@@ -71,7 +71,6 @@ title: James Johnson | Portfolio
     <h3>UI/UX Design</h3>
     <ul>
       <li>Adept at crafting intuitive layouts that enhance user experience across devices.</li>
-    <ul>
       <li>Familiar with GitHub Pages and cloud-based deployment workflows.</li>
     </ul>
     <h3>Problem-Solving & Debugging</h3>
