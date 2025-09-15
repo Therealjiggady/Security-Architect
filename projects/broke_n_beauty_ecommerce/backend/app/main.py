@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from datetime import datetime, timezone
 from .db import get_engine, init_dev_sqlite, test_connection
+from backend.app.routers import users as users_router
 
 app = FastAPI(title="Clover Line API", version="0.1.0")
 
@@ -44,3 +45,6 @@ def db_url(redact: bool = True):
         "dialect": url.get_backend_name(),
         "driver": url.drivername,
     }
+
+# Users resource endpoints
+app.include_router(users_router.router, prefix="/users", tags=["users"])

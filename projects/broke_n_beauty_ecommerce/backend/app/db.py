@@ -5,6 +5,10 @@ from typing import Dict, Any
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
+
+# SQLAlchemy ORM Base
+Base = declarative_base()
 
 # Load environment variables from backend/.env robustly (independent of CWD)
 BACKEND_DIR = Path(__file__).resolve().parents[1]
@@ -113,3 +117,16 @@ def test_connection(engine: Engine) -> Dict[str, Any]:
             "driver": engine.url.drivername,
             "error": str(exc),
         }
+
+# ORM Engine and Session factory
+# Create a single module-level Engine instance for ORM use
+engine = get_engine()
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, expire_on_commit=False)
+
+# FastAPI dependency to provide a DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
