@@ -131,8 +131,13 @@ title: James Johnson | Portfolio
     <p>Email: <a href="mailto:1997Jamesjjohnson@gmail.com">1997Jamesjjohnson@gmail.com</a></p>
     <p>GitHub: <a href="https://github.com/therealjiggady" target="_blank">therealjiggady</a></p>
     <p>LinkedIn: <a href="https://www.linkedin.com/in/james-johnson-63b381367/" target="_blank">James Johnson</a></p>
-    [![pages-build-deployment](https://github.com/Therealjiggady/Security-Architect/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Therealjiggady/Security-Architect/actions/workflows/pages/pages-build-deployment)
   </div>
+  <!-- GitHub Pages Build Badge -->
+  <p>
+    <a href="https://github.com/Therealjiggady/Security-Architect/actions/workflows/pages/pages-build-deployment">
+      <img src="https://github.com/Therealjiggady/Security-Architect/actions/workflows/pages/pages-build-deployment/badge.svg" alt="pages-build-deployment" />
+    </a>
+  </p>
 </section>
 
 <!-- Footer -->
