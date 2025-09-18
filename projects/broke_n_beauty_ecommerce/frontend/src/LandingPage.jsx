@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
@@ -14,10 +15,11 @@ export default function LandingPage() {
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-300">
             <a className="hover:text-white" href="#features">Features</a>
-            <a className="hover:text-white" href="#products">Products</a>
-            <a className="hover:text-white" href="#cta">Get Started</a>
+            <Link className="hover:text-white" to="/products">Products</Link>
+            <Link className="hover:text-white" to="/cart">Cart</Link>
+            <Link className="hover:text-white" to="/profile">Profile</Link>
           </nav>
-          <button className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/20">Sign In</button>
+          <Link to="/profile" className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/20">Sign In</Link>
         </div>
       </header>
 
@@ -41,9 +43,9 @@ export default function LandingPage() {
               Simple sizing, streamlined checkout, and fast shipping.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a href="#cta" className="rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 shadow-lg shadow-emerald-500/25 hover:bg-emerald-400">
+              <Link to="/products" className="rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 shadow-lg shadow-emerald-500/25 hover:bg-emerald-400">
                 Shop the collection
-              </a>
+              </Link>
               <a href="#features" className="rounded-2xl border border-white/15 px-6 py-3 font-medium text-white hover:bg-white/10">
                 Learn more
               </a>
@@ -84,7 +86,7 @@ export default function LandingPage() {
       <section id="products" className="mx-auto max-w-6xl px-4 pb-20">
         <div className="mb-6 flex items-end justify-between">
           <h2 className="text-2xl font-semibold tracking-tight">Featured Products</h2>
-          <a href="#" className="text-sm text-emerald-300 hover:text-emerald-200">View all</a>
+          <Link to="/products" className="text-sm text-emerald-300 hover:text-emerald-200">View all</Link>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
@@ -135,7 +137,7 @@ export default function LandingPage() {
             Start with our best-sellers and get personalized tips from SmartFit.
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a href="#" className="rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 hover:bg-emerald-400">Get started</a>
+            <Link to="/products" className="rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 hover:bg-emerald-400">Get started</Link>
             <a href="#features" className="rounded-2xl border border-white/15 px-6 py-3 font-medium text-white hover:bg-white/10">Why Clover Line?</a>
           </div>
         </div>

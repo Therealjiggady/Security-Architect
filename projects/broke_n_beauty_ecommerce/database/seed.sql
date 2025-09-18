@@ -8,6 +8,15 @@ INSERT INTO users (email, hashed_password, full_name) VALUES
 ('diana@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj6fM9t8t8tG', 'Diana Wilson'),
 ('eve@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj6fM9t8t8tG', 'Eve Davis');
 
+-- Insert categories
+INSERT INTO categories (name, description) VALUES
+('Sports Bras', 'Supportive and comfortable sports bras for active lifestyles'),
+('Biker Shorts', 'High-waisted shorts perfect for workouts and casual wear'),
+('Scrubs', 'Professional medical and healthcare apparel'),
+('Leggings', 'Compression and yoga leggings for various activities'),
+('Tank Tops', 'Breathable tank tops for yoga and casual wear'),
+('Activewear', 'General athletic and fitness clothing');
+
 -- Insert products
 INSERT INTO products (name, description, sku, price) VALUES
 ('BnB Sport Bra – Black', 'Comfortable sports bra with excellent support for all-day wear', 'BNB-SB-BLK', 11.99),
@@ -15,6 +24,18 @@ INSERT INTO products (name, description, sku, price) VALUES
 ('BnB Unisex Scrub Top', 'Professional scrub top suitable for healthcare workers', 'BNB-ST-UNI', 33.99),
 ('BnB Compression Leggings', 'Moisture-wicking compression leggings for intense workouts', 'BNB-CL-BLK', 24.99),
 ('BnB Yoga Tank Top', 'Breathable tank top designed for yoga and pilates', 'BNB-YT-GRY', 15.99);
+
+-- Insert product-category relationships
+INSERT INTO product_categories (product_id, category_id) VALUES
+(1, 1), -- Sport Bra -> Sports Bras
+(1, 6), -- Sport Bra -> Activewear
+(2, 2), -- Biker Short -> Biker Shorts
+(2, 6), -- Biker Short -> Activewear
+(3, 3), -- Scrub Top -> Scrubs
+(4, 4), -- Compression Leggings -> Leggings
+(4, 6), -- Compression Leggings -> Activewear
+(5, 5), -- Yoga Tank Top -> Tank Tops
+(5, 6); -- Yoga Tank Top -> Activewear
 
 -- Insert product variants
 INSERT INTO product_variants (product_id, size, color, stock) VALUES

@@ -17,6 +17,14 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+-- CATEGORIES
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 -- PRODUCTS
 CREATE TABLE products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,6 +33,17 @@ CREATE TABLE products (
     sku VARCHAR(64) UNIQUE,
     price DECIMAL(10,2) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+-- PRODUCT CATEGORIES (junction table for many-to-many relationship)
+CREATE TABLE product_categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products (id),
+    FOREIGN KEY (category_id) REFERENCES categories (id),
+    UNIQUE(product_id, category_id)
 );
 
 -- PRODUCT VARIANTS
@@ -91,7 +110,10 @@ CREATE TABLE order_items (
 
 -- Create indexes for better performance
 CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_categories_name ON categories(name);
 CREATE INDEX idx_products_sku ON products(sku);
+CREATE INDEX idx_product_categories_product_id ON product_categories(product_id);
+CREATE INDEX idx_product_categories_category_id ON product_categories(category_id);
 CREATE INDEX idx_product_variants_product_id ON product_variants(product_id);
 CREATE INDEX idx_carts_user_id ON carts(user_id);
 CREATE INDEX idx_cart_items_cart_id ON cart_items(cart_id);
