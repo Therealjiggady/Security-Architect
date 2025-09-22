@@ -132,6 +132,11 @@ title: James Johnson | Portfolio
     <p>GitHub: <a href="https://github.com/therealjiggady" target="_blank">therealjiggady</a></p>
     <p>LinkedIn: <a href="https://www.linkedin.com/in/james-johnson-63b381367/" target="_blank">James Johnson</a></p>
   </div>
+  <!-- GitHub Pages Build Badge -->
+  <p>
+    <a href="https://github.com/Therealjiggady/Security-Architect/actions/workflows/pages/pages-build-deployment">
+      <img src="https://github.com/Therealjiggady/Security-Architect/actions/workflows/pages/pages-build-deployment/badge.svg" alt="pages-build-deployment" />
+    </a>
 </section>
 
 <!-- Footer -->
@@ -139,3 +144,5 @@ title: James Johnson | Portfolio
   <p>&copy; 2025 James Johnson. All rights reserved.</p>
   <img src="/Security-Architect/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
 </footer>
+<p>&copy; 2025 James Johnson. All rights reserved.</p>
+  <img src="assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />

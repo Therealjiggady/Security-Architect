@@ -9,11 +9,11 @@ DROP TABLE IF EXISTS users CASCADE;
 
 -- USERS
 CREATE TABLE users (
-  id            BIGSERIAL PRIMARY KEY,
-  email         VARCHAR(255) NOT NULL UNIQUE,
-  password_hash VARCHAR(255) NOT NULL,
-  full_name     VARCHAR(255),
-  created_at    TIMESTAMP NOT NULL DEFAULT NOW()
+  id              BIGSERIAL PRIMARY KEY,
+  email           VARCHAR(255) NOT NULL UNIQUE,
+  hashed_password VARCHAR(255) NOT NULL,
+  full_name       VARCHAR(255),
+  created_at      TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- PRODUCTS (base info)

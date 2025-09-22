@@ -78,3 +78,6 @@ title: Resume
   <p>&copy; 2024 James Johnson. All rights reserved.</p>
   <img src="/Security-Architect/assets/img/dae-logo.png" alt="dae logo" class="footer-logo" />
 </footer>
+
+
+[![pages-build-deployment](https://github.com/Therealjiggady/Security-Architect/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Therealjiggady/Security-Architect/actions/workflows/pages/pages-build-deployment)
