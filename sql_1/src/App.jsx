@@ -1,6 +1,4 @@
 import { Link, Route, Routes } from 'react-router-dom'
-import { UserProvider } from './contexts/UserContext'
-import { CartProvider } from './contexts/CartContext'
 import LandingPage from './LandingPage'
 import ProductsPage from './ProductsPage'
 import CartPage from './CartPage'
@@ -24,15 +22,11 @@ function Profile() {
 
 export default function App() {
   return (
-    <UserProvider>
-      <CartProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
-      </CartProvider>
-    </UserProvider>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/profile" element={<Profile />} />
+    </Routes>
   )
 }
