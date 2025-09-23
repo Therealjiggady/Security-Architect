@@ -1,0 +1,6 @@
+0|id|INTEGER|0||1
+1|name|VARCHAR(255)|1||0
+2|description|TEXT|0||0
+3|sku|VARCHAR(64)|0||0
+4|price|DECIMAL(10,2)|1||0
+5|created_at|DATETIME|1|CURRENT_TIMESTAMP|0
