@@ -1,4 +1,6 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
+from datetime import datetime
+from typing import Optional
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -18,3 +20,22 @@ class LoginRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+class ProductVariantRead(BaseModel):
+    id: int
+    size: str
+    color: Optional[str] = None
+    stock: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+class ProductRead(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    sku: Optional[str] = None
+    price: float
+    created_at: Optional[datetime] = None
+    variants: list[ProductVariantRead] = []
+
+    model_config = ConfigDict(from_attributes=True)
