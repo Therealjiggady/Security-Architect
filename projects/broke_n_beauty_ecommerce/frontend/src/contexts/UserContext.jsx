@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext();
 
+const API_BASE = 'http://localhost:8000';
+
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
@@ -14,30 +16,78 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate checking for existing session on mount
   useEffect(() => {
     const checkSession = async () => {
-      // In a real app, check for token in cookies/localStorage and validate
-      // For now, just set loading to false
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const res = await fetch(`${API_BASE}/users/me`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+          });
+          if (res.ok) {
+            const userData = await res.json();
+            setUser(userData);
+          } else {
+            localStorage.removeItem('token');
+          }
+        } catch (err) {
+          console.error('Session check failed:', err);
+          localStorage.removeItem('token');
+        }
+      }
       setIsLoading(false);
     };
     checkSession();
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    // Store token if needed
+  const login = async (email, password) => {
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) throw new Error('Login failed');
+      const data = await res.json();
+      localStorage.setItem('token', data.access_token);
+      // Fetch user data
+      const userRes = await fetch(`${API_BASE}/users/me`, {
+        headers: { 'Authorization': `Bearer ${data.access_token}` },
+      });
+      const userData = await userRes.json();
+      setUser(userData);
+    } catch (err) {
+      console.error('Login error:', err);
+      throw err;
+    }
+  };
+
+  const register = async (email, password, full_name) => {
+    try {
+      const res = await fetch(`${API_BASE}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, full_name }),
+      });
+      if (!res.ok) throw new Error('Registration failed');
+      // After registration, login to get token
+      await login(email, password);
+    } catch (err) {
+      console.error('Registration error:', err);
+      throw err;
+    }
   };
 
   const logout = () => {
     setUser(null);
-    // Clear token
+    localStorage.removeItem('token');
   };
 
   const value = {
     user,
     isLoading,
     login,
+    register,
     logout,
   };
 
