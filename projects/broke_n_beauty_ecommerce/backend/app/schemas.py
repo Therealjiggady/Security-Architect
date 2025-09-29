@@ -29,12 +29,27 @@ class ProductVariantRead(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class ProductCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    sku: Optional[str] = None
+    price: float
+    image_url: Optional[str] = None
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    sku: Optional[str] = None
+    price: Optional[float] = None
+    image_url: Optional[str] = None
+
 class ProductRead(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
     sku: Optional[str] = None
     price: float
+    image_url: Optional[str] = None
     created_at: Optional[datetime] = None
     variants: list[ProductVariantRead] = []
 

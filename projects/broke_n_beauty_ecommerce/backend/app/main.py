@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from backend.app.db import Base, engine
 from backend.app import models  # Import models so SQLAlchemy knows about them
 from backend.app.routers import auth as auth_router
@@ -6,6 +8,18 @@ from backend.app.routers import users as users_router
 from backend.app.routers import products as products_router
 
 app = FastAPI(title="Clover Line API", version="0.1.0")
+
+# Mount static files for images
+app.mount("/static/images", StaticFiles(directory="backend/static/images"), name="images")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],  # Frontend URLs
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dev convenience: create tables automatically
 Base.metadata.create_all(bind=engine)

@@ -40,9 +40,12 @@ This folder contains additional Python code for advanced backend logic in the Br
 ## Folder Structure
 
 ```
-python_2/
-└── README.md # This documentation
-# Add specific Python files as needed
+python_2/SQL_2/
+├── queries.sql # SELECT, UPDATE, DELETE examples
+├── schema.sql # Tables and relationships
+├── export.sql # Final database export
+├── screenshots/ # Query results and relationship proofs
+└── README.md # This file
 ```
 
 ---

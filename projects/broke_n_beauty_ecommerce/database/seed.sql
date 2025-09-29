@@ -18,12 +18,13 @@ INSERT INTO categories (name, description) VALUES
 ('Activewear', 'General athletic and fitness clothing');
 
 -- Insert products
-INSERT INTO products (name, description, sku, price) VALUES
-('BnB Sport Bra – Black', 'Comfortable sports bra with excellent support for all-day wear', 'BNB-SB-BLK', 11.99),
-('BnB Biker Short – Navy', 'High-waisted biker shorts perfect for workouts and casual wear', 'BNB-BS-NVY', 9.99),
-('BnB Unisex Scrub Top', 'Professional scrub top suitable for healthcare workers', 'BNB-ST-UNI', 33.99),
-('BnB Compression Leggings', 'Moisture-wicking compression leggings for intense workouts', 'BNB-CL-BLK', 24.99),
-('BnB Yoga Tank Top', 'Breathable tank top designed for yoga and pilates', 'BNB-YT-GRY', 15.99);
+INSERT INTO products (name, description, sku, price, image_url) VALUES
+('BnB Sport Bra – Black', 'Comfortable sports bra with excellent support for all-day wear', 'BNB-SB-BLK', 13.99, 'https://i.ibb.co/example/black-outfit.jpg'),
+('BnB Biker Short – Grey', 'High-waisted biker shorts perfect for workouts and casual wear', 'BNB-BS-GRY', 9.99, 'https://i.ibb.co/example/grey-fit.jpg'),
+('BnB Unisex Scrub Top', 'Professional scrub top suitable for healthcare workers', 'BNB-ST-UNI', 15.00, 'https://i.ibb.co/example/grey-scrubs.jpg'),
+('BnB Unisex Scrub Pants', 'Professional scrub pants suitable for healthcare workers', 'BNB-SP-UNI', 17.00, 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?q=80&w=800&auto=format&fit=crop'),
+('BnB Compression Leggings', 'Moisture-wicking compression leggings for intense workouts', 'BNB-CL-BLK', 24.99, 'https://images.unsplash.com/photo-1506629905607-0b5ab9a9e21a?q=80&w=800&auto=format&fit=crop'),
+('BnB Yoga Tank Top', 'Breathable tank top designed for yoga and pilates', 'BNB-YT-GRY', 15.99, 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop');
 
 -- Insert product-category relationships
 INSERT INTO product_categories (product_id, category_id) VALUES
@@ -32,10 +33,11 @@ INSERT INTO product_categories (product_id, category_id) VALUES
 (2, 2), -- Biker Short -> Biker Shorts
 (2, 6), -- Biker Short -> Activewear
 (3, 3), -- Scrub Top -> Scrubs
-(4, 4), -- Compression Leggings -> Leggings
-(4, 6), -- Compression Leggings -> Activewear
-(5, 5), -- Yoga Tank Top -> Tank Tops
-(5, 6); -- Yoga Tank Top -> Activewear
+(4, 3), -- Scrub Pants -> Scrubs
+(5, 4), -- Compression Leggings -> Leggings
+(5, 6), -- Compression Leggings -> Activewear
+(6, 5), -- Yoga Tank Top -> Tank Tops
+(6, 6); -- Yoga Tank Top -> Activewear
 
 -- Insert product variants
 INSERT INTO product_variants (product_id, size, color, stock) VALUES
@@ -48,12 +50,15 @@ INSERT INTO product_variants (product_id, size, color, stock) VALUES
 (3, 'M', 'Blue', 25),
 (3, 'L', 'Blue', 30),
 (3, 'XL', 'Blue', 20),
-(4, 'S', 'Black', 60),
-(4, 'M', 'Black', 55),
-(4, 'L', 'Black', 50),
-(5, 'XS', 'Gray', 40),
-(5, 'S', 'Gray', 45),
-(5, 'M', 'Gray', 50);
+(4, 'M', 'Blue', 25),
+(4, 'L', 'Blue', 30),
+(4, 'XL', 'Blue', 20),
+(5, 'S', 'Black', 60),
+(5, 'M', 'Black', 55),
+(5, 'L', 'Black', 50),
+(6, 'XS', 'Gray', 40),
+(6, 'S', 'Gray', 45),
+(6, 'M', 'Gray', 50);
 
 -- Insert carts
 INSERT INTO carts (user_id, status) VALUES
@@ -68,8 +73,8 @@ INSERT INTO cart_items (cart_id, product_variant_id, quantity) VALUES
 (1, 1, 2),
 (1, 4, 1),
 (2, 7, 1),
-(2, 10, 3),
-(3, 13, 2),
+(2, 13, 3),
+(3, 16, 2),
 (4, 2, 1),
 (5, 5, 1);
 
@@ -83,10 +88,10 @@ INSERT INTO orders (user_id, cart_id, order_number, status, total_amount, shippi
 
 -- Insert order items
 INSERT INTO order_items (order_id, product_variant_id, quantity, price_at_purchase) VALUES
-(1, 13, 2, 15.99),
-(2, 2, 1, 11.99),
-(3, 1, 2, 11.99),
+(1, 16, 2, 15.99),
+(2, 2, 1, 13.99),
+(3, 1, 2, 13.99),
 (3, 4, 1, 9.99),
-(4, 7, 1, 33.99),
-(4, 10, 3, 24.99),
+(4, 7, 1, 15.00),
+(4, 13, 3, 24.99),
 (5, 5, 1, 9.99);

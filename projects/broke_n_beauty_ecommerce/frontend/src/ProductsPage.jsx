@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ProductCard from './components/ProductCard';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -76,44 +77,7 @@ export default function ProductsPage() {
         {/* Products Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <div key={product.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-              <div className="aspect-[4/3] overflow-hidden bg-zinc-800">
-                {/* Placeholder for image */}
-                <div className="h-full w-full flex items-center justify-center text-zinc-400">
-                  <span className="text-4xl">📦</span>
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-medium text-lg">{product.name}</h3>
-                  <span className="text-emerald-300 font-semibold">${product.price}</span>
-                </div>
-                <p className="text-sm text-zinc-300 mb-3">{product.description}</p>
-                {product.variants && product.variants.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-xs text-zinc-400 mb-2">Available sizes:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {product.variants.map((variant) => (
-                        <span
-                          key={variant.id}
-                          className="inline-block bg-zinc-700 text-zinc-300 text-xs px-2 py-1 rounded"
-                        >
-                          {variant.size} {variant.color && `(${variant.color})`} - {variant.stock} in stock
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
-                  <button className="flex-1 rounded-xl bg-emerald-500 px-3 py-2 text-sm font-medium text-zinc-950 hover:bg-emerald-400 transition-colors">
-                    Add to Cart
-                  </button>
-                  <button className="rounded-xl border border-white/15 px-3 py-2 text-sm hover:bg-white/10 transition-colors">
-                    Details
-                  </button>
-                </div>
-              </div>
-            </div>
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
