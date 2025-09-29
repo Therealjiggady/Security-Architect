@@ -74,21 +74,50 @@ with easy maintenance.
 
 ## 5. Key Features / Functions
 
--   **Authentication:** Signup/login, JWT session management, user
-    profiles.\
--   **Product Catalog:** CRUD for admins, search, filters, product
-    details.\
--   **Cart & Checkout:** Cart persistence, simulated/real payments,
-    order creation.\
--   **Orders:** Confirmation, status updates, admin management.\
--   **Wishlist:** Save/remove products, quick add-to-cart.\
--   **SmartFit Recommender:** Size suggestions with detailed or quick
-    inputs.\
--   **Admin Dashboard:** Manage products, orders, users.\
--   **Email/Notifications:** Order confirmations, shipping updates.\
--   **Payments:** Stripe/PayPal integration with sandbox testing.\
--   **Deployment:** Hosting on Heroku/Vercel/Netlify, CI pipelines,
-    monitoring.
+### Authentication System
+- User registration with email and password validation
+- Secure login with JWT token generation
+- Password hashing using bcrypt for security
+- Protected API routes requiring authentication
+- User profile management
+
+### Product Catalog Management
+- Public product browsing with detailed information
+- Admin-only CRUD operations for products
+- Product variants (size, color, stock levels)
+- Image upload and management for products
+- SKU and pricing management
+
+### Cart Functionality
+- Frontend-based shopping cart using React Context
+- Add/remove products from cart
+- Cart persistence during user session
+- Quantity management
+
+### User Management
+- User profiles with email and full name
+- Admin capabilities for user management
+- Secure user data handling
+
+### API Architecture
+- RESTful API design with FastAPI
+- Comprehensive endpoint documentation via Swagger UI
+- Input validation using Pydantic schemas
+- CORS configuration for frontend integration
+- Health check endpoints for monitoring
+
+### Database Design
+- SQLite for development, PostgreSQL for production
+- SQLAlchemy ORM for database interactions
+- Automatic table creation and migrations
+- Sample data seeding for testing
+
+### Frontend Features
+- Responsive React application with Vite
+- TailwindCSS for styling
+- React Router for navigation
+- Context-based state management
+- Component-based architecture
 
 ------------------------------------------------------------------------
 
