@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#fff0f5" />
-  <text x="100" y="80" font-family="Arial" font-size="20" text-anchor="middle" fill="#c71585">FAQs App</text>
-  <text x="100" y="110" font-family="Arial" font-size="14" text-anchor="middle" fill="#c71585">Help Center</text>
-  <rect x="60" y="120" width="80" height="40" rx="5" fill="#c71585" />
-  <text x="100" y="145" font-family="Arial" font-size="12" text-anchor="middle" fill="white">Python + Tkinter</text>
-</svg>

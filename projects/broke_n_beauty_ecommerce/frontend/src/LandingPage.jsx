@@ -11,7 +11,7 @@ export default function LandingPage() {
             <div className="h-8 w-8 rounded-xl bg-emerald-500/20 ring-1 ring-emerald-400/40 grid place-items-center">
               <span className="text-emerald-300 font-bold">BnB</span>
             </div>
-            <span className="font-semibold tracking-wide">Broke N Beauty</span>
+            <span className="font-semibold tracking-wide">Broken Beauty</span>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-300">
             <a className="hover:text-white" href="#features">Features</a>
@@ -35,12 +35,13 @@ export default function LandingPage() {
               New • SmartFit size helper
             </span>
             <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
-              Comfort-first apparel.
-              <br /> Built for everyday performance.
+              Live bold move free.
+              <br /> 
             </h1>
             <p className="mt-4 text-zinc-300 md:text-lg">
-              Discover sports bras, biker shorts, and scrubs designed to move with you. 
-              Simple sizing, streamlined checkout, and fast shipping.
+              From workouts to workdays — every butterfly has its perfect balance. 
+              
+              Find yours in sports bras, shorts, and scrubs with sizing made simple and shipping made quick
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link to="/products" className="rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 shadow-lg shadow-emerald-500/25 hover:bg-emerald-400">
@@ -94,19 +95,19 @@ export default function LandingPage() {
               name: "BnB Sport Bra – Black",
               price: "$11.99",
               tag: "Sports Bras",
-              img: "https://images.unsplash.com/photo-1599050751795-5f9a2b2f1f1a?q=80&w=800&auto=format&fit=crop",
+              img: "sports_bra.png",
             },
             {
-              name: "BnB Biker Short – Navy",
+              name: "BnB Biker Short – Grey",
               price: "$9.99",
               tag: "Biker Shorts",
-              img: "https://images.unsplash.com/photo-1618354691438-25e8c4a7cb68?q=80&w=800&auto=format&fit=crop",
+              img: "Grey fit.png",
             },
             {
               name: "BnB Unisex Scrub Top",
               price: "$33.99",
               tag: "Scrubs",
-              img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800&auto=format&fit=crop",
+              img: "Scrubs2.png",
             },
           ].map((p, i) => (
             <div key={i} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5">
@@ -147,7 +148,7 @@ export default function LandingPage() {
       <footer className="border-t border-white/10">
         <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-zinc-400">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p>© {new Date().getFullYear()} Broke N Beauty. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Broken Beauty. All rights reserved.</p>
             <div className="flex items-center gap-4">
               <a className="hover:text-zinc-200" href="#">Privacy</a>
               <a className="hover:text-zinc-200" href="#">Terms</a>
