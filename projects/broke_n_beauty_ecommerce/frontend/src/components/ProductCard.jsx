@@ -1,6 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useUser } from '../contexts/UserContext';
 
 const ProductCard = ({ product }) => {
+  const { user } = useUser();
+  const [saved, setSaved] = useState(false);
+
+  // Organize functions: Create addToWishlist(productId, userId) returning success/fail
+  const addToWishlist = async (productId, userId) => {
+    try {
+      const response = await fetch('http://localhost:8000/wishlist/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        },
+        body: JSON.stringify({ product_id: productId })
+      });
+      if (response.ok) {
+        return true;
+      } else {
+        console.error('Failed to add to wishlist');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      return false;
+    }
+  };
+
   // Use actual image URL from database, or fallback to placeholder
   const getImageUrl = (product) => {
     if (product.image_url) {
@@ -29,8 +56,19 @@ const ProductCard = ({ product }) => {
 
   const imageUrl = getImageUrl(product);
 
+  const handleSaveToWishlist = async () => {
+    if (!user) return;
+    // Onclick reaction: Trigger wishlist add function
+    const success = await addToWishlist(product.id, user.id);
+    if (success) {
+      setSaved(true);
+      // Add attributes dynamically: Add data-saved="true" when user clicks save
+      // Note: In React, we use state instead, but for DOM attribute, could use ref
+    }
+  };
+
   return (
-    <div className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+    <div className={`group overflow-hidden rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors ${saved ? 'data-saved="true"' : ''}`} data-saved={saved ? "true" : undefined}>
       <div className="aspect-[4/3] overflow-hidden">
         <img
           src={imageUrl}
@@ -71,8 +109,16 @@ const ProductCard = ({ product }) => {
           <button className="flex-1 rounded-xl bg-emerald-500 px-3 py-2 text-sm font-medium text-zinc-950 hover:bg-emerald-400 transition-colors">
             Add to Cart
           </button>
-          <button className="rounded-xl border border-white/15 px-3 py-2 text-sm hover:bg-white/10 transition-colors">
-            Details
+          <button
+            onClick={handleSaveToWishlist}
+            className={`rounded-xl border px-3 py-2 text-sm transition-colors ${
+              saved
+                ? 'border-red-500/20 bg-red-500/10 text-red-400'
+                : 'border-white/15 hover:bg-white/10'
+            }`}
+            disabled={!user}
+          >
+            {saved ? 'Saved' : 'Save'}
           </button>
         </div>
       </div>

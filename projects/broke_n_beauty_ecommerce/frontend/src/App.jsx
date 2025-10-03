@@ -2,6 +2,7 @@ import { Link, Route, Routes } from 'react-router-dom'
 import LandingPage from './LandingPage'
 import ProductsPage from './ProductsPage'
 import CartPage from './CartPage'
+import WishlistPage from './WishlistPage'
 import ProfilePage from './ProfilePage'
 import LoginPage from './LoginPage'
 import RegisterPage from './RegisterPage'
@@ -16,6 +17,10 @@ function Products() {
 
 function Cart() {
   return <CartPage />
+}
+
+function Wishlist() {
+  return <WishlistPage />
 }
 
 function Profile() {
@@ -36,6 +41,7 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/products" element={<Products />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

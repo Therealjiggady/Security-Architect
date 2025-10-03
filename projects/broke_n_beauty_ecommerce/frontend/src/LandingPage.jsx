@@ -35,7 +35,7 @@ export default function LandingPage() {
               New • SmartFit size helper
             </span>
             <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
-              Live bold move free.
+              Live bold <br> move free.</br>
               <br /> 
             </h1>
             <p className="mt-4 text-zinc-300 md:text-lg">

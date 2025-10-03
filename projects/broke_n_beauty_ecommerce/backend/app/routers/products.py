@@ -1,19 +1,20 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Request
 from sqlalchemy.orm import Session
 from backend.app.db import get_db
-from backend.app import models, schemas
+from backend.app import models
+from backend.app.schemas.product import ProductRead, ProductCreate, ProductUpdate, ProductVariantRead
 from backend.app.auth import require_auth
 import uuid
 import os
 
 router = APIRouter(prefix="/products", tags=["products"])
 
-@router.get("/", response_model=list[schemas.ProductRead])
+@router.get("/", response_model=list[ProductRead])
 def get_products(db: Session = Depends(get_db)):
     products = db.query(models.Product).all()
     return products
 
-@router.post("/", response_model=schemas.ProductRead)
+@router.post("/", response_model=ProductRead)
 async def create_product(
     request: Request,
     db: Session = Depends(get_db),
@@ -56,7 +57,7 @@ async def create_product(
     db.refresh(product)
     return product
 
-@router.put("/{product_id}", response_model=schemas.ProductRead)
+@router.put("/{product_id}", response_model=ProductRead)
 async def update_product(
     product_id: int,
     request: Request,

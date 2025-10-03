@@ -7,6 +7,7 @@ from backend.app.routers import auth as auth_router
 from backend.app.routers import users as users_router
 from backend.app.routers import products as products_router
 from backend.app.routers import cart as cart_router
+from backend.app.routers import wishlist as wishlist_router
 
 app = FastAPI(title="Clover Line API", version="0.1.0")
 
@@ -33,3 +34,4 @@ app.include_router(auth_router.router)
 app.include_router(users_router.router)
 app.include_router(products_router.router)
 app.include_router(cart_router.router)
+app.include_router(wishlist_router.router)
