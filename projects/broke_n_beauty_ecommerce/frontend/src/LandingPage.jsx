@@ -35,8 +35,8 @@ export default function LandingPage() {
               New • SmartFit size helper
             </span>
             <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
-              Live bold <br> move free.</br>
-              <br /> 
+              Live bold <br /> move free.
+              <br />
             </h1>
             <p className="mt-4 text-zinc-300 md:text-lg">
               From workouts to workdays — every butterfly has its perfect balance. 

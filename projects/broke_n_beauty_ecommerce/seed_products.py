@@ -23,7 +23,7 @@ def seed_products():
                 'description': 'Comfortable sports bra with excellent support for all-day wear',
                 'sku': 'BNB-SB-BLK',
                 'price': 13.99,
-                'image_url': 'https://images.unsplash.com/photo-1599050751795-5f9a2b2f1f1a?q=80&w=800&auto=format&fit=crop',
+                'image_url': '/static/images/sports_bra.png',
                 'variants': [
                     {'size': 'S', 'color': 'Black', 'stock': 50},
                     {'size': 'M', 'color': 'Black', 'stock': 45},
@@ -35,7 +35,7 @@ def seed_products():
                 'description': 'High-waisted biker shorts perfect for workouts and casual wear',
                 'sku': 'BNB-BS-GRY',
                 'price': 9.99,
-                'image_url': 'https://images.unsplash.com/photo-1618354691438-25e8c4a7cb68?q=80&w=800&auto=format&fit=crop',
+                'image_url': '/static/images/Grey fit.png',
                 'variants': [
                     {'size': 'XS', 'color': 'Grey', 'stock': 30},
                     {'size': 'S', 'color': 'Grey', 'stock': 35},
@@ -47,7 +47,7 @@ def seed_products():
                 'description': 'Professional scrub top suitable for healthcare workers',
                 'sku': 'BNB-ST-UNI',
                 'price': 15.00,
-                'image_url': 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800&auto=format&fit=crop',
+                'image_url': '/static/images/Scrubs2.png',
                 'variants': [
                     {'size': 'M', 'color': 'Blue', 'stock': 25},
                     {'size': 'L', 'color': 'Blue', 'stock': 30},
@@ -59,7 +59,7 @@ def seed_products():
                 'description': 'Professional scrub pants suitable for healthcare workers',
                 'sku': 'BNB-SP-UNI',
                 'price': 17.00,
-                'image_url': 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?q=80&w=800&auto=format&fit=crop',
+                'image_url': '/static/images/navy blue scrubs.png',
                 'variants': [
                     {'size': 'M', 'color': 'Blue', 'stock': 25},
                     {'size': 'L', 'color': 'Blue', 'stock': 30},
@@ -71,7 +71,7 @@ def seed_products():
                 'description': 'Moisture-wicking compression leggings for intense workouts',
                 'sku': 'BNB-CL-BLK',
                 'price': 24.99,
-                'image_url': 'https://images.unsplash.com/photo-1506629905607-0b5ab9a9e21a?q=80&w=800&auto=format&fit=crop',
+                'image_url': '/static/images/compression leggings.png',
                 'variants': [
                     {'size': 'S', 'color': 'Black', 'stock': 60},
                     {'size': 'M', 'color': 'Black', 'stock': 55},
@@ -83,7 +83,7 @@ def seed_products():
                 'description': 'Breathable tank top designed for yoga and pilates',
                 'sku': 'BNB-YT-GRY',
                 'price': 15.99,
-                'image_url': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop',
+                'image_url': '/static/images/yoga tank top.png',
                 'variants': [
                     {'size': 'XS', 'color': 'Gray', 'stock': 40},
                     {'size': 'S', 'color': 'Gray', 'stock': 45},
