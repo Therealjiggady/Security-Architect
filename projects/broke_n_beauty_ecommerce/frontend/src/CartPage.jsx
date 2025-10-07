@@ -48,7 +48,7 @@ export default function CartPage() {
             <div className="h-8 w-8 rounded-xl bg-emerald-500/20 ring-1 ring-emerald-400/40 grid place-items-center">
               <span className="text-emerald-300 font-bold">BnB</span>
             </div>
-            <span className="font-semibold tracking-wide">Broke N Beauty</span>
+            <span className="font-semibold tracking-wide">Broken Beauty</span>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-300">
             <a className="hover:text-white" href="/">Home</a>

@@ -1,6 +1,6 @@
 -- =========================================
 -- SQL_1 AND SQL_2 RUBRICS DEMONSTRATION
--- Broke N Beauty Ecommerce Database
+-- Broken Beauty Ecommerce Database
 -- =========================================
 
 -- This file demonstrates all SQL_1 and SQL_2 rubric requirements

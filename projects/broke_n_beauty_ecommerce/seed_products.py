@@ -23,7 +23,7 @@ def seed_products():
                 'description': 'Comfortable sports bra with excellent support for all-day wear',
                 'sku': 'BNB-SB-BLK',
                 'price': 13.99,
-                'image_url': '/static/images/sports_bra.png',
+                'image_url': '/static/images/cursive bra.png',
                 'variants': [
                     {'size': 'S', 'color': 'Black', 'stock': 50},
                     {'size': 'M', 'color': 'Black', 'stock': 45},
@@ -31,23 +31,23 @@ def seed_products():
                 ]
             },
             {
-                'name': 'BnB Biker Short – Grey',
+                'name': 'BnB Biker Short – Black',
                 'description': 'High-waisted biker shorts perfect for workouts and casual wear',
                 'sku': 'BNB-BS-GRY',
                 'price': 9.99,
-                'image_url': '/static/images/Grey fit.png',
+                'image_url': '/static/images/biker shorts in back.png',
                 'variants': [
-                    {'size': 'XS', 'color': 'Grey', 'stock': 30},
-                    {'size': 'S', 'color': 'Grey', 'stock': 35},
-                    {'size': 'M', 'color': 'Grey', 'stock': 40},
+                    {'size': 'XS', 'color': 'Black', 'stock': 30},
+                    {'size': 'S', 'color': 'Black', 'stock': 35},
+                    {'size': 'M', 'color': 'Black', 'stock': 40},
                 ]
             },
             {
-                'name': 'BnB Unisex Scrub Top',
+                'name': 'BnB Scrub Top',
                 'description': 'Professional scrub top suitable for healthcare workers',
                 'sku': 'BNB-ST-UNI',
                 'price': 15.00,
-                'image_url': '/static/images/Scrubs2.png',
+                'image_url': '/static/images/india top.png',
                 'variants': [
                     {'size': 'M', 'color': 'Blue', 'stock': 25},
                     {'size': 'L', 'color': 'Blue', 'stock': 30},
@@ -55,11 +55,11 @@ def seed_products():
                 ]
             },
             {
-                'name': 'BnB Unisex Scrub Pants',
+                'name': 'BnB Scrub Pants',
                 'description': 'Professional scrub pants suitable for healthcare workers',
                 'sku': 'BNB-SP-UNI',
                 'price': 17.00,
-                'image_url': '/static/images/navy blue scrubs.png',
+                'image_url': '/static/images/india bottoms.png',
                 'variants': [
                     {'size': 'M', 'color': 'Blue', 'stock': 25},
                     {'size': 'L', 'color': 'Blue', 'stock': 30},
@@ -71,7 +71,7 @@ def seed_products():
                 'description': 'Moisture-wicking compression leggings for intense workouts',
                 'sku': 'BNB-CL-BLK',
                 'price': 24.99,
-                'image_url': '/static/images/compression leggings.png',
+                'image_url': '/static/images/Generated Image October 07, 2025 - 9_15AM.png',
                 'variants': [
                     {'size': 'S', 'color': 'Black', 'stock': 60},
                     {'size': 'M', 'color': 'Black', 'stock': 55},
@@ -83,7 +83,7 @@ def seed_products():
                 'description': 'Breathable tank top designed for yoga and pilates',
                 'sku': 'BNB-YT-GRY',
                 'price': 15.99,
-                'image_url': '/static/images/yoga tank top.png',
+                'image_url': '/static/images/dominican tanktop.png',
                 'variants': [
                     {'size': 'XS', 'color': 'Gray', 'stock': 40},
                     {'size': 'S', 'color': 'Gray', 'stock': 45},

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './components/ProductCard';
+import SizeRecommender from './components/SizeRecommender';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -7,6 +8,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -57,13 +59,19 @@ export default function ProductsPage() {
             <div className="h-8 w-8 rounded-xl bg-emerald-500/20 ring-1 ring-emerald-400/40 grid place-items-center">
               <span className="text-emerald-300 font-bold">BnB</span>
             </div>
-            <span className="font-semibold tracking-wide">Broke N Beauty</span>
+            <span className="font-semibold tracking-wide">Broken Beauty</span>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-300">
             <a className="hover:text-white" href="/">Home</a>
             <a className="hover:text-white text-emerald-300" href="/products">Products</a>
             <a className="hover:text-white" href="/cart">Cart</a>
             <a className="hover:text-white" href="/profile">Profile</a>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+            >
+              Size Recommender
+            </button>
           </nav>
         </div>
       </header>
@@ -87,6 +95,8 @@ export default function ProductsPage() {
           </div>
         )}
       </main>
+
+      <SizeRecommender isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

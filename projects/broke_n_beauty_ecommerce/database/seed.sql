@@ -1,4 +1,4 @@
--- Seed data for Broke N Beauty E-commerce Database
+-- Seed data for Broken Beauty E-commerce Database
 
 -- Insert users
 INSERT INTO users (email, hashed_password, full_name) VALUES

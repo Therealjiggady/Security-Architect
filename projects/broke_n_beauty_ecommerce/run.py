@@ -5,7 +5,7 @@ import sys
 import subprocess
 
 def main():
-    print("🚀 Starting Broke n Beauty Ecommerce Backend Setup...")
+    print("🚀 Starting Broken Beauty Ecommerce Backend Setup...")
 
     # Check for virtual environment
     print("📦 Checking for virtual environment...")

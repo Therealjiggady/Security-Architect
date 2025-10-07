@@ -35,7 +35,7 @@ export default function LandingPage() {
               New • SmartFit size helper
             </span>
             <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
-              Live bold <br /> move free.
+              Live Bold <br /> Move Free.
               <br />
             </h1>
             <p className="mt-4 text-zinc-300 md:text-lg">
@@ -104,7 +104,7 @@ export default function LandingPage() {
               img: "Grey fit.png",
             },
             {
-              name: "BnB Unisex Scrub Top",
+              name: "BnB Scrub Top",
               price: "$33.99",
               tag: "Scrubs",
               img: "Scrubs2.png",
@@ -139,7 +139,7 @@ export default function LandingPage() {
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link to="/products" className="rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 hover:bg-emerald-400">Get started</Link>
-            <a href="#features" className="rounded-2xl border border-white/15 px-6 py-3 font-medium text-white hover:bg-white/10">Why Clover Line?</a>
+            <a href="#features" className="rounded-2xl border border-white/15 px-6 py-3 font-medium text-white hover:bg-white/10">Why Broken Beauty?</a>
           </div>
         </div>
       </section>
