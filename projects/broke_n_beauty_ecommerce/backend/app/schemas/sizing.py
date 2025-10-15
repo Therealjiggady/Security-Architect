@@ -15,13 +15,14 @@ class SizeRecommendationRequest(BaseModel):
     user_id: int = None  # Optional for anonymous users
     height: float  # inches
     weight: float  # lbs
-    chest: float   # inches (bust/chest circumference)
-    waist: float   # inches
-    hips: float    # inches
-    shoulders: float  # inches (shoulder width)
-    inseam: float  # inches (for bottoms)
+    chest: float = None   # inches (bust/chest circumference) - optional
+    waist: float = None   # inches - optional
+    hips: float = None    # inches - optional
+    shoulders: float = None  # inches (shoulder width) - optional
+    inseam: float = None  # inches (for bottoms) - optional
     fit_preference: FitPreference
     fabric_stretch: FabricStretch
+    product_type: str = "general"  # Product type for context
 
 class SizeRecommendationResponse(BaseModel):
     top_size: str

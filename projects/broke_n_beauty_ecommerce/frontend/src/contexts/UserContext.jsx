@@ -83,12 +83,34 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('token');
   };
 
+  const updateProfile = async (updates) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE}/users/me`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) throw new Error('Profile update failed');
+      const updatedUser = await res.json();
+      setUser(updatedUser);
+      return updatedUser;
+    } catch (err) {
+      console.error('Profile update error:', err);
+      throw err;
+    }
+  };
+
   const value = {
     user,
     isLoading,
     login,
     register,
     logout,
+    updateProfile,
   };
 
   return (

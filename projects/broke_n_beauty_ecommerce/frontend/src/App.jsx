@@ -6,6 +6,7 @@ import WishlistPage from './WishlistPage'
 import ProfilePage from './ProfilePage'
 import LoginPage from './LoginPage'
 import RegisterPage from './RegisterPage'
+import PaymentTestPage from './PaymentTestPage'
 
 function Home() {
   return <LandingPage />
@@ -35,6 +36,10 @@ function Register() {
   return <RegisterPage />
 }
 
+function PaymentTest() {
+  return <PaymentTestPage />
+}
+
 export default function App() {
   return (
     <Routes>
@@ -45,6 +50,7 @@ export default function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/payment-test" element={<PaymentTest />} />
     </Routes>
   )
 }

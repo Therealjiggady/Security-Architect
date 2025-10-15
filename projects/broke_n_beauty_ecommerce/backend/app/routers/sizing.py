@@ -107,12 +107,13 @@ def calculate_size_score(measurements: dict, size_chart: dict, weights: dict,
     """
     Calculate weighted score for how well measurements fit a size.
     Returns score between 0-1, where 1 is perfect fit.
+    When measurements don't fit perfectly, still provides meaningful scores.
     """
     total_score = 0
     total_weight = 0
 
     for measurement, value in measurements.items():
-        if measurement in size_chart and measurement in weights:
+        if measurement in size_chart and measurement in weights and value is not None:
             min_val = size_chart[measurement]["min"] * fit_multiplier["range_multiplier"]
             max_val = size_chart[measurement]["max"] * fit_multiplier["range_multiplier"]
             weight = weights[measurement]
@@ -121,16 +122,21 @@ def calculate_size_score(measurements: dict, size_chart: dict, weights: dict,
                 # Perfect fit within adjusted range
                 score = 1.0
             else:
-                # Calculate deviation score
+                # Calculate deviation score - improved to handle edge cases better
+                range_center = (min_val + max_val) / 2
                 range_width = max_val - min_val
-                deviation = min(abs(value - min_val), abs(value - max_val))
-                tolerance = fit_multiplier["tolerance"] * range_width
-                penalty = stretch_adjustment["deviation_penalty"]
+                deviation = abs(value - range_center)
 
-                if deviation <= tolerance:
-                    score = 1.0 - (deviation / tolerance) * penalty
+                # Use a more forgiving scoring system
+                if deviation <= range_width * 0.5:  # Within 50% of range
+                    score = max(0.1, 1.0 - (deviation / (range_width * 0.5)))
                 else:
-                    score = max(0, 1.0 - (deviation / range_width) * penalty)
+                    # Still give some score even if outside range
+                    score = max(0.05, 0.5 - (deviation / (range_width * 2)))
+
+                # Apply stretch penalty
+                penalty = stretch_adjustment["deviation_penalty"]
+                score = score * penalty
 
             total_score += score * weight
             total_weight += weight
@@ -144,10 +150,46 @@ def apply_offset(size: str, offset_val: int) -> str:
     new_idx = max(0, min(len(SIZE_ORDER) - 1, idx + offset_val))
     return SIZE_ORDER[new_idx]
 
+def estimate_size_from_height_weight(height: float, weight: float) -> str:
+    """
+    Basic size estimation based on height and weight when no measurements provided.
+    Uses rough correlations for women's sizing.
+    """
+    # Convert to feet for easier logic
+    height_feet = height / 12
+
+    # Very basic size estimation
+    if height_feet < 5.2:
+        if weight < 110:
+            return "XS"
+        elif weight < 130:
+            return "S"
+        else:
+            return "M"
+    elif height_feet < 5.6:
+        if weight < 120:
+            return "XS"
+        elif weight < 140:
+            return "S"
+        elif weight < 160:
+            return "M"
+        else:
+            return "L"
+    else:  # 5.6+ feet
+        if weight < 130:
+            return "S"
+        elif weight < 150:
+            return "M"
+        elif weight < 170:
+            return "L"
+        else:
+            return "XL"
+
 def recommend_sizes(request: SizeRecommendationRequest, user_id: int = None, db: Session = None) -> SizeRecommendationResponse:
     """
     Recommend separate top and bottom sizes based on body measurements,
     fit preference, and fabric stretch, adjusted by user-specific offsets.
+    Falls back to height/weight estimation when no measurements provided.
     """
     # Load user offsets if user_id provided
     top_offset = 0
@@ -161,40 +203,55 @@ def recommend_sizes(request: SizeRecommendationRequest, user_id: int = None, db:
     fit_mult = FIT_MULTIPLIERS[request.fit_preference]
     stretch_adj = STRETCH_ADJUSTMENTS[request.fabric_stretch]
 
-    # Top measurements
-    top_measurements = {
-        "chest": request.chest,
-        "shoulders": request.shoulders,
-        "waist": request.waist
-    }
+    # Check if any measurements are provided
+    has_measurements = any([
+        request.chest, request.shoulders, request.waist,
+        request.hips, request.inseam
+    ])
 
-    # Bottom measurements
-    bottom_measurements = {
-        "waist": request.waist,
-        "hips": request.hips,
-        "inseam": request.inseam
-    }
+    if has_measurements:
+        # Use measurement-based scoring
+        # Top measurements
+        top_measurements = {
+            "chest": request.chest,
+            "shoulders": request.shoulders,
+            "waist": request.waist
+        }
 
-    # Calculate scores for tops
-    top_scores = {}
-    for size, ranges in TOP_SIZE_CHART.items():
-        top_scores[size] = calculate_size_score(
-            top_measurements, ranges, TOP_WEIGHTS, fit_mult, stretch_adj
-        )
+        # Bottom measurements
+        bottom_measurements = {
+            "waist": request.waist,
+            "hips": request.hips,
+            "inseam": request.inseam
+        }
 
-    # Calculate scores for bottoms
-    bottom_scores = {}
-    for size, ranges in BOTTOM_SIZE_CHART.items():
-        bottom_scores[size] = calculate_size_score(
-            bottom_measurements, ranges, BOTTOM_WEIGHTS, fit_mult, stretch_adj
-        )
+        # Calculate scores for tops
+        top_scores = {}
+        for size, ranges in TOP_SIZE_CHART.items():
+            top_scores[size] = calculate_size_score(
+                top_measurements, ranges, TOP_WEIGHTS, fit_mult, stretch_adj
+            )
 
-    # Select best sizes
-    top_size = max(top_scores, key=top_scores.get)
-    top_confidence = top_scores[top_size]
+        # Calculate scores for bottoms
+        bottom_scores = {}
+        for size, ranges in BOTTOM_SIZE_CHART.items():
+            bottom_scores[size] = calculate_size_score(
+                bottom_measurements, ranges, BOTTOM_WEIGHTS, fit_mult, stretch_adj
+            )
 
-    bottom_size = max(bottom_scores, key=bottom_scores.get)
-    bottom_confidence = bottom_scores[bottom_size]
+        # Select best sizes
+        top_size = max(top_scores, key=top_scores.get)
+        top_confidence = top_scores[top_size]
+
+        bottom_size = max(bottom_scores, key=bottom_scores.get)
+        bottom_confidence = bottom_scores[bottom_size]
+    else:
+        # Fallback to height/weight estimation
+        estimated_size = estimate_size_from_height_weight(request.height, request.weight)
+        top_size = estimated_size
+        bottom_size = estimated_size
+        top_confidence = 0.3  # Low confidence for estimation
+        bottom_confidence = 0.3
 
     # Apply user offsets
     top_size = apply_offset(top_size, top_offset)
@@ -202,6 +259,8 @@ def recommend_sizes(request: SizeRecommendationRequest, user_id: int = None, db:
 
     # Generate notes
     notes = []
+    if not has_measurements:
+        notes.append("Size estimated from height and weight only. For better accuracy, provide body measurements.")
     if top_confidence < 0.7:
         notes.append(f"Top size {top_size} may not fit perfectly. Consider trying on.")
     if bottom_confidence < 0.7:

@@ -19,7 +19,7 @@ export default function LandingPage() {
             <Link className="hover:text-white" to="/cart">Cart</Link>
             <Link className="hover:text-white" to="/profile">Profile</Link>
           </nav>
-          <Link to="/profile" className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/20">Sign In</Link>
+          <Link to="/login" className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/20">Sign In</Link>
         </div>
       </header>
 

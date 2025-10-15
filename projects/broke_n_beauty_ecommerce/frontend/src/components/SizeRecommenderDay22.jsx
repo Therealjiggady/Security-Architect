@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const API_BASE = 'http://localhost:8000';
 
-export default function SizeRecommender({ isOpen, onClose }) {
+export default function SizeRecommenderDay22({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     height: '',
     weight: '',
@@ -12,43 +12,25 @@ export default function SizeRecommender({ isOpen, onClose }) {
     shoulders: '',
     inseam: '',
     fit_preference: 'regular',
-    fabric_stretch: 'medium',
-    product_type: 'general'
+    fabric_stretch: 'medium'
   });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [formChanged, setFormChanged] = useState(false);
+
+  // Ref for autofocus
+  const heightInputRef = useRef(null);
+
+  // Autofocus on first input when component mounts
+  useEffect(() => {
+    if (isOpen && heightInputRef.current) {
+      heightInputRef.current.focus();
+    }
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear previous result when form changes
-    if (result) {
-      setResult(null);
-      setFormChanged(true);
-    }
-  };
-
-  const parseHeight = (heightStr) => {
-    // Handle formats like "5'6", "5 feet 6 inches", "66 inches", "66"
-    const cleanStr = heightStr.toLowerCase().replace(/[^0-9'"\s]/g, '');
-
-    // Check for feet'inches format
-    const feetInchesMatch = cleanStr.match(/(\d+)\s*[']\s*(\d+)/);
-    if (feetInchesMatch) {
-      const feet = parseInt(feetInchesMatch[1]);
-      const inches = parseInt(feetInchesMatch[2]);
-      return feet * 12 + inches;
-    }
-
-    // Check for plain number (assume inches)
-    const numberMatch = cleanStr.match(/(\d+)/);
-    if (numberMatch) {
-      return parseFloat(numberMatch[1]);
-    }
-
-    throw new Error('Invalid height format. Use format like "5\'6" or "66"');
   };
 
   const handleSubmit = async (e) => {
@@ -56,15 +38,18 @@ export default function SizeRecommender({ isOpen, onClose }) {
     setLoading(true);
     setError(null);
     setResult(null);
-    setFormChanged(false);
+
+    // Show "Calculating size..." for 2 seconds minimum
+    const loadingTimeout = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
 
     try {
       const requestData = {
-        height: parseHeight(formData.height),
+        height: parseFloat(formData.height),
         weight: parseFloat(formData.weight),
         fit_preference: formData.fit_preference,
-        fabric_stretch: formData.fabric_stretch,
-        product_type: formData.product_type
+        fabric_stretch: formData.fabric_stretch
       };
 
       // Add optional measurements only if provided
@@ -88,9 +73,17 @@ export default function SizeRecommender({ isOpen, onClose }) {
 
       const data = await response.json();
       setResult(data);
+
+      // Log to console as specified
+      console.log('Recommended Size:', data);
+
+      // Clear loading after API response if it took less than 2 seconds
+      clearTimeout(loadingTimeout);
+      setTimeout(() => setLoading(false), 0);
+
     } catch (err) {
       setError(err.message);
-    } finally {
+      clearTimeout(loadingTimeout);
       setLoading(false);
     }
   };
@@ -101,35 +94,38 @@ export default function SizeRecommender({ isOpen, onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-zinc-900 text-zinc-100 rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Size Recommendation</h2>
+          <h2 className="text-xl font-bold">Interactive Size Recommender (Day 22)</h2>
           <button onClick={onClose} className="text-zinc-400 hover:text-white">&times;</button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Height (e.g., 5'6" or 66 inches)</label>
-            <input
-              type="text"
-              name="height"
-              value={formData.height}
-              onChange={handleChange}
-              required
-              placeholder="5 feet 6 inches or 66"
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Weight (lbs)</label>
-            <input
-              type="number"
-              name="weight"
-              value={formData.weight}
-              onChange={handleChange}
-              required
-              step="0.1"
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Height (inches)</label>
+              <input
+                ref={heightInputRef}
+                type="number"
+                name="height"
+                value={formData.height}
+                onChange={handleChange}
+                required
+                min="48"
+                step="0.1"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Weight (lbs)</label>
+              <input
+                type="number"
+                name="weight"
+                value={formData.weight}
+                onChange={handleChange}
+                required
+                step="0.1"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -142,7 +138,7 @@ export default function SizeRecommender({ isOpen, onClose }) {
                 onChange={handleChange}
                 step="0.1"
                 placeholder="Optional"
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
@@ -154,7 +150,7 @@ export default function SizeRecommender({ isOpen, onClose }) {
                 onChange={handleChange}
                 step="0.1"
                 placeholder="Optional"
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
@@ -169,7 +165,7 @@ export default function SizeRecommender({ isOpen, onClose }) {
                 onChange={handleChange}
                 step="0.1"
                 placeholder="Optional"
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
@@ -181,7 +177,7 @@ export default function SizeRecommender({ isOpen, onClose }) {
                 onChange={handleChange}
                 step="0.1"
                 placeholder="Optional"
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
@@ -195,7 +191,7 @@ export default function SizeRecommender({ isOpen, onClose }) {
               onChange={handleChange}
               step="0.1"
               placeholder="Optional"
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
@@ -206,7 +202,7 @@ export default function SizeRecommender({ isOpen, onClose }) {
                 name="fit_preference"
                 value={formData.fit_preference}
                 onChange={handleChange}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
               >
                 <option value="slim">Slim</option>
                 <option value="regular">Regular</option>
@@ -219,7 +215,7 @@ export default function SizeRecommender({ isOpen, onClose }) {
                 name="fabric_stretch"
                 value={formData.fabric_stretch}
                 onChange={handleChange}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded transition-colors hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:border-emerald-500"
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -228,31 +224,12 @@ export default function SizeRecommender({ isOpen, onClose }) {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Product Type (Optional)</label>
-            <select
-              name="product_type"
-              value={formData.product_type}
-              onChange={handleChange}
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
-            >
-              <option value="general">General</option>
-              <option value="sports_bra">Sports Bra</option>
-              <option value="biker_shorts">Biker Shorts</option>
-              <option value="tank_top">Tank Top</option>
-              <option value="scrub_top">Scrub Top</option>
-              <option value="scrub_bottom">Scrub Bottom</option>
-              <option value="compression_leggings">Compression Leggings</option>
-              <option value="yoga_tank">Yoga Tank Top</option>
-            </select>
-          </div>
-
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-800 text-white font-medium py-2 px-4 rounded transition-colors"
           >
-            {loading ? 'Getting Recommendation...' : formChanged ? 'Update Recommendation' : 'Get Size Recommendation'}
+            {loading ? 'Calculating size...' : 'Get Size Recommendation'}
           </button>
         </form>
 

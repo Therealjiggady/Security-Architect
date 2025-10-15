@@ -43,9 +43,26 @@ Implemented a comprehensive clothing size recommendation system with advanced fe
 
 ## Usage
 1. Click "Size Recommender" on products page
-2. Enter measurements (height in feet/inches)
-3. Select fit preference and fabric stretch
-4. Get personalized size recommendations with confidence and notes
+2. Enter height (e.g., "5'6" or "66 inches") and weight (pounds) - required
+3. Optionally enter additional measurements (chest, waist, hips, shoulders, inseam in inches)
+4. Select fit preference, fabric stretch, and product type
+5. Get personalized size recommendations with confidence and notes
+
+## Product Types
+- **General**: Standard sizing for all products
+- **Sports Bra**: Optimized for athletic tops
+- **Biker Shorts**: Focused on bottom fit
+- **Tank Top**: Upper body emphasis
+- **Scrub Top/Bottom**: Professional wear sizing
+- **Compression Leggings**: Activewear bottoms
+- **Yoga Tank Top**: Flexible upper body wear
+
+## Key Features
+- **Minimum Requirements**: Only height and weight required for basic recommendations
+- **Optional Measurements**: Add more measurements for higher confidence
+- **Flexible Height Input**: Accepts formats like "5'6", "5 feet 6 inches", "66 inches", or just "66"
+- **Units Display**: Clear labeling (inches, pounds)
+- **Flexible Algorithm**: Handles missing measurements gracefully with appropriate confidence scores
 5. Optional: Provide feedback to improve future recommendations
 
 ## Testing
