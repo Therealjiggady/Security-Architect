@@ -107,7 +107,7 @@ export default function LandingPage() {
               name: "BnB Scrub Top",
               price: "$33.99",
               tag: "Scrubs",
-              img: "Scrubs2.png",
+              img: "Scrubs.png",
             },
           ].map((p, i) => (
             <div key={i} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5">
