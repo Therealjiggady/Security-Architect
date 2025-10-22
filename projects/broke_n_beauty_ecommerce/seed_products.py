@@ -59,7 +59,7 @@ def seed_products():
                 'description': 'Professional scrub pants suitable for healthcare workers',
                 'sku': 'BNB-SP-UNI',
                 'price': 17.00,
-                'image_url': '/static/images/india bottoms.png',
+                'image_url': '/static/images/india 22.png',
                 'variants': [
                     {'size': 'M', 'color': 'Blue', 'stock': 25},
                     {'size': 'L', 'color': 'Blue', 'stock': 30},

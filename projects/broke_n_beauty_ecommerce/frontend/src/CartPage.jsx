@@ -40,21 +40,21 @@ export default function CartPage() {
   const total = subtotal + shipping;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-30 backdrop-blur border-b border-white/10 bg-zinc-950/60">
+      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-background/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-xl bg-emerald-500/20 ring-1 ring-emerald-400/40 grid place-items-center">
-              <span className="text-emerald-300 font-bold">BnB</span>
+            <div className="h-8 w-8 rounded-xl bg-primary/20 ring-1 ring-primary/40 grid place-items-center">
+              <span className="text-primary font-bold">BnB</span>
             </div>
             <span className="font-semibold tracking-wide">Broken Beauty</span>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-300">
-            <a className="hover:text-white" href="/">Home</a>
-            <a className="hover:text-white" href="/products">Products</a>
-            <a className="hover:text-white text-emerald-300" href="/cart">Cart ({cartItems.length})</a>
-            <a className="hover:text-white" href="/profile">Profile</a>
+          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
+            <a className="hover:text-foreground" href="/">Home</a>
+            <a className="hover:text-foreground" href="/products">Products</a>
+            <a className="hover:text-primary" href="/cart">Cart ({cartItems.length})</a>
+            <a className="hover:text-foreground" href="/profile">Profile</a>
           </nav>
         </div>
       </header>
@@ -70,7 +70,7 @@ export default function CartPage() {
             <p className="text-zinc-400 mb-6">Add some products to get started!</p>
             <a
               href="/products"
-              className="inline-block rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 hover:bg-emerald-400 transition-colors"
+              className="inline-block rounded-2xl px-6 py-3 font-medium transition-colors"
             >
               Browse Products
             </a>
@@ -80,7 +80,7 @@ export default function CartPage() {
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {cartItems.map((item) => (
-                <div key={item.id} className="flex gap-4 p-4 bg-zinc-800/50 rounded-lg border border-zinc-700">
+                <div key={item.id} className="flex gap-4 p-4 bg-card/50 rounded-lg border border-border">
                   <img
                     src={item.image}
                     alt={item.productName}
@@ -88,30 +88,30 @@ export default function CartPage() {
                   />
                   <div className="flex-1">
                     <h3 className="font-medium text-lg">{item.productName}</h3>
-                    <p className="text-sm text-zinc-400">
+                    <p className="text-sm text-muted-foreground">
                       Size: {item.size} | Color: {item.color}
                     </p>
-                    <p className="text-emerald-300 font-semibold">${item.price}</p>
+                    <p className="text-primary font-semibold">${item.price}</p>
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="w-8 h-8 rounded bg-zinc-700 hover:bg-zinc-600 flex items-center justify-center"
+                        className="w-8 h-8 rounded bg-muted hover:bg-muted/80 flex items-center justify-center"
                       >
                         -
                       </button>
                       <span className="w-8 text-center">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="w-8 h-8 rounded bg-zinc-700 hover:bg-zinc-600 flex items-center justify-center"
+                        className="w-8 h-8 rounded bg-muted hover:bg-muted/80 flex items-center justify-center"
                       >
                         +
                       </button>
                     </div>
                     <button
                       onClick={() => removeItem(item.id)}
-                      className="text-red-400 hover:text-red-300 text-sm"
+                      className="text-destructive hover:text-destructive/80 text-sm"
                     >
                       Remove
                     </button>
@@ -121,7 +121,7 @@ export default function CartPage() {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-zinc-800/50 rounded-lg border border-zinc-700 p-6 h-fit">
+            <div className="bg-card/50 rounded-lg border border-border p-6 h-fit">
               <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between">
@@ -132,16 +132,16 @@ export default function CartPage() {
                   <span>Shipping</span>
                   <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
                 </div>
-                <hr className="border-zinc-600" />
+                <hr className="border-border" />
                 <div className="flex justify-between font-semibold text-lg">
                   <span>Total</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
-              <button className="w-full rounded-xl bg-emerald-500 px-4 py-3 font-medium text-zinc-950 hover:bg-emerald-400 transition-colors">
+              <button className="w-full rounded-xl px-4 py-3 font-medium transition-colors">
                 Proceed to Checkout
               </button>
-              <p className="text-xs text-zinc-400 mt-2 text-center">
+              <p className="text-xs text-muted-foreground mt-2 text-center">
                 {shipping === 0 ? 'Free shipping on orders over $50!' : 'Add $50+ for free shipping'}
               </p>
             </div>

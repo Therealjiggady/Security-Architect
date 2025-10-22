@@ -1,54 +1,99 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from "./components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./components/ui/navigation-menu";
+import { cn } from "./lib/utils";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-zinc-100">
+    <div className="min-h-screen text-foreground">
+      {/* Background Video */}
+      <video
+        src="/MamiVid.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="background-video"
+        onLoadedData={() => console.log("Video loaded successfully")}
+        onError={(e) => console.error("Video load error:", e.target.src, e)}
+      />
       {/* Nav */}
-      <header className="sticky top-0 z-30 backdrop-blur border-b border-white/10 bg-zinc-950/60">
+      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-background/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-xl bg-emerald-500/20 ring-1 ring-emerald-400/40 grid place-items-center">
-              <span className="text-emerald-300 font-bold">BnB</span>
+            <div className="h-8 w-8 rounded-xl bg-primary/20 ring-1 ring-primary/40 grid place-items-center">
+              <span className="text-primary font-bold">BnB</span>
             </div>
             <span className="font-semibold tracking-wide">Broken Beauty</span>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-300">
-            <a className="hover:text-white" href="#features">Features</a>
-            <Link className="hover:text-white" to="/products">Products</Link>
-            <Link className="hover:text-white" to="/cart">Cart</Link>
-            <Link className="hover:text-white" to="/profile">Profile</Link>
-          </nav>
-          <Link to="/login" className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/20">Sign In</Link>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <a className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} href="#features">
+                    Features
+                  </a>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} to="/products">
+                    Products
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} to="/cart">
+                    Cart
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} to="/profile">
+                    Profile
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          <Link to="/login" className="rounded-xl bg-secondary px-3 py-2 text-sm text-secondary-foreground hover:bg-secondary/80">Sign In</Link>
         </div>
       </header>
 
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-emerald-500/10 blur-3xl" />
-          <div className="absolute -bottom-16 right-8 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute -bottom-16 right-8 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         </div>
         <div className="mx-auto max-w-6xl px-4 py-20 md:py-28">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-300">
+            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs text-primary">
               New • SmartFit size helper
             </span>
             <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
               Live Bold <br /> Move Free.
               <br />
             </h1>
-            <p className="mt-4 text-zinc-300 md:text-lg">
-              From workouts to workdays — every butterfly has its perfect balance. 
-              
+            <p className="mt-4 text-muted-foreground md:text-lg">
+              From workouts to workdays — every butterfly has its perfect balance.
+
               Find yours in sports bras, shorts, and scrubs with sizing made simple and shipping made quick
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link to="/products" className="rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 shadow-lg shadow-emerald-500/25 hover:bg-emerald-400">
-                Shop the collection
+              <Link to="/products">
+                <Button size="lg" className="shadow-lg shadow-primary/25">
+                  Shop the collection
+                </Button>
               </Link>
-              <a href="#features" className="rounded-2xl border border-white/15 px-6 py-3 font-medium text-white hover:bg-white/10">
-                Learn more
+              <a href="#features">
+                <Button variant="outline" size="lg">
+                  Learn more
+                </Button>
               </a>
             </div>
           </div>
@@ -72,13 +117,17 @@ export default function LandingPage() {
               desc: "Secure payments with a streamlined cart. In and out in seconds.",
             },
           ].map((f, i) => (
-            <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-sm">
-              <div className="mb-3 h-10 w-10 rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/30 grid place-items-center">
-                <div className="h-2 w-2 rounded-full bg-emerald-400" />
-              </div>
-              <h3 className="text-lg font-semibold tracking-tight">{f.title}</h3>
-              <p className="mt-2 text-sm text-zinc-300">{f.desc}</p>
-            </div>
+            <Card key={i} className="bg-card/5">
+              <CardHeader>
+                <div className="mb-3 h-10 w-10 rounded-xl bg-primary/15 ring-1 ring-primary/30 grid place-items-center">
+                  <div className="h-2 w-2 rounded-full bg-primary" />
+                </div>
+                <CardTitle className="text-lg">{f.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{f.desc}</CardDescription>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>
@@ -87,7 +136,7 @@ export default function LandingPage() {
       <section id="products" className="mx-auto max-w-6xl px-4 pb-20">
         <div className="mb-6 flex items-end justify-between">
           <h2 className="text-2xl font-semibold tracking-tight">Featured Products</h2>
-          <Link to="/products" className="text-sm text-emerald-300 hover:text-emerald-200">View all</Link>
+          <Link to="/products" className="text-sm text-primary hover:text-primary/80">View all</Link>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
@@ -107,53 +156,91 @@ export default function LandingPage() {
               name: "BnB Scrub Top",
               price: "$33.99",
               tag: "Scrubs",
-              img: "Scrubs.png",
+              img: "Ambs.png",
             },
           ].map((p, i) => (
-            <div key={i} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-              <div className="aspect-[4/3] overflow-hidden">
-                <img src={p.img} alt={p.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-              </div>
-              <div className="p-4">
+            <Card key={i} className="group overflow-hidden bg-card/5">
+              <CardHeader>
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img src={p.img} alt={p.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                </div>
+              </CardHeader>
+              <CardContent>
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium">{p.name}</h3>
-                  <span className="text-emerald-300">{p.price}</span>
+                  <span className="text-primary">{p.price}</span>
                 </div>
-                <p className="mt-1 text-xs text-zinc-400">{p.tag}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{p.tag}</p>
                 <div className="mt-4 flex items-center gap-2">
-                  <button className="w-full rounded-xl bg-emerald-500 px-3 py-2 text-sm font-medium text-zinc-950 hover:bg-emerald-400">Add to cart</button>
-                  <button className="rounded-xl border border-white/15 px-3 py-2 text-sm hover:bg-white/10">Details</button>
+                  <Button className="flex-1">Add to cart</Button>
+                  <Button variant="outline">Details</Button>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section id="cta" className="border-t border-white/10 bg-zinc-950/40 py-16">
+      <section id="cta" className="border-t border-border bg-background/40 py-16">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <h3 className="text-2xl font-semibold">Ready to feel the difference?</h3>
-          <p className="mt-2 text-zinc-300">
+          <p className="mt-2 text-muted-foreground">
             Start with our best-sellers and get personalized tips from SmartFit.
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link to="/products" className="rounded-2xl bg-emerald-500 px-6 py-3 font-medium text-zinc-950 hover:bg-emerald-400">Get started</Link>
-            <a href="#features" className="rounded-2xl border border-white/15 px-6 py-3 font-medium text-white hover:bg-white/10">Why Broken Beauty?</a>
+            <Link to="/products">
+              <Button size="lg">Get started</Button>
+            </Link>
+            <a href="#features">
+              <Button variant="outline" size="lg">Why Broken Beauty?</Button>
+            </a>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10">
-        <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-zinc-400">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p>© {new Date().getFullYear()} Broken Beauty. All rights reserved.</p>
-            <div className="flex items-center gap-4">
-              <a className="hover:text-zinc-200" href="#">Privacy</a>
-              <a className="hover:text-zinc-200" href="#">Terms</a>
-              <a className="hover:text-zinc-200" href="#">Contact</a>
+      <footer className="border-t border-border bg-muted/50">
+        <div className="mx-auto max-w-6xl px-4 py-8">
+          <div className="grid gap-8 md:grid-cols-4">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="h-6 w-6 rounded-lg bg-primary grid place-items-center">
+                  <span className="text-primary-foreground text-xs font-bold">BnB</span>
+                </div>
+                <span className="font-semibold">Broken Beauty</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Live bold, move free with our smart sizing and premium comfort.
+              </p>
             </div>
+            <div className="space-y-3">
+              <h4 className="font-medium">Shop</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <Link to="/products" className="block hover:text-foreground">Products</Link>
+                <a href="#features" className="block hover:text-foreground">Features</a>
+                <Link to="/cart" className="block hover:text-foreground">Cart</Link>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h4 className="font-medium">Support</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <a href="#" className="block hover:text-foreground">Size Guide</a>
+                <a href="#" className="block hover:text-foreground">Shipping</a>
+                <a href="#" className="block hover:text-foreground">Returns</a>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h4 className="font-medium">Company</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <a href="#" className="block hover:text-foreground">About</a>
+                <a href="#" className="block hover:text-foreground">Contact</a>
+                <a href="#" className="block hover:text-foreground">Privacy</a>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 border-t border-border pt-8 text-center text-sm text-muted-foreground">
+            <p>© {new Date().getFullYear()} Broken Beauty. All rights reserved.</p>
           </div>
         </div>
       </footer>

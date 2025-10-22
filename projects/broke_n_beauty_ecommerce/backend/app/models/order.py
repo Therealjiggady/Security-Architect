@@ -1,13 +1,21 @@
 from __future__ import annotations
 
+import enum
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import Column, Integer, String, DateTime, Numeric, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Numeric, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from backend.app.db import Base
+
+
+class OrderStatus(str, enum.Enum):
+    """Enum for order status tracking"""
+    PENDING = "pending"
+    SHIPPED = "shipped"
+    DELIVERED = "delivered"
 
 
 class Order(Base):
@@ -21,7 +29,7 @@ class Order(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     cart_id = Column(Integer, ForeignKey("carts.id"), nullable=True)
-    status = Column(String(16), nullable=False, default="pending")
+    status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
     total_amount = Column(Numeric(10, 2), nullable=False)
     created_at = Column(DateTime, nullable=False, server_default=func.now())
 

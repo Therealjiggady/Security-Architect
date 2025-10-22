@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
+import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
+import { Button } from './ui/button';
 
 const ProductCard = ({ product }) => {
   const { user } = useUser();
@@ -68,61 +70,62 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className={`group overflow-hidden rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors ${saved ? 'data-saved="true"' : ''}`} data-saved={saved ? "true" : undefined}>
-      <div className="aspect-[4/3] overflow-hidden">
-        <img
-          src={imageUrl}
-          alt={product.name}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-        />
-      </div>
-      <div className="p-4">
+    <Card className={`group overflow-hidden rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors ${saved ? 'data-saved="true"' : ''}`} data-saved={saved ? "true" : undefined}>
+      <CardHeader>
+        <div className="aspect-[4/3] overflow-hidden">
+          <img
+            src={imageUrl}
+            alt={product.name}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          />
+        </div>
+      </CardHeader>
+      <CardContent>
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-medium text-lg">{product.name}</h3>
-          <span className="text-emerald-300 font-semibold">${product.price}</span>
+          <span className="text-primary font-semibold">${product.price}</span>
         </div>
-        <p className="text-sm text-zinc-300 mb-3">{product.description}</p>
+        <p className="text-sm text-muted-foreground mb-3">{product.description}</p>
         {product.sku && (
-          <p className="text-xs text-zinc-400 mb-2">SKU: {product.sku}</p>
+          <p className="text-xs text-muted-foreground mb-2">SKU: {product.sku}</p>
         )}
         {product.variants && product.variants.length > 0 && (
           <div className="mb-4">
-            <p className="text-xs text-zinc-400 mb-2">Available options:</p>
+            <p className="text-xs text-muted-foreground mb-2">Available options:</p>
             <div className="flex flex-wrap gap-1">
               {product.variants.slice(0, 3).map((variant) => (
                 <span
                   key={variant.id}
-                  className="inline-block bg-zinc-700 text-zinc-300 text-xs px-2 py-1 rounded"
+                  className="inline-block bg-muted text-muted-foreground text-xs px-2 py-1 rounded"
                 >
                   {variant.size} {variant.color && `(${variant.color})`}
                 </span>
               ))}
               {product.variants.length > 3 && (
-                <span className="inline-block bg-zinc-700 text-zinc-300 text-xs px-2 py-1 rounded">
+                <span className="inline-block bg-muted text-muted-foreground text-xs px-2 py-1 rounded">
                   +{product.variants.length - 3} more
                 </span>
               )}
             </div>
           </div>
         )}
-        <div className="flex items-center gap-2">
-          <button className="flex-1 rounded-xl bg-emerald-500 px-3 py-2 text-sm font-medium text-zinc-950 hover:bg-emerald-400 transition-colors">
+      </CardContent>
+      <CardFooter>
+        <div className="flex items-center gap-2 w-full">
+          <Button className="flex-1 rounded-xl px-3 py-2 text-sm font-medium transition-colors">
             Add to Cart
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSaveToWishlist}
-            className={`rounded-xl border px-3 py-2 text-sm transition-colors ${
-              saved
-                ? 'border-red-500/20 bg-red-500/10 text-red-400'
-                : 'border-white/15 hover:bg-white/10'
-            }`}
+            variant={saved ? "destructive" : "outline"}
+            className="rounded-xl px-3 py-2 text-sm transition-colors"
             disabled={!user}
           >
             {saved ? 'Saved' : 'Save'}
-          </button>
+          </Button>
         </div>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 };
 

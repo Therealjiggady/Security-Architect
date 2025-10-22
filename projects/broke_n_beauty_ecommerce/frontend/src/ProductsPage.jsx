@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './components/ProductCard';
 import SizeRecommender from './components/SizeRecommender';
+import { Button } from './components/ui/button';
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from './components/ui/navigation-menu';
+import { cn } from './lib/utils';
+import { Link } from 'react-router-dom';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -13,14 +17,18 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${API_BASE}/products`);
+        console.log('Starting fetch for products from:', `${API_BASE}/products/`);
+        const response = await fetch(`${API_BASE}/products/`);
+        console.log('Response status:', response.status, 'OK:', response.ok, 'Headers:', Object.fromEntries(response.headers.entries()));
         if (!response.ok) {
-          throw new Error('Failed to fetch products');
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log('Parsed data:', data, 'Type:', typeof data, 'Is array:', Array.isArray(data));
         setProducts(data);
       } catch (err) {
-        setError(err.message);
+        console.error('Error in fetchProducts:', err);
+        setError(err.message || 'Failed to load products');
       } finally {
         setLoading(false);
       }
@@ -31,9 +39,9 @@ export default function ProductsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p>Loading products...</p>
         </div>
       </div>
@@ -42,37 +50,66 @@ export default function ProductsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-500">Error: {error}</p>
+          <p className="text-destructive">Error: {error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-30 backdrop-blur border-b border-white/10 bg-zinc-950/60">
+      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-background/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-xl bg-emerald-500/20 ring-1 ring-emerald-400/40 grid place-items-center">
-              <span className="text-emerald-300 font-bold">BnB</span>
+            <div className="h-8 w-8 rounded-xl bg-primary/20 ring-1 ring-primary/40 grid place-items-center">
+              <span className="text-primary font-bold">BnB</span>
             </div>
             <span className="font-semibold tracking-wide">Broken Beauty</span>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-300">
-            <a className="hover:text-white" href="/">Home</a>
-            <a className="hover:text-white text-emerald-300" href="/products">Products</a>
-            <a className="hover:text-white" href="/cart">Cart</a>
-            <a className="hover:text-white" href="/profile">Profile</a>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
-            >
-              Size Recommender
-            </button>
-          </nav>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} to="/">
+                    Home
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <a className={cn(navigationMenuTriggerStyle(), "cursor-pointer text-primary")} href="/products">
+                    Products
+                  </a>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} to="/cart">
+                    Cart
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} to="/profile">
+                    Profile
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Button
+                  onClick={() => setIsModalOpen(true)}
+                  size="sm"
+                  variant="outline"
+                >
+                  Size Recommender
+                </Button>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
       </header>
 
@@ -91,7 +128,7 @@ export default function ProductsPage() {
 
         {products.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-zinc-400">No products available.</p>
+            <p className="text-muted-foreground">No products available.</p>
           </div>
         )}
       </main>

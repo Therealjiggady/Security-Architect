@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from datetime import datetime
+from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 # Pydantic v1/v2 compatibility for ORM mode / from_attributes
 try:
@@ -12,6 +13,13 @@ try:
 except Exception:
     ConfigDict = None  # type: ignore
     _HAS_CONFIG_DICT = False
+
+
+class OrderStatus(str, Enum):
+    """Enum for order status values"""
+    PENDING = "pending"
+    SHIPPED = "shipped"
+    DELIVERED = "delivered"
 
 
 class OrderItemRead(BaseModel):
@@ -55,3 +63,8 @@ class OrderCreate(BaseModel):
 
 class OrderUpdate(BaseModel):
     status: Optional[str] = None
+
+
+class OrderStatusUpdate(BaseModel):
+    """Schema for updating order status"""
+    status: OrderStatus = Field(..., description="New status for the order (pending, shipped, or delivered)")

@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -95,66 +100,62 @@ export default function SizeRecommender({ isOpen, onClose }) {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-zinc-900 text-zinc-100 rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Size Recommendation</h2>
-          <button onClick={onClose} className="text-zinc-400 hover:text-white">&times;</button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Size Recommendation</DialogTitle>
+          <DialogDescription>
+            Enter your measurements to get personalized size recommendations.
+          </DialogDescription>
+        </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Height (e.g., 5'6" or 66 inches)</label>
-            <input
+            <Input
               type="text"
               name="height"
               value={formData.height}
               onChange={handleChange}
               required
               placeholder="5 feet 6 inches or 66"
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Weight (lbs)</label>
-            <input
+            <Input
               type="number"
               name="weight"
               value={formData.weight}
               onChange={handleChange}
               required
               step="0.1"
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Chest (inches)</label>
-              <input
+              <Input
                 type="number"
                 name="chest"
                 value={formData.chest}
                 onChange={handleChange}
                 step="0.1"
                 placeholder="Optional"
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Waist (inches)</label>
-              <input
+              <Input
                 type="number"
                 name="waist"
                 value={formData.waist}
                 onChange={handleChange}
                 step="0.1"
                 placeholder="Optional"
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
@@ -162,140 +163,143 @@ export default function SizeRecommender({ isOpen, onClose }) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Hips (inches)</label>
-              <input
+              <Input
                 type="number"
                 name="hips"
                 value={formData.hips}
                 onChange={handleChange}
                 step="0.1"
                 placeholder="Optional"
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Shoulders (inches)</label>
-              <input
+              <Input
                 type="number"
                 name="shoulders"
                 value={formData.shoulders}
                 onChange={handleChange}
                 step="0.1"
                 placeholder="Optional"
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Inseam (inches)</label>
-            <input
+            <Input
               type="number"
               name="inseam"
               value={formData.inseam}
               onChange={handleChange}
               step="0.1"
               placeholder="Optional"
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Fit Preference</label>
-              <select
-                name="fit_preference"
-                value={formData.fit_preference}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
-              >
-                <option value="slim">Slim</option>
-                <option value="regular">Regular</option>
-                <option value="relaxed">Relaxed</option>
-              </select>
+              <Select name="fit_preference" value={formData.fit_preference} onValueChange={(value) => handleChange({ target: { name: 'fit_preference', value } })}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="slim">Slim</SelectItem>
+                  <SelectItem value="regular">Regular</SelectItem>
+                  <SelectItem value="relaxed">Relaxed</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Fabric Stretch</label>
-              <select
-                name="fabric_stretch"
-                value={formData.fabric_stretch}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
-              >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </select>
+              <Select name="fabric_stretch" value={formData.fabric_stretch} onValueChange={(value) => handleChange({ target: { name: 'fabric_stretch', value } })}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Product Type (Optional)</label>
-            <select
-              name="product_type"
-              value={formData.product_type}
-              onChange={handleChange}
-              className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded focus:outline-none focus:border-emerald-500"
-            >
-              <option value="general">General</option>
-              <option value="sports_bra">Sports Bra</option>
-              <option value="biker_shorts">Biker Shorts</option>
-              <option value="tank_top">Tank Top</option>
-              <option value="scrub_top">Scrub Top</option>
-              <option value="scrub_bottom">Scrub Bottom</option>
-              <option value="compression_leggings">Compression Leggings</option>
-              <option value="yoga_tank">Yoga Tank Top</option>
-            </select>
+            <Select name="product_type" value={formData.product_type} onValueChange={(value) => handleChange({ target: { name: 'product_type', value } })}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="general">General</SelectItem>
+                <SelectItem value="sports_bra">Sports Bra</SelectItem>
+                <SelectItem value="biker_shorts">Biker Shorts</SelectItem>
+                <SelectItem value="tank_top">Tank Top</SelectItem>
+                <SelectItem value="scrub_top">Scrub Top</SelectItem>
+                <SelectItem value="scrub_bottom">Scrub Bottom</SelectItem>
+                <SelectItem value="compression_leggings">Compression Leggings</SelectItem>
+                <SelectItem value="yoga_tank">Yoga Tank Top</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-800 text-white font-medium py-2 px-4 rounded transition-colors"
+            className="w-full"
           >
             {loading ? 'Getting Recommendation...' : formChanged ? 'Update Recommendation' : 'Get Size Recommendation'}
-          </button>
+          </Button>
         </form>
 
         {error && (
-          <div className="mt-4 p-3 bg-red-900/50 border border-red-700 rounded">
-            <p className="text-red-300 text-sm">{error}</p>
-          </div>
+          <Card className="mt-4 border-destructive">
+            <CardContent className="pt-6">
+              <p className="text-destructive text-sm">{error}</p>
+            </CardContent>
+          </Card>
         )}
 
         {result && (
-          <div className="mt-4 p-4 bg-zinc-800 rounded">
-            <h3 className="font-semibold mb-2">Recommended Sizes</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span>Top Size:</span>
-                <span className="font-medium">{result.top_size}</span>
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle>Recommended Sizes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>Top Size:</span>
+                  <span className="font-medium">{result.top_size}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Bottom Size:</span>
+                  <span className="font-medium">{result.bottom_size}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Top Confidence:</span>
+                  <span className="font-medium">{(result.top_confidence * 100).toFixed(0)}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Bottom Confidence:</span>
+                  <span className="font-medium">{(result.bottom_confidence * 100).toFixed(0)}%</span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span>Bottom Size:</span>
-                <span className="font-medium">{result.bottom_size}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Top Confidence:</span>
-                <span className="font-medium">{(result.top_confidence * 100).toFixed(0)}%</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Bottom Confidence:</span>
-                <span className="font-medium">{(result.bottom_confidence * 100).toFixed(0)}%</span>
-              </div>
-            </div>
-            {result.notes.length > 0 && (
-              <div className="mt-3">
-                <h4 className="font-medium mb-1">Notes:</h4>
-                <ul className="text-sm text-zinc-300 space-y-1">
-                  {result.notes.map((note, index) => (
-                    <li key={index}>• {note}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
+              {result.notes.length > 0 && (
+                <div className="mt-3">
+                  <h4 className="font-medium mb-1">Notes:</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    {result.notes.map((note, index) => (
+                      <li key={index}>• {note}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
