@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Request
 from sqlalchemy.orm import Session
-from backend.app.db import get_db
-from backend.app import models
-from backend.app.schemas.product import ProductRead, ProductCreate, ProductUpdate, ProductVariantRead
-from backend.app.auth import require_auth
+from app.db import get_db
+from app import models
+from app.schemas.product import ProductRead, ProductCreate, ProductUpdate, ProductVariantRead
+from app.auth import require_auth
 import uuid
 import os
 

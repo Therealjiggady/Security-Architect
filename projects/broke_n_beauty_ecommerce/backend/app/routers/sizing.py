@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from backend.app.schemas.sizing import SizeRecommendationRequest, SizeRecommendationResponse, SizingFeedbackRequest
-from backend.app.db import get_db
-from backend.app.models import UserSizingOffset
+from app.schemas.sizing import SizeRecommendationRequest, SizeRecommendationResponse, SizingFeedbackRequest
+from app.db import get_db
+from app.models import UserSizingOffset
 
 router = APIRouter(prefix="/sizing", tags=["sizing"])
 

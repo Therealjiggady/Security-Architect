@@ -1,12 +1,59 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
-from backend.app.db import get_db
-from backend.app import models
-from backend.app.auth import require_auth
-from backend.app.schemas.order import OrderRead, OrderStatusUpdate, OrderStatus
-from backend.app.models.order import OrderStatus as ModelOrderStatus
+from app.db import get_db
+from app import models
+from app.auth import require_auth
+from app.schemas.order import OrderRead, OrderCreate, OrderStatusUpdate, OrderStatus
+from app.models.order import OrderStatus as ModelOrderStatus
 
 router = APIRouter(prefix="/orders", tags=["orders"])
+
+@router.post("/", response_model=OrderRead, status_code=201)
+def create_order(
+    order_data: OrderCreate,
+    email: str = Depends(require_auth),
+    db: Session = Depends(get_db)
+):
+    """
+    Create a new order for the authenticated user.
+    """
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Create the order
+    order = models.Order(
+        user_id=user.id,
+        total_amount=order_data.total_amount,
+        shipping_address=order_data.shipping_address,
+        payment_method=order_data.payment_method,
+        status=ModelOrderStatus.PENDING
+    )
+    db.add(order)
+    db.flush()  # Get the order ID
+    
+    # Create order items
+    for item_data in order_data.items:
+        order_item = models.OrderItem(
+            order_id=order.id,
+            product_variant_id=item_data.product_variant_id,
+            quantity=item_data.quantity,
+            price_at_purchase=item_data.price_at_purchase
+        )
+        db.add(order_item)
+    
+    db.commit()
+    db.refresh(order)
+    
+    # Return order with items
+    order_with_items = (
+        db.query(models.Order)
+        .filter(models.Order.id == order.id)
+        .options(joinedload(models.Order.items))
+        .first()
+    )
+    
+    return order_with_items
 
 @router.get("/me", response_model=list[OrderRead])
 def get_my_orders(email: str = Depends(require_auth), db: Session = Depends(get_db)):

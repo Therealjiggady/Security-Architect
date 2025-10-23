@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from backend.app.db import get_db
-from backend.app import models
-from backend.app.schemas.wishlist import AddToWishlistRequest, WishlistRead
-from backend.app.auth import require_auth
+from app.db import get_db
+from app import models
+from app.schemas.wishlist import AddToWishlistRequest, WishlistRead
+from app.auth import require_auth
 
 router = APIRouter(prefix="/wishlist", tags=["wishlist"])
 
