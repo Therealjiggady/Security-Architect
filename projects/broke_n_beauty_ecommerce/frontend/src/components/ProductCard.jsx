@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
+import { useCart } from '../contexts/CartContext';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 
 const ProductCard = ({ product }) => {
   const { user } = useUser();
+  const { addToCart } = useCart();
   const [saved, setSaved] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   // Organize functions: Create addToWishlist(productId, userId) returning success/fail
   const addToWishlist = async (productId, userId) => {
@@ -69,6 +72,13 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const handleAddToCart = () => {
+    addToCart(product);
+    setAddedToCart(true);
+    // Reset the "Added!" text after 2 seconds
+    setTimeout(() => setAddedToCart(false), 2000);
+  };
+
   return (
     <Card className={`group overflow-hidden rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors ${saved ? 'data-saved="true"' : ''}`} data-saved={saved ? "true" : undefined}>
       <CardHeader>
@@ -112,8 +122,11 @@ const ProductCard = ({ product }) => {
       </CardContent>
       <CardFooter>
         <div className="flex items-center gap-2 w-full">
-          <Button className="flex-1 rounded-xl px-3 py-2 text-sm font-medium transition-colors">
-            Add to Cart
+          <Button
+            onClick={handleAddToCart}
+            className="flex-1 rounded-xl px-3 py-2 text-sm font-medium transition-colors"
+          >
+            {addedToCart ? '✓ Added!' : 'Add to Cart'}
           </Button>
           <Button
             onClick={handleSaveToWishlist}

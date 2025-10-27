@@ -15,11 +15,12 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
     try {
       await register(email, password, fullName);
       navigate('/');
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      setError(err.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -27,6 +28,11 @@ const RegisterPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
       <Card className="max-w-md w-full">
         <CardHeader>
+          <div className="flex items-center justify-between mb-4">
+            <Link to="/" className="text-muted-foreground hover:text-foreground">
+              ← Back to Home
+            </Link>
+          </div>
           <CardTitle className="text-center text-3xl font-extrabold">
             Create your account
           </CardTitle>

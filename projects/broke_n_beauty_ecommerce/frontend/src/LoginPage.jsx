@@ -14,11 +14,12 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
     try {
       await login(email, password);
       navigate('/');
     } catch (err) {
-      setError('Login failed. Please check your credentials.');
+      setError(err.message || 'Login failed. Please check your credentials.');
     }
   };
 
@@ -26,6 +27,11 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-background text-foreground flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <Card className="max-w-md w-full">
         <CardHeader>
+          <div className="flex items-center justify-between mb-4">
+            <Link to="/" className="text-muted-foreground hover:text-foreground">
+              ← Back to Home
+            </Link>
+          </div>
           <CardTitle className="text-center text-3xl font-extrabold">
             Sign in to your account
           </CardTitle>

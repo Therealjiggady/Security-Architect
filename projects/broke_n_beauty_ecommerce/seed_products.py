@@ -4,8 +4,8 @@ import sys
 import os
 sys.path.append('backend')
 
-from backend.app.db import SessionLocal, engine
-from backend.app.models import Product, ProductVariant
+from app.db import SessionLocal, engine
+from app.models import Product, ProductVariant
 
 def seed_products():
     db = SessionLocal()

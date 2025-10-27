@@ -10,7 +10,7 @@ export default function LandingPage() {
     <div className="min-h-screen text-foreground">
       {/* Background Video */}
       <video
-        src="/MamiVid.mp4"
+        src="/Thats her.mp4"
         autoPlay
         loop
         muted

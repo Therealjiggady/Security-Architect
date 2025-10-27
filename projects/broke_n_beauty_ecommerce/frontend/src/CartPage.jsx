@@ -1,43 +1,67 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from './contexts/UserContext';
+import { useCart } from './contexts/CartContext';
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      productName: 'BnB Sport Bra – Black',
-      size: 'M',
-      color: 'Black',
-      price: 11.99,
-      quantity: 2,
-      image: 'https://images.unsplash.com/photo-1599050751795-5f9a2b2f1f1a?q=80&w=400&auto=format&fit=crop'
-    },
-    {
-      id: 2,
-      productName: 'BnB Biker Short – Navy',
-      size: 'S',
-      color: 'Navy',
-      price: 9.99,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1618354691438-25e8c4a7cb68?q=80&w=400&auto=format&fit=crop'
-    }
-  ]);
+  const navigate = useNavigate();
+  const { user } = useUser();
+  const { cart: cartItems, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
 
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return;
-    setCartItems(items =>
-      items.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-
-  const removeItem = (id) => {
-    setCartItems(items => items.filter(item => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = getTotalPrice();
   const shipping = subtotal > 50 ? 0 : 5.99;
   const total = subtotal + shipping;
+
+  const handleCheckout = async () => {
+    if (!user) {
+      alert('Please log in to checkout');
+      navigate('/login');
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      alert('Your cart is empty');
+      return;
+    }
+
+    try {
+      // Create order
+      const token = localStorage.getItem('token');
+      const orderData = {
+        items: cartItems.map(item => ({
+          product_variant_id: item.id,
+          quantity: item.quantity,
+          price_at_purchase: item.price
+        })),
+        total_amount: total,
+        shipping_address: "123 Main St", // Placeholder
+        payment_method: "card" // Placeholder
+      };
+
+      const response = await fetch('http://localhost:8000/orders/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (response.ok) {
+        alert('Order placed successfully! 🎉');
+        setCartItems([]); // Clear cart
+        navigate('/orders'); // Go to orders page
+        clearCart(); // Clear cart using context method
+        navigate('/orders'); // Go to orders page
+      } else {
+        const error = await response.json();
+        alert(`Checkout failed: ${error.detail || 'Please try again'}`);
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Checkout failed. Please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -63,7 +87,7 @@ export default function CartPage() {
       <main className="mx-auto max-w-6xl px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
 
-        {cartItems.length === 0 ? (
+        {!cartItems || cartItems.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🛒</div>
             <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
@@ -82,14 +106,14 @@ export default function CartPage() {
               {cartItems.map((item) => (
                 <div key={item.id} className="flex gap-4 p-4 bg-card/50 rounded-lg border border-border">
                   <img
-                    src={item.image}
-                    alt={item.productName}
+                    src={item.image_url || 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=400&auto=format&fit=crop'}
+                    alt={item.name}
                     className="w-20 h-20 object-cover rounded-lg"
                   />
                   <div className="flex-1">
-                    <h3 className="font-medium text-lg">{item.productName}</h3>
+                    <h3 className="font-medium text-lg">{item.name}</h3>
                     <p className="text-sm text-muted-foreground">
-                      Size: {item.size} | Color: {item.color}
+                      {item.description || 'Product details'}
                     </p>
                     <p className="text-primary font-semibold">${item.price}</p>
                   </div>
@@ -110,7 +134,7 @@ export default function CartPage() {
                       </button>
                     </div>
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeFromCart(item.id)}
                       className="text-destructive hover:text-destructive/80 text-sm"
                     >
                       Remove
@@ -138,7 +162,10 @@ export default function CartPage() {
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
-              <button className="w-full rounded-xl px-4 py-3 font-medium transition-colors">
+              <button
+                onClick={handleCheckout}
+                className="w-full rounded-xl bg-primary text-primary-foreground px-4 py-3 font-medium transition-colors hover:bg-primary/90"
+              >
                 Proceed to Checkout
               </button>
               <p className="text-xs text-muted-foreground mt-2 text-center">

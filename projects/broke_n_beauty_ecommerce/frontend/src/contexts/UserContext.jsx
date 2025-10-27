@@ -47,7 +47,10 @@ export const UserProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      if (!res.ok) throw new Error('Login failed');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ detail: 'Login failed' }));
+        throw new Error(errorData.detail || 'Invalid email or password');
+      }
       const data = await res.json();
       localStorage.setItem('token', data.access_token);
       // Fetch user data
@@ -69,7 +72,10 @@ export const UserProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, full_name }),
       });
-      if (!res.ok) throw new Error('Registration failed');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ detail: 'Registration failed' }));
+        throw new Error(errorData.detail || 'Email already exists or invalid data');
+      }
       // After registration, login to get token
       await login(email, password);
     } catch (err) {
