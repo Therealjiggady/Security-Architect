@@ -8,6 +8,7 @@ import LoginPage from './LoginPage'
 import RegisterPage from './RegisterPage'
 import PaymentTestPage from './PaymentTestPage'
 import OrderHistoryPage from './OrderHistoryPage'
+import ChatPage from './ChatPage'
 
 function Home() {
   return <LandingPage />
@@ -45,6 +46,10 @@ function Orders() {
   return <OrderHistoryPage />
 }
 
+function Chat() {
+  return <ChatPage />
+}
+
 export default function App() {
   return (
     <Routes>
@@ -57,6 +62,7 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/payment-test" element={<PaymentTest />} />
       <Route path="/orders" element={<Orders />} />
+      <Route path="/chat" element={<Chat />} />
     </Routes>
   )
 }

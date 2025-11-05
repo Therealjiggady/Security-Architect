@@ -13,6 +13,7 @@ const Navbar = () => {
           <li><Link to="/" className="text-primary-foreground hover:text-primary-foreground/80">Home</Link></li>
           <li><Link to="/products" className="text-primary-foreground hover:text-primary-foreground/80">Products</Link></li>
           <li><Link to="/cart" className="text-primary-foreground hover:text-primary-foreground/80">Cart</Link></li>
+          <li><Link to="/chat" className="text-primary-foreground hover:text-primary-foreground/80">Chat</Link></li>
           {user && (
             <li><Link to="/orders" className="text-primary-foreground hover:text-primary-foreground/80">Orders</Link></li>
           )}

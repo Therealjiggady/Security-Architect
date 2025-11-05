@@ -21,19 +21,34 @@ def create_order(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
+    # Validate order items: variants must exist and have sufficient stock
+    variant_checks = []
+    for item_data in order_data.items:
+        variant = db.query(models.ProductVariant).filter(
+            models.ProductVariant.id == item_data.product_variant_id
+        ).first()
+        if not variant:
+            raise HTTPException(status_code=404, detail=f"Product variant {item_data.product_variant_id} not found")
+        if item_data.quantity <= 0:
+            raise HTTPException(status_code=400, detail="Item quantity must be positive")
+        if variant.stock is None or variant.stock < item_data.quantity:
+            raise HTTPException(status_code=400, detail=f"Insufficient stock for variant {variant.id}")
+        if item_data.price_at_purchase <= 0:
+            raise HTTPException(status_code=400, detail="Invalid item price")
+        variant_checks.append(variant)
+
     # Create the order
     order = models.Order(
         user_id=user.id,
+        cart_id=order_data.cart_id,
         total_amount=order_data.total_amount,
-        shipping_address=order_data.shipping_address,
-        payment_method=order_data.payment_method,
         status=ModelOrderStatus.PENDING
     )
     db.add(order)
     db.flush()  # Get the order ID
-    
+
     # Create order items
-    for item_data in order_data.items:
+    for idx, item_data in enumerate(order_data.items):
         order_item = models.OrderItem(
             order_id=order.id,
             product_variant_id=item_data.product_variant_id,
@@ -41,7 +56,10 @@ def create_order(
             price_at_purchase=item_data.price_at_purchase
         )
         db.add(order_item)
-    
+        # Decrement stock for the corresponding variant
+        variant = variant_checks[idx]
+        variant.stock = (variant.stock or 0) - item_data.quantity
+
     db.commit()
     db.refresh(order)
     

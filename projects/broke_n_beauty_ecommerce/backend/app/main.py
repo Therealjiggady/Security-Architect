@@ -10,6 +10,8 @@ from app.routers import cart as cart_router
 from app.routers import wishlist as wishlist_router
 from app.routers import sizing as sizing_router
 from app.routers import orders as orders_router
+from app.routers import chat as chat_router
+from app.routers import payments as payments_router
 
 app = FastAPI(title="Clover Line API", version="0.1.0")
 
@@ -39,3 +41,5 @@ app.include_router(cart_router.router)
 app.include_router(wishlist_router.router)
 app.include_router(sizing_router.router)
 app.include_router(orders_router.router)
+app.include_router(chat_router.router)
+app.include_router(payments_router.router)

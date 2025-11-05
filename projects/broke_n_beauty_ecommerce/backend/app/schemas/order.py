@@ -57,8 +57,11 @@ class OrderRead(BaseModel):
 
 
 class OrderCreate(BaseModel):
-    cart_id: int
+    items: List["OrderItemCreate"]
     total_amount: float
+    shipping_address: Optional[str] = None
+    payment_method: Optional[str] = None
+    cart_id: Optional[int] = None
 
 
 class OrderUpdate(BaseModel):
@@ -68,3 +71,9 @@ class OrderUpdate(BaseModel):
 class OrderStatusUpdate(BaseModel):
     """Schema for updating order status"""
     status: OrderStatus = Field(..., description="New status for the order (pending, shipped, or delivered)")
+
+
+class OrderItemCreate(BaseModel):
+    product_variant_id: int
+    quantity: int
+    price_at_purchase: float

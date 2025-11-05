@@ -53,6 +53,13 @@ export default function LandingPage() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
+                  <Link className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} to="/chat">
+                    Chat
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
                   <Link className={cn(navigationMenuTriggerStyle(), "cursor-pointer")} to="/profile">
                     Profile
                   </Link>

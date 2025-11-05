@@ -21,6 +21,7 @@ class User(Base):
     email = Column(String(255), nullable=False, unique=True, index=True)
     hashed_password = Column(String(255), nullable=False)
     full_name = Column(String(255), nullable=True)
+    role = Column(String(50), nullable=False, server_default="user")  # "user" or "superuser"
     created_at = Column(DateTime, nullable=False, server_default=func.now())
 
     # Type hints (for IDEs/type checkers)
@@ -28,6 +29,7 @@ class User(Base):
     email: str
     hashed_password: str
     full_name: Optional[str]
+    role: str
     created_at: datetime
 
     def __repr__(self) -> str:

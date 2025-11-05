@@ -1,12 +1,70 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from './contexts/UserContext';
 import { useCart } from './contexts/CartContext';
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+function StripeCheckout({ clientSecret, orderId, onPaid, email }) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleConfirm = async () => {
+    if (!stripe || !elements) return;
+    setLoading(true);
+    setErrorMsg('');
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          payment_method_data: {
+            billing_details: { email }
+          }
+        },
+        redirect: 'if_required',
+      });
+      if (error) {
+        setErrorMsg(error.message || 'Payment failed');
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        onPaid(orderId);
+      } else {
+        setErrorMsg('Payment not completed. Please try again.');
+      }
+    } catch (e) {
+      console.error('Payment error', e);
+      setErrorMsg('Payment failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <PaymentElement />
+      {errorMsg && <p className="text-destructive text-sm">{errorMsg}</p>}
+      <button
+        disabled={loading || !stripe}
+        onClick={handleConfirm}
+        className="w-full rounded-xl bg-primary text-primary-foreground px-4 py-3 font-medium transition-colors hover:bg-primary/90 disabled:opacity-50"
+      >
+        {loading ? 'Processing…' : 'Pay now'}
+      </button>
+    </div>
+  );
+}
 
 export default function CartPage() {
   const navigate = useNavigate();
   const { user } = useUser();
   const { cart: cartItems, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
+  const [clientSecret, setClientSecret] = useState(null);
+  const [createdOrderId, setCreatedOrderId] = useState(null);
+  const stripePromise = useMemo(() => {
+    const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+    return key ? loadStripe(key) : null;
+  }, []);
 
   const subtotal = getTotalPrice();
   const shipping = subtotal > 50 ? 0 : 5.99;
@@ -25,7 +83,7 @@ export default function CartPage() {
     }
 
     try {
-      // Create order
+      // Create order (pending)
       const token = localStorage.getItem('token');
       const orderData = {
         items: cartItems.map(item => ({
@@ -47,20 +105,43 @@ export default function CartPage() {
         body: JSON.stringify(orderData)
       });
 
-      if (response.ok) {
-        alert('Order placed successfully! 🎉');
-        setCartItems([]); // Clear cart
-        navigate('/orders'); // Go to orders page
-        clearCart(); // Clear cart using context method
-        navigate('/orders'); // Go to orders page
-      } else {
+      if (!response.ok) {
         const error = await response.json();
         alert(`Checkout failed: ${error.detail || 'Please try again'}`);
+        return;
       }
+
+      const createdOrder = await response.json();
+      const orderId = createdOrder.id;
+      setCreatedOrderId(orderId);
+
+      // Create PaymentIntent for total amount (in cents) and this order
+      const intentRes = await fetch('http://localhost:8000/payments/intents', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ amount: Math.round(total * 100), currency: 'usd', order_id: orderId })
+      });
+      if (!intentRes.ok) {
+        const err = await intentRes.json();
+        alert(`Failed to initiate payment: ${err.detail || 'Please try again'}`);
+        return;
+      }
+      const { client_secret } = await intentRes.json();
+      setClientSecret(client_secret);
     } catch (error) {
       console.error('Checkout error:', error);
       alert('Checkout failed. Please try again.');
     }
+  };
+
+  const handlePaid = async () => {
+    // On payment success: clear cart and navigate to orders
+    alert('Payment successful! 🎉');
+    clearCart();
+    navigate('/orders');
   };
 
   return (
@@ -162,15 +243,27 @@ export default function CartPage() {
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
-              <button
-                onClick={handleCheckout}
-                className="w-full rounded-xl bg-primary text-primary-foreground px-4 py-3 font-medium transition-colors hover:bg-primary/90"
-              >
-                Proceed to Checkout
-              </button>
-              <p className="text-xs text-muted-foreground mt-2 text-center">
-                {shipping === 0 ? 'Free shipping on orders over $50!' : 'Add $50+ for free shipping'}
-              </p>
+              {!clientSecret ? (
+                <>
+                  <button
+                    onClick={handleCheckout}
+                    className="w-full rounded-xl bg-primary text-primary-foreground px-4 py-3 font-medium transition-colors hover:bg-primary/90"
+                  >
+                    Proceed to Checkout
+                  </button>
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
+                    {shipping === 0 ? 'Free shipping on orders over $50!' : 'Add $50+ for free shipping'}
+                  </p>
+                </>
+              ) : (
+                stripePromise ? (
+                  <Elements stripe={stripePromise} options={{ clientSecret }}>
+                    <StripeCheckout clientSecret={clientSecret} orderId={createdOrderId} onPaid={handlePaid} email={user?.email} />
+                  </Elements>
+                ) : (
+                  <p className="text-destructive">Stripe publishable key missing. Set VITE_STRIPE_PUBLISHABLE_KEY.</p>
+                )
+              )}
             </div>
           </div>
         )}
