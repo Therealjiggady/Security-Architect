@@ -44,8 +44,6 @@ class Order(Base):
     cart_id: Optional[int]
     status: str
     total_amount: float
-    shipping_address: Optional[str]
-    payment_method: Optional[str]
     created_at: datetime
 
     def __repr__(self) -> str:
