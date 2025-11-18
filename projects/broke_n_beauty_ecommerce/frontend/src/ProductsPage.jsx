@@ -5,8 +5,12 @@ import { Button } from './components/ui/button';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from './components/ui/navigation-menu';
 import { cn } from './lib/utils';
 import { Link } from 'react-router-dom';
+import { API_URL } from './config';
+import { MetaTags } from './components/SEO/MetaTags';
+import { CollectionPageSchema, BreadcrumbSchema } from './components/SEO/StructuredData';
+import { getPageSEO } from './config/seo';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = API_URL;
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -58,8 +62,32 @@ export default function ProductsPage() {
     );
   }
 
+  // SEO data for products page
+  const seoData = getPageSEO('products', {
+    description: `Browse our complete collection of ${products.length} premium activewear items including leggings, sports bras, workout tops, and athleisure wear.`
+  });
+
+  const breadcrumbs = [
+    { name: 'Home', url: '/' },
+    { name: 'Products', url: '/products' }
+  ];
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* SEO Meta Tags */}
+      <MetaTags
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      
+      {/* Structured Data */}
+      <CollectionPageSchema
+        category="Activewear"
+        products={products}
+        url={`${seoData.url}/products`}
+      />
+      <BreadcrumbSchema breadcrumbs={breadcrumbs} />
       {/* Header */}
       <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-background/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
@@ -116,7 +144,10 @@ export default function ProductsPage() {
       {/* Main Content */}
       <main className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">Our Products</h1>
+          <h1 className="text-3xl font-bold mb-4">Premium Activewear Collection</h1>
+          <p className="text-muted-foreground text-lg">
+            Discover our complete range of high-performance activewear designed for style and comfort.
+          </p>
         </div>
 
         {/* Products Grid */}

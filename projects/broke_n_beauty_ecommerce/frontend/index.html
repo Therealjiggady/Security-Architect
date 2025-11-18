@@ -3,10 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Clover Line</title>
+    
+    <!-- SEO Meta Tags (Base - will be enhanced by React Helmet) -->
+    <title>Broken Beauty - Premium Activewear & Fitness Clothing</title>
+    <meta name="description" content="Discover premium activewear and fitness clothing designed for performance and style. Shop leggings, sports bras, and workout gear with fast shipping." />
+    <meta name="keywords" content="activewear, fitness clothing, leggings, sports bras, workout gear, athleisure, broken beauty" />
+    <meta name="author" content="Broken Beauty" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Broken Beauty" />
+    <meta property="og:title" content="Broken Beauty - Premium Activewear" />
+    <meta property="og:description" content="Discover premium activewear and fitness clothing designed for performance and style." />
+    <meta property="og:image" content="/images/og-image.jpg" />
+    <meta property="og:url" content="/" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@brokenbeauty" />
+    <meta name="twitter:title" content="Broken Beauty - Premium Activewear" />
+    <meta name="twitter:description" content="Discover premium activewear and fitness clothing designed for performance and style." />
+    <meta name="twitter:image" content="/images/twitter-card.jpg" />
+    
+    <!-- Favicons and Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Theme and Mobile -->
+    <meta name="theme-color" content="#000000" />
+    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Analytics placeholder (will be enhanced by React components) -->
+    <!-- Google Analytics and other analytics will be loaded by React components -->
   </head>
   <body class="bg-zinc-950 text-zinc-100">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- NoScript fallback -->
+    <noscript>
+      <div style="padding: 20px; text-align: center; background: #f5f5f5; color: #333;">
+        <h1>JavaScript Required</h1>
+        <p>This website requires JavaScript to function properly. Please enable JavaScript in your browser settings.</p>
+      </div>
+    </noscript>
   </body>
 </html>

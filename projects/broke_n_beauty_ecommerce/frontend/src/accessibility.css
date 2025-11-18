@@ -1,0 +1,416 @@
+/**
+ * Accessibility enhancements for Broken Beauty e-commerce platform
+ * Improves color contrast, focus states, and keyboard navigation
+ */
+
+/* Import this file in main.jsx or index.css */
+
+/* ===============================================
+   FOCUS STATES & KEYBOARD NAVIGATION
+   =============================================== */
+
+:root {
+  --focus-color: #2563EB;
+  --focus-width: 3px;
+  --focus-offset: 2px;
+  --high-contrast-text: #1F2937;
+  --high-contrast-bg: #FFFFFF;
+}
+
+/* Remove default focus outlines */
+*:focus {
+  outline: none;
+}
+
+/* Enhanced focus-visible styles */
+*:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color) !important;
+  outline-offset: var(--focus-offset) !important;
+}
+
+/* Button focus enhancements */
+button:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color) !important;
+  outline-offset: var(--focus-offset) !important;
+  box-shadow: 0 0 0 1px var(--focus-color) !important;
+}
+
+/* Link focus enhancements */
+a:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color) !important;
+  outline-offset: var(--focus-offset) !important;
+  background-color: rgba(37, 99, 235, 0.1) !important;
+  border-radius: 2px !important;
+  text-decoration: underline !important;
+}
+
+/* Form input focus enhancements */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: var(--focus-width) solid var(--focus-color) !important;
+  outline-offset: 1px !important;
+  border-color: var(--focus-color) !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+}
+
+/* ===============================================
+   COLOR CONTRAST IMPROVEMENTS
+   =============================================== */
+
+/* Primary button - high contrast */
+.btn-primary,
+.bg-primary {
+  background-color: #1D4ED8 !important; /* WCAG AA compliant */
+  color: white !important;
+}
+
+.btn-primary:hover {
+  background-color: #1E40AF !important;
+}
+
+/* Secondary button - high contrast */
+.btn-secondary {
+  background-color: #374151 !important; /* Dark gray */
+  color: white !important;
+}
+
+.btn-secondary:hover {
+  background-color: #1F2937 !important;
+}
+
+/* Outline button - improved contrast */
+.btn-outline {
+  border: 2px solid #1D4ED8 !important;
+  color: #1D4ED8 !important;
+  background-color: transparent !important;
+}
+
+.btn-outline:hover {
+  background-color: #1D4ED8 !important;
+  color: white !important;
+}
+
+/* Text color improvements */
+.text-muted,
+.text-muted-foreground {
+  color: #4B5563 !important; /* Improved contrast ratio */
+}
+
+.text-secondary {
+  color: #374151 !important;
+}
+
+/* Link color improvements */
+a, .link {
+  color: #1D4ED8 !important;
+}
+
+a:hover, .link:hover {
+  color: #1E40AF !important;
+  text-decoration: underline !important;
+}
+
+a:visited {
+  color: #7C3AED !important; /* High contrast purple */
+}
+
+/* ===============================================
+   SKIP TO CONTENT LINK
+   =============================================== */
+
+.skip-to-content {
+  position: absolute !important;
+  top: -100px !important;
+  left: 0 !important;
+  background: #1D4ED8 !important;
+  color: white !important;
+  padding: 12px 16px !important;
+  text-decoration: none !important;
+  font-weight: bold !important;
+  z-index: 10000 !important;
+  transition: top 0.3s ease !important;
+  border-radius: 0 0 4px 0 !important;
+}
+
+.skip-to-content:focus {
+  top: 0 !important;
+  outline: 3px solid white !important;
+  outline-offset: -3px !important;
+}
+
+/* ===============================================
+   FORM ACCESSIBILITY IMPROVEMENTS
+   =============================================== */
+
+/* Required field indicators */
+.required::after {
+  content: ' *';
+  color: #DC2626;
+  font-weight: bold;
+}
+
+/* Error message styling */
+.error-message {
+  color: #DC2626 !important;
+  font-weight: bold !important;
+  margin-top: 4px !important;
+}
+
+.error-input {
+  border-color: #DC2626 !important;
+  background-color: #FEF2F2 !important;
+}
+
+/* Success message styling */
+.success-message {
+  color: #059669 !important;
+  font-weight: bold !important;
+  margin-top: 4px !important;
+}
+
+/* Form labels */
+label {
+  font-weight: 600 !important;
+  color: #1F2937 !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+
+/* ===============================================
+   INTERACTIVE ELEMENT SIZING
+   =============================================== */
+
+/* Ensure minimum touch target size (44px) */
+button,
+a,
+input[type="submit"],
+input[type="button"],
+input[type="checkbox"],
+input[type="radio"],
+select {
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+}
+
+/* Navigation links */
+.nav-link {
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 8px 12px !important;
+}
+
+/* ===============================================
+   SCREEN READER IMPROVEMENTS
+   =============================================== */
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Ensure decorative elements are hidden from screen readers */
+.decorative {
+  aria-hidden: true;
+}
+
+/* ===============================================
+   HIGH CONTRAST MODE SUPPORT
+   =============================================== */
+
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor !important;
+  }
+  
+  .btn-primary {
+    background-color: #000080 !important;
+    border: 2px solid #000080 !important;
+    color: white !important;
+  }
+  
+  .btn-secondary {
+    background-color: #000000 !important;
+    border: 2px solid #000000 !important;
+    color: white !important;
+  }
+  
+  .btn-outline {
+    border: 3px solid #000080 !important;
+    color: #000080 !important;
+  }
+  
+  /* Improve text contrast */
+  .text-muted {
+    color: #000000 !important;
+  }
+}
+
+/* ===============================================
+   REDUCED MOTION SUPPORT
+   =============================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Remove parallax and transform animations */
+  .parallax,
+  .animate-bounce,
+  .animate-spin,
+  .animate-pulse {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ===============================================
+   DARK MODE ACCESSIBILITY
+   =============================================== */
+
+@media (prefers-color-scheme: dark) {
+  /* Ensure adequate contrast in dark mode */
+  .text-muted {
+    color: #9CA3AF !important; /* Lighter gray for dark backgrounds */
+  }
+  
+  /* Input styling for dark mode */
+  input, select, textarea {
+    background-color: #374151 !important;
+    border-color: #6B7280 !important;
+    color: white !important;
+  }
+}
+
+/* ===============================================
+   MOBILE ACCESSIBILITY
+   =============================================== */
+
+@media (max-width: 768px) {
+  /* Larger touch targets on mobile */
+  button, a, input {
+    min-height: 48px !important;
+    min-width: 48px !important;
+  }
+  
+  /* Improved spacing for mobile */
+  .btn:not(:last-child) {
+    margin-bottom: 8px !important;
+  }
+}
+
+/* ===============================================
+   LOADING AND LIVE REGIONS
+   =============================================== */
+
+/* Loading indicator accessibility */
+.loading-spinner::after {
+  content: '';
+  role: 'status';
+  aria-label: 'Loading';
+}
+
+/* Live regions for dynamic content */
+.live-region {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+[aria-live] {
+  /* Ensure live regions are properly announced */
+}
+
+/* ===============================================
+   CUSTOM COMPONENT ACCESSIBILITY
+   =============================================== */
+
+/* Modal/Dialog accessibility */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  position: relative;
+}
+
+/* Dropdown accessibility */
+.dropdown-menu {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #D1D5DB !important;
+}
+
+.dropdown-item:focus {
+  background-color: #EBF4FF !important;
+  color: #1D4ED8 !important;
+  outline: none !important;
+}
+
+/* ===============================================
+   ACCESSIBILITY UTILITIES
+   =============================================== */
+
+/* Hide content visually but keep for screen readers */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Show content for screen readers only */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: inherit !important;
+}
+
+/* High visibility focus for debugging */
+.debug-focus *:focus {
+  outline: 5px solid #FF0000 !important;
+  background-color: rgba(255, 0, 0, 0.1) !important;
+}

@@ -4,10 +4,48 @@ import { Button } from "./components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./components/ui/navigation-menu";
 import { cn } from "./lib/utils";
+import { MetaTags } from "./components/SEO/MetaTags";
+import { OrganizationSchema, WebsiteSchema } from "./components/SEO/StructuredData";
+import { getPageSEO } from "./config/seo";
 
 export default function LandingPage() {
+  const seoData = getPageSEO('home');
+
   return (
     <div className="min-h-screen text-foreground">
+      {/* SEO Meta Tags */}
+      <MetaTags
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        type="website"
+      />
+      
+      {/* Structured Data */}
+      <OrganizationSchema />
+      <WebsiteSchema />
+
+      {/* Skip to Content Link */}
+      <a
+        href="#main-content"
+        className="skip-to-content sr-only-focusable"
+        style={{
+          position: 'absolute',
+          top: '-100px',
+          left: '0',
+          background: '#1D4ED8',
+          color: 'white',
+          padding: '12px 16px',
+          textDecoration: 'none',
+          fontWeight: 'bold',
+          zIndex: 10000,
+          transition: 'top 0.3s ease'
+        }}
+        onFocus={(e) => { e.target.style.top = '0'; }}
+        onBlur={(e) => { e.target.style.top = '-100px'; }}
+      >
+        Skip to main content
+      </a>
       {/* Background Video */}
       <video
         src="/Thats her.mp4"
@@ -72,7 +110,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden" role="banner" aria-labelledby="hero-heading">
         <div className="absolute inset-0 -z-10">
           <div className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
           <div className="absolute -bottom-16 right-8 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
@@ -82,7 +120,7 @@ export default function LandingPage() {
             <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs text-primary">
               New • SmartFit size helper
             </span>
-            <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+            <h1 id="hero-heading" className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
               Live Bold <br /> Move Free.
               <br />
             </h1>
@@ -107,8 +145,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="mx-auto max-w-6xl px-4 py-14 md:py-20">
+      {/* Main Content */}
+      <main id="main-content" tabIndex="-1" style={{ outline: 'none' }}>
+        {/* Features */}
+        <section id="features" className="mx-auto max-w-6xl px-4 py-14 md:py-20" aria-labelledby="features-heading">
+          <h2 id="features-heading" className="sr-only">Key Features</h2>
         <div className="grid gap-6 md:grid-cols-3">
           {[
             {
@@ -140,10 +181,16 @@ export default function LandingPage() {
       </section>
 
       {/* Products placeholder */}
-      <section id="products" className="mx-auto max-w-6xl px-4 pb-20">
+      <section id="products" className="mx-auto max-w-6xl px-4 pb-20" aria-labelledby="products-heading">
         <div className="mb-6 flex items-end justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">Featured Products</h2>
-          <Link to="/products" className="text-sm text-primary hover:text-primary/80">View all</Link>
+          <h2 id="products-heading" className="text-2xl font-semibold tracking-tight">Featured Products</h2>
+          <Link
+            to="/products"
+            className="text-sm text-primary hover:text-primary/80"
+            aria-label="View all products in our complete collection"
+          >
+            View all
+          </Link>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
@@ -166,48 +213,76 @@ export default function LandingPage() {
               img: "Ambs.png",
             },
           ].map((p, i) => (
-            <Card key={i} className="group overflow-hidden bg-card/5">
+            <Card key={i} className="group overflow-hidden bg-card/5" role="article" aria-labelledby={`product-title-${i}`}>
               <CardHeader>
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img src={p.img} alt={p.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                  <img
+                    src={p.img}
+                    alt={`${p.name} - ${p.tag} in high-quality activewear material, showing style and fit`}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
-                  <h3 className="font-medium">{p.name}</h3>
-                  <span className="text-primary">{p.price}</span>
+                  <h3 id={`product-title-${i}`} className="font-medium">{p.name}</h3>
+                  <span className="text-primary" aria-label={`Price: ${p.price}`}>
+                    {p.price}
+                    <span className="sr-only">dollars</span>
+                  </span>
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">{p.tag}</p>
                 <div className="mt-4 flex items-center gap-2">
-                  <Button className="flex-1">Add to cart</Button>
-                  <Button variant="outline">Details</Button>
+                  <Button
+                    className="flex-1"
+                    aria-label={`Add ${p.name} to shopping cart`}
+                  >
+                    Add to cart
+                  </Button>
+                  <Button
+                    variant="outline"
+                    aria-label={`View details for ${p.name}`}
+                  >
+                    Details
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
-      </section>
+        </section>
+      </main>
 
       {/* CTA */}
-      <section id="cta" className="border-t border-border bg-background/40 py-16">
+      <section id="cta" className="border-t border-border bg-background/40 py-16" aria-labelledby="cta-heading">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <h3 className="text-2xl font-semibold">Ready to feel the difference?</h3>
+          <h3 id="cta-heading" className="text-2xl font-semibold">Ready to feel the difference?</h3>
           <p className="mt-2 text-muted-foreground">
             Start with our best-sellers and get personalized tips from SmartFit.
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link to="/products">
-              <Button size="lg">Get started</Button>
+              <Button size="lg" aria-label="Get started shopping our activewear collection">
+                Get started
+              </Button>
             </Link>
             <a href="#features">
-              <Button variant="outline" size="lg">Why Broken Beauty?</Button>
+              <Button
+                variant="outline"
+                size="lg"
+                aria-label="Learn more about Broken Beauty features and benefits"
+              >
+                Why Broken Beauty?
+              </Button>
             </a>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-muted/50">
+      <footer className="border-t border-border bg-muted/50" role="contentinfo" aria-labelledby="footer-heading">
+        <h2 id="footer-heading" className="sr-only">Footer Navigation and Information</h2>
         <div className="mx-auto max-w-6xl px-4 py-8">
           <div className="grid gap-8 md:grid-cols-4">
             <div className="space-y-3">
@@ -224,25 +299,25 @@ export default function LandingPage() {
             <div className="space-y-3">
               <h4 className="font-medium">Shop</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <Link to="/products" className="block hover:text-foreground">Products</Link>
-                <a href="#features" className="block hover:text-foreground">Features</a>
-                <Link to="/cart" className="block hover:text-foreground">Cart</Link>
+                <Link to="/products" className="block hover:text-foreground" aria-label="Browse our complete product collection">Products</Link>
+                <a href="#features" className="block hover:text-foreground" aria-label="Learn about our key features and benefits">Features</a>
+                <Link to="/cart" className="block hover:text-foreground" aria-label="View your shopping cart">Cart</Link>
               </div>
             </div>
             <div className="space-y-3">
               <h4 className="font-medium">Support</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <a href="#" className="block hover:text-foreground">Size Guide</a>
-                <a href="#" className="block hover:text-foreground">Shipping</a>
-                <a href="#" className="block hover:text-foreground">Returns</a>
+                <a href="#" className="block hover:text-foreground" aria-label="View our comprehensive size guide">Size Guide</a>
+                <a href="#" className="block hover:text-foreground" aria-label="Learn about shipping options and delivery times">Shipping</a>
+                <a href="#" className="block hover:text-foreground" aria-label="Read our returns and exchange policy">Returns</a>
               </div>
             </div>
             <div className="space-y-3">
               <h4 className="font-medium">Company</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <a href="#" className="block hover:text-foreground">About</a>
-                <a href="#" className="block hover:text-foreground">Contact</a>
-                <a href="#" className="block hover:text-foreground">Privacy</a>
+                <a href="#" className="block hover:text-foreground" aria-label="Learn about Broken Beauty's story and mission">About</a>
+                <a href="#" className="block hover:text-foreground" aria-label="Contact our customer support team">Contact</a>
+                <a href="#" className="block hover:text-foreground" aria-label="Read our privacy policy">Privacy</a>
               </div>
             </div>
           </div>

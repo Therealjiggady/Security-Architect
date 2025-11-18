@@ -2,8 +2,10 @@ fastapi
 uvicorn[standard]
 pydantic[email]
 SQLAlchemy
+alembic
 python-multipart
 passlib[bcrypt]
 python-jose[cryptography]
 email-validator
 stripe
+psycopg2-binary

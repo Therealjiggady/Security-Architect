@@ -1,0 +1,8 @@
+# Robots.txt for http://localhost:5173
+# Development environment - not for crawling
+
+User-agent: *
+Disallow: /
+
+# This is a development/staging environment
+# Please do not index or crawl this site
