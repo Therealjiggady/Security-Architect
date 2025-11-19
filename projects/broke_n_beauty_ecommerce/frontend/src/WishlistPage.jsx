@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from './contexts/UserContext';
+import { API_URL } from './config';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = API_URL;
 
 export default function WishlistPage() {
   const { user } = useUser();

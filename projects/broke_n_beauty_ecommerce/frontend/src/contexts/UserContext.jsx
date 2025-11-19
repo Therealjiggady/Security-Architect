@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { API_URL } from '../config';
 
 const UserContext = createContext();
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = API_URL;
 
 export const useUser = () => {
   const context = useContext(UserContext);

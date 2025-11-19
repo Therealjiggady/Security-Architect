@@ -5,9 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './com
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
 import Navbar from './components/Navbar';
+import { API_URL } from './config';
 
-const API_BASE = 'http://localhost:8000';
-const WS_BASE = 'ws://localhost:8000';
+const API_BASE = API_URL;
+const WS_BASE = API_URL.replace('http', 'ws');
 
 export default function ChatPage() {
   const { user } = useUser();
