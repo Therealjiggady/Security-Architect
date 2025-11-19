@@ -1,506 +1,768 @@
-# Learning Notes - Real-Time Chat Board Technology
+# Learning Notes - Broke N Beauty E-commerce Project
 
-## Student Information
-**Name:** James  
-**Project:** Broke N Beauty E-commerce Platform  
-**Technology:** Real-Time Chat Board (FastAPI WebSockets + React)  
-**Start Date:** October 27, 2025
+## Overview
+This document contains key learnings, best practices, and technical notes from building the Broke N Beauty e-commerce platform.
 
 ---
 
-## Overview of Technology
-
-### What is WebSocket?
-WebSocket is a communication protocol that provides full-duplex (two-way) communication channels over a single TCP connection. Unlike HTTP where the client must request data, WebSockets allow the server to push data to clients in real-time.
-
-**Key Benefits:**
-- Real-time, bidirectional communication
-- Lower latency than HTTP polling
-- Efficient - one connection handles all messages
-- Perfect for chat applications, live updates, notifications
-
-### Why I Chose This Technology
-I'm adding a real-time chat board to my e-commerce site for:
-1. **Customer Support** - Instant help with orders and products
-2. **Sizing Questions** - Real-time advice from staff or other customers
-3. **Community Building** - Customers can share experiences
-4. **Competitive Advantage** - Most small e-commerce sites don't have live chat
+## Table of Contents
+1. [Frontend Development](#frontend-development)
+2. [Backend Development](#backend-development)
+3. [Real-Time Communication](#real-time-communication)
+4. [Testing Strategies](#testing-strategies)
+5. [Security Best Practices](#security-best-practices)
+6. [Performance Optimization](#performance-optimization)
+7. [Deployment](#deployment)
+8. [Common Issues & Solutions](#common-issues--solutions)
 
 ---
 
-## Technical Stack
+## Frontend Development
 
-### Backend
-- **FastAPI** - Python web framework with built-in WebSocket support
-- **SQLAlchemy** - ORM for database operations
-- **JWT Authentication** - Secure token-based auth
-- **SQLite/PostgreSQL** - Message storage
+### React Best Practices
 
-### Frontend
-- **React** - UI framework
-- **WebSocket API** - Browser native WebSocket support
-- **React Hooks** - useState, useEffect, useRef for state management
-- **Tailwind CSS** - Styling
+#### Component Organization
+```javascript
+// ✅ Good: Functional components with hooks
+const ProductCard = ({ product }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <div onMouseEnter={() => setIsHovered(true)}>
+      {product.name}
+    </div>
+  );
+};
 
----
-
-## Three Integration Tasks
-
-### Task 1: WebSocket Server + Message Model
-**Goal:** Build the backend infrastructure for real-time messaging
-
-**What I Learned:**
-- How to create WebSocket endpoints in FastAPI
-- Managing multiple concurrent connections with ConnectionManager
-- Broadcasting messages to all clients in a room
-- Storing chat messages in database with SQLAlchemy
-- JWT authentication for WebSocket connections
-
-**Key Code Pattern:**
-```python
-@router.websocket("/ws/{room}")
-async def websocket_endpoint(
-    websocket: WebSocket,
-    room: str,
-    token: str = Query(...),
-    db: Session = Depends(get_db)
-):
-    # 1. Verify JWT token
-    user = await verify_websocket_token(token, db)
-    
-    # 2. Connect to room
-    await manager.connect(websocket, room, user.email)
-    
-    # 3. Handle messages
-    while True:
-        data = await websocket.receive_text()
-        # Process and broadcast
+// ❌ Avoid: Class components (legacy)
+class ProductCard extends React.Component { ... }
 ```
 
-**Challenges:**
-- Handling disconnections gracefully
-- Managing connection state across multiple rooms
-- Ensuring messages persist even if recipient is offline
+#### Context API for State Management
+```javascript
+// Create context in separate file
+const UserContext = createContext();
 
-**Success:** ✅ Two browser tabs can chat in real-time with <200ms latency
+// Provider wraps app
+<UserProvider>
+  <App />
+</UserProvider>
+
+// Consume with hook
+const { user, login } = useUser();
+```
+
+#### Lazy Loading for Performance
+```javascript
+// Code splitting with React.lazy
+const ProductsPage = lazy(() => import('./ProductsPage'));
+
+// Wrap with Suspense
+<Suspense fallback={<LoadingSpinner />}>
+  <ProductsPage />
+</Suspense>
+```
+
+### Tailwind CSS Tips
+
+```css
+/* Use utility classes for consistency */
+className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+
+/* Custom classes when needed */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+  }
+}
+```
+
+### React Router Patterns
+
+```javascript
+// Protected routes
+<Route 
+  path="/profile" 
+  element={user ? <ProfilePage /> : <Navigate to="/login" />} 
+/>
+
+// Nested routes
+<Route path="/products">
+  <Route index element={<ProductList />} />
+  <Route path=":id" element={<ProductDetail />} />
+</Route>
+```
 
 ---
 
-### Task 2: React Chat UI + Typing Indicator
-**Goal:** Build user-friendly chat interface with real-time features
+## Backend Development
 
-**What I Learned:**
-- Managing WebSocket connections in React with useEffect
-- Handling WebSocket lifecycle (open, message, error, close)
-- Implementing typing indicators over WebSocket
-- Auto-scrolling to latest messages
-- Optimistic UI updates
+### FastAPI Structure
 
-**Key Code Pattern:**
+#### Models (SQLAlchemy)
+```python
+# Always use proper typing
+class Product(Base):
+    __tablename__ = "products"
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255), nullable=False)
+    price = Column(Float, nullable=False)
+    
+    # Add indexes for frequently queried fields
+    __table_args__ = (
+        Index('idx_product_name', 'name'),
+    )
+```
+
+#### Schemas (Pydantic)
+```python
+# Separate schemas for input/output
+class ProductCreate(BaseModel):
+    name: str = Field(..., max_length=255)
+    price: float = Field(..., gt=0)
+
+class ProductRead(BaseModel):
+    id: int
+    name: str
+    price: float
+    
+    class Config:
+        orm_mode = True  # Enable ORM compatibility
+```
+
+#### Routers
+```python
+# Keep routes thin, logic in services/controllers
+@router.post("/products", response_model=ProductRead)
+async def create_product(
+    product: ProductCreate,
+    db: Session = Depends(get_db)
+):
+    return create_product_service(product, db)
+```
+
+### Database Best Practices
+
+#### Query Optimization
+```python
+# ❌ N+1 query problem
+products = db.query(Product).all()
+for product in products:
+    category = product.category  # Additional query!
+
+# ✅ Eager loading
+products = db.query(Product)\
+    .options(joinedload(Product.category))\
+    .all()
+```
+
+#### Pagination
+```python
+# Always paginate large datasets
+@router.get("/products")
+def get_products(
+    skip: int = 0,
+    limit: int = Query(20, le=100),
+    db: Session = Depends(get_db)
+):
+    return db.query(Product).offset(skip).limit(limit).all()
+```
+
+---
+
+## Real-Time Communication
+
+### WebSocket Implementation
+
+#### Backend (FastAPI)
+```python
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: Dict[str, List[WebSocket]] = {}
+    
+    async def connect(self, websocket: WebSocket, room: str):
+        await websocket.accept()
+        if room not in self.active_connections:
+            self.active_connections[room] = []
+        self.active_connections[room].append(websocket)
+    
+    async def broadcast(self, room: str, message: dict):
+        for connection in self.active_connections.get(room, []):
+            try:
+                await connection.send_json(message)
+            except:
+                # Remove dead connections
+                self.active_connections[room].remove(connection)
+```
+
+#### Frontend (React)
 ```javascript
 useEffect(() => {
   const ws = new WebSocket(`ws://localhost:8000/chat/ws/${room}?token=${token}`);
   
+  ws.onopen = () => console.log('Connected');
+  
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
+    // Handle different message types
     if (data.type === 'message') {
       setMessages(prev => [...prev, data.data]);
-    } else if (data.type === 'typing') {
-      updateTypingIndicator(data.data);
     }
   };
   
-  return () => ws.close(); // Cleanup
+  ws.onerror = (error) => console.error('WebSocket error:', error);
+  
+  ws.onclose = () => console.log('Disconnected');
+  
+  return () => ws.close();
 }, [room, token]);
 ```
 
-**Challenges:**
-- Preventing memory leaks with proper cleanup
-- Handling reconnection when network drops
-- Debouncing typing events (don't spam server)
-- Smooth UX with loading states
-
-**Success:** ✅ Messages appear instantly, typing indicator works perfectly
+### Key Learnings
+- WebSockets enable bidirectional real-time communication
+- Always handle connection errors and cleanup
+- Use rooms/channels to organize conversations
+- Implement reconnection logic for reliability
+- Add typing indicators for better UX
 
 ---
 
-### Task 3: Auth + Moderation + Documentation
-**Goal:** Add security, admin features, and comprehensive docs
+## Testing Strategies
 
-**What I Learned:**
-- Role-based access control (RBAC)
-- Admin-only features (message deletion)
-- Input validation (message length limits)
-- Writing clear technical documentation
-- Testing edge cases
+### Unit Testing
 
-**Key Code Pattern:**
+#### Frontend (Jest + React Testing Library)
+```javascript
+// Test component rendering
+it('should render product name', () => {
+  render(<ProductCard product={mockProduct} />);
+  expect(screen.getByText('Test Product')).toBeInTheDocument();
+});
+
+// Test user interactions
+it('should call onClick when clicked', () => {
+  const onClick = jest.fn();
+  render(<Button onClick={onClick}>Click me</Button>);
+  fireEvent.click(screen.getByText('Click me'));
+  expect(onClick).toHaveBeenCalled();
+});
+
+// Test async operations
+it('should fetch data on mount', async () => {
+  render(<ProductList />);
+  await waitFor(() => {
+    expect(screen.getByText('Product 1')).toBeInTheDocument();
+  });
+});
+```
+
+#### Backend (pytest)
 ```python
-# Admin-only message deletion
-@router.delete("/messages/{message_id}")
-async def delete_message(
-    message_id: int,
-    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
-    db: Session = Depends(get_db)
-):
-    # Verify user is admin
-    user = get_current_user(credentials, db)
-    if user.role != ADMIN_ROLE:
-        raise HTTPException(403, "Admin access required")
+def test_create_product(client, db):
+    response = client.post(
+        "/products",
+        json={"name": "Test", "price": 29.99}
+    )
+    assert response.status_code == 201
+    assert response.json()["name"] == "Test"
+```
+
+### Integration Testing
+
+```javascript
+// Test API integration with supertest
+describe('Product API', () => {
+  it('should create and retrieve product', async () => {
+    // Create
+    const createRes = await request(app)
+      .post('/products')
+      .send({ name: 'Test', price: 29.99 });
     
-    # Delete and broadcast
-    db.query(ChatMessage).filter(ChatMessage.id == message_id).delete()
-    await manager.broadcast(room, {"type": "delete", "data": {"message_id": message_id}})
+    const productId = createRes.body.id;
+    
+    // Retrieve
+    const getRes = await request(app)
+      .get(`/products/${productId}`);
+    
+    expect(getRes.body.name).toBe('Test');
+  });
+});
 ```
 
-**Challenges:**
-- Ensuring non-admins can't delete messages
-- Broadcasting deletions to all clients
-- Handling over-length messages gracefully
-- Writing documentation that's clear but complete
-
-**Success:** ✅ Admin moderation works, docs are comprehensive
+### Testing Best Practices
+- Write tests before or alongside code (TDD)
+- Aim for 80%+ code coverage
+- Test edge cases and error conditions
+- Mock external dependencies
+- Keep tests isolated and independent
+- Use descriptive test names
 
 ---
 
-## Key Concepts Learned
+## Security Best Practices
 
-### 1. WebSocket Connection Management
+### Authentication & Authorization
+
+#### JWT Token Management
 ```python
-class ConnectionManager:
-    def __init__(self):
-        # Store connections per room
-        self.active_connections: Dict[str, List[WebSocket]] = {}
-        self.connection_usernames: Dict[WebSocket, str] = {}
+# Backend: Create secure tokens
+def create_access_token(sub: str) -> str:
+    payload = {
+        "sub": sub,
+        "iat": datetime.utcnow(),
+        "exp": datetime.utcnow() + timedelta(hours=1)
+    }
+    return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+
+# Verify tokens
+def verify_token(token: str) -> str:
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        return payload["sub"]
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 ```
 
-**Why this matters:** Efficient broadcasting means messages go only to users in the same room, not everyone on the server.
-
-### 2. Async/Await in Python
-```python
-# Non-blocking operations
-async def broadcast(self, room: str, message: dict):
-    for connection in self.active_connections.get(room, []):
-        try:
-            await connection.send_json(message)
-        except:
-            # Handle dead connections
-            pass
-```
-
-**Why this matters:** Async allows handling many connections without blocking. One slow client doesn't affect others.
-
-### 3. React useEffect for WebSockets
 ```javascript
-useEffect(() => {
-  const ws = new WebSocket(url);
-  wsRef.current = ws;
-  
-  return () => {
-    ws.close(); // Critical: cleanup on unmount
-  };
-}, [room]); // Reconnect when room changes
+// Frontend: Store tokens securely
+localStorage.setItem('token', access_token);
+
+// Include in requests
+fetch('/api/protected', {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+});
 ```
 
-**Why this matters:** Proper cleanup prevents memory leaks and connection buildup.
-
-### 4. JWT for WebSocket Auth
+#### Password Security
 ```python
-# Parse token from query parameter
-token: str = Query(...)
+# Use bcrypt or argon2 for hashing
+from passlib.context import CryptContext
 
-# Verify before accepting connection
-user = await verify_websocket_token(token, db)
-if not user:
-    await websocket.close(code=1008)  # Policy violation
+pwd_context = CryptContext(schemes=["argon2", "bcrypt"], deprecated="auto")
+
+# Hash passwords before storing
+hashed = pwd_context.hash(plain_password)
+
+# Verify passwords
+pwd_context.verify(plain_password, hashed_password)
 ```
 
-**Why this matters:** WebSocket URLs can't have headers, so token goes in query string. Must verify before accepting connection.
+### CORS Configuration
+```python
+# Allow specific origins only
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",  # Development
+        "https://yourdomain.com"  # Production
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+```
 
-### 5. Typing Indicators
+### Input Validation
+```python
+# Always validate input
+class ProductCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=255)
+    price: float = Field(..., gt=0, le=100000)
+    
+    @validator('name')
+    def name_must_not_be_empty(cls, v):
+        if not v.strip():
+            raise ValueError('Name cannot be empty')
+        return v
+```
+
+### SQL Injection Prevention
+```python
+# ✅ Use ORM (SQLAlchemy) - safe from SQL injection
+products = db.query(Product).filter(Product.name == user_input).all()
+
+# ❌ Never use raw SQL with user input
+db.execute(f"SELECT * FROM products WHERE name = '{user_input}'")
+```
+
+---
+
+## Performance Optimization
+
+### Frontend Optimization
+
+#### Code Splitting
 ```javascript
-// Frontend: Debounce typing events
-const handleInputChange = (e) => {
-  setMessageInput(e.target.value);
-  
-  // Send typing = true
-  ws.send(JSON.stringify({type: 'typing', is_typing: true}));
-  
-  // Auto-send typing = false after 2 seconds
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(() => {
-    ws.send(JSON.stringify({type: 'typing', is_typing: false}));
-  }, 2000);
-};
+// Split by route
+const Home = lazy(() => import('./pages/Home'));
+const Products = lazy(() => import('./pages/Products'));
+
+// Split by feature
+const Chat = lazy(() => import('./features/Chat'));
 ```
 
-**Why this matters:** Debouncing prevents spamming the server with typing events every keystroke.
-
----
-
-## Common Pitfalls & Solutions
-
-### Problem 1: WebSocket Connection Closes Immediately
-**Symptom:** Connection opens then closes right away
-
-**Solution:**
-```python
-# Must have message loop or ping/pong
-try:
-    while True:
-        data = await websocket.receive_text()
-        # Process message
-except WebSocketDisconnect:
-    # Clean disconnect
-    await manager.disconnect(websocket, room)
-```
-
-**Why:** WebSocket needs active communication or it times out.
-
----
-
-### Problem 2: Messages Not Appearing in Other Tabs
-**Symptom:** Send message but only shows in sender's tab
-
-**Solution:**
-```python
-# Broadcast to ALL connections in room
-await manager.broadcast(room, message_data)
-
-# Not just sender:
-# await websocket.send_json(message_data)  ❌
-```
-
-**Why:** Must explicitly broadcast to all connections, not just respond to sender.
-
----
-
-### Problem 3: Memory Leaks in React
-**Symptom:** App gets slower over time
-
-**Solution:**
+#### Image Optimization
 ```javascript
-useEffect(() => {
-  const ws = new WebSocket(url);
-  
-  // CRITICAL: Return cleanup function
-  return () => {
-    ws.close();
-  };
-}, []);
+// Use lazy loading
+<img src={product.image} loading="lazy" alt={product.name} />
+
+// Use appropriate formats (WebP)
+<picture>
+  <source srcset="image.webp" type="image/webp" />
+  <img src="image.jpg" alt="Product" />
+</picture>
 ```
 
-**Why:** Without cleanup, old WebSocket connections stay open even after component unmounts.
-
----
-
-### Problem 4: Authentication Errors
-**Symptom:** "Unauthorized" when connecting to WebSocket
-
-**Solution:**
+#### Memoization
 ```javascript
-// Get token from localStorage
-const token = localStorage.getItem('token');
+// Prevent unnecessary re-renders
+const MemoizedComponent = React.memo(ExpensiveComponent);
 
-// Include in WebSocket URL (not headers!)
-const ws = new WebSocket(`ws://localhost:8000/chat/ws/general?token=${token}`);
+// Memoize expensive calculations
+const totalPrice = useMemo(() => {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}, [items]);
+
+// Memoize callbacks
+const handleClick = useCallback(() => {
+  doSomething(value);
+}, [value]);
 ```
 
-**Why:** WebSocket connections can't use custom headers, must use query parameters for auth.
+### Backend Optimization
 
----
-
-## Testing Methodology
-
-### Manual Testing Steps
-
-1. **Two-Tab Test**
-   ```
-   1. Open http://localhost:5173/chat in Tab 1
-   2. Open http://localhost:5173/chat in Tab 2  
-   3. Login to both tabs
-   4. Send message from Tab 1
-   5. Verify appears in Tab 2 within 1 second
-   ```
-
-2. **Typing Indicator Test**
-   ```
-   1. Start typing in Tab 1
-   2. Check Tab 2 shows "[User] is typing..."
-   3. Stop typing for 2 seconds
-   4. Verify indicator disappears
-   ```
-
-3. **Admin Moderation Test**
-   ```
-   1. Login as admin user
-   2. Hover over any message
-   3. Click delete button (🗑️)
-   4. Verify message disappears from all tabs
-   ```
-
-### Automated Tests
-
+#### Database Indexing
 ```python
-# Backend test
-def test_websocket_broadcast(client):
-    with client.websocket_connect("/chat/ws/general?token=valid_token") as ws1:
-        with client.websocket_connect("/chat/ws/general?token=valid_token") as ws2:
-            # Send from ws1
-            ws1.send_json({"type": "message", "content": "Hello"})
-            
-            # Verify ws2 receives
-            data = ws2.receive_json()
-            assert data["type"] == "message"
-            assert data["data"]["message"] == "Hello"
-```
-
----
-
-## Performance Considerations
-
-### Connection Limits
-- Each WebSocket is a persistent TCP connection
-- Server can handle ~10,000 concurrent connections (with proper setup)
-- Use Redis pub/sub for multi-server scaling
-
-### Message Size
-- Limit messages to 500 characters
-- Prevents abuse and bandwidth waste
-- Enforced on both client and server
-
-### Database Optimization
-```python
-# Index frequently queried fields
-class ChatMessage(Base):
+# Add indexes to frequently queried columns
+class Product(Base):
     __table_args__ = (
-        Index('idx_chat_room', 'room'),
-        Index('idx_chat_created', 'created_at'),
+        Index('idx_product_category', 'category'),
+        Index('idx_product_price', 'price'),
     )
 ```
 
+#### Caching
+```python
+# Use Redis for caching
+from redis import Redis
+
+redis_client = Redis(host='localhost', port=6379)
+
+# Cache expensive queries
+@lru_cache(maxsize=100)
+def get_popular_products():
+    return db.query(Product).order_by(Product.views.desc()).limit(10).all()
+```
+
+#### Connection Pooling
+```python
+engine = create_engine(
+    DATABASE_URL,
+    pool_size=10,          # Persistent connections
+    max_overflow=20,       # Additional connections under load
+    pool_pre_ping=True,    # Verify connections before use
+    pool_recycle=3600      # Recycle connections after 1 hour
+)
+```
+
+### Compression
+```javascript
+// Node.js/Express
+const compression = require('compression');
+app.use(compression());
+
+// Reduces response size by 70-90%
+```
+
 ---
 
-## Security Checklist
-
-- [x] JWT authentication required
-- [x] Token verified before accepting WebSocket
-- [x] Role-based access (admin only for deletions)
-- [x] Message length limits (500 chars)
-- [x] Input sanitization (XSS prevention)
-- [x] Rate limiting (prevent spam)
-- [x] Room isolation (users only see their room)
-- [x] Secure WebSocket (wss://) in production
-
----
-
-## Deployment Notes
+## Deployment
 
 ### Environment Variables
+
 ```bash
-# Required for production
+# .env (never commit this!)
+DATABASE_URL=postgresql://user:pass@localhost/dbname
 JWT_SECRET=your-super-secret-key-here
-DATABASE_URL=postgresql://user:pass@host/dbname
-ALLOWED_ORIGINS=https://yourdomain.com
+STRIPE_SECRET_KEY=sk_test_...
+NODE_ENV=production
 ```
 
-### WebSocket in Production
-```nginx
-# Nginx configuration for WebSocket
-location /chat/ws/ {
-    proxy_pass http://backend:8000;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
+```python
+# Load in application
+from dotenv import load_dotenv
+load_dotenv()
+
+JWT_SECRET = os.getenv("JWT_SECRET")
+```
+
+### Production Checklist
+
+#### Backend
+- [ ] Use production database (PostgreSQL)
+- [ ] Set strong JWT secret
+- [ ] Enable HTTPS
+- [ ] Configure CORS for production domain
+- [ ] Set up error logging (Sentry)
+- [ ] Enable rate limiting
+- [ ] Use gunicorn/uvicorn workers
+- [ ] Set up database backups
+
+#### Frontend
+- [ ] Build for production (`npm run build`)
+- [ ] Minify and compress assets
+- [ ] Use CDN for static assets
+- [ ] Enable service workers (PWA)
+- [ ] Configure SEO meta tags
+- [ ] Set up analytics
+- [ ] Enable error tracking
+
+### Deployment Platforms
+
+**Frontend:**
+- Vercel (recommended for React)
+- Netlify
+- GitHub Pages
+
+**Backend:**
+- Railway (easy Python deployment)
+- Heroku
+- DigitalOcean
+- AWS/Google Cloud
+
+**Database:**
+- Railway (PostgreSQL)
+- Supabase
+- PlanetScale
+- AWS RDS
+
+---
+
+## Common Issues & Solutions
+
+### Issue: CORS Errors
+
+**Problem:** 
+```
+Access to fetch at 'http://localhost:8000' from origin 'http://localhost:5173' 
+has been blocked by CORS policy
+```
+
+**Solution:**
+```python
+# Add CORS middleware to backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+```
+
+### Issue: JWT Token Not Working
+
+**Problem:** Getting 401 Unauthorized
+
+**Solution:**
+```javascript
+// Check token is stored correctly
+const token = localStorage.getItem('token');
+console.log('Token:', token);
+
+// Include in Authorization header
+headers: {
+  'Authorization': `Bearer ${token}`
 }
+
+// Verify token hasn't expired
+// Tokens typically expire after 1 hour
+```
+
+### Issue: WebSocket Connection Fails
+
+**Problem:** WebSocket won't connect
+
+**Solutions:**
+```javascript
+// 1. Check URL format
+const ws = new WebSocket('ws://localhost:8000/chat/ws/general?token=...');
+// Note: ws:// not wss:// for local development
+
+// 2. Include authentication token
+const token = localStorage.getItem('token');
+const ws = new WebSocket(`ws://localhost:8000/chat/ws/general?token=${token}`);
+
+// 3. Check backend is running on correct port
+```
+
+### Issue: Database Migration Errors
+
+**Problem:** Table doesn't exist
+
+**Solution:**
+```python
+# Recreate all tables (development only)
+from app.db import Base, engine
+Base.metadata.drop_all(engine)
+Base.metadata.create_all(engine)
+
+# Or use Alembic for proper migrations
+alembic revision --autogenerate -m "Create tables"
+alembic upgrade head
+```
+
+### Issue: React State Not Updating
+
+**Problem:** Component doesn't re-render
+
+**Solutions:**
+```javascript
+// 1. Make sure you're not mutating state directly
+// ❌ Don't do this
+state.push(item);
+
+// ✅ Do this
+setState([...state, item]);
+
+// 2. Use functional updates for state that depends on previous state
+setState(prev => [...prev, item]);
+
+// 3. Check dependencies in useEffect
+useEffect(() => {
+  fetchData();
+}, [dependency]); // Make sure dependency is listed
+```
+
+### Issue: Password Login Fails
+
+**Problem:** "Invalid email or password" even with correct credentials
+
+**Solutions:**
+```python
+# 1. Check password hash is stored correctly
+user = db.query(User).filter(User.email == email).first()
+print(f"Hash in DB: {user.hashed_password}")
+
+# 2. Verify password hashing is consistent
+from app.auth import get_password_hash, verify_password
+
+# When creating user
+hashed = get_password_hash(password)
+
+# When verifying
+is_valid = verify_password(plain_password, user.hashed_password)
+
+# 3. Make sure you're using the same hashing algorithm
+# (bcrypt, argon2, etc.)
 ```
 
 ---
 
-## Resources Used
+## Quick Reference
 
-### Documentation
-- FastAPI WebSockets: https://fastapi.tiangolo.com/advanced/websockets/
-- MDN WebSocket API: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
-- SQLAlchemy Docs: https://docs.sqlalchemy.org/
+### Common Commands
 
-### Tutorials
-- "Real-Time Communication with WebSockets" (YouTube)
-- FastAPI WebSocket chat tutorial
-- React WebSocket patterns
+```bash
+# Backend (FastAPI)
+cd backend
+source .venv/bin/activate
+uvicorn app.main:app --reload
 
-### Tools
-- Postman (API testing)
-- Chrome DevTools (WebSocket inspection)
-- DB Browser for SQLite (database inspection)
+# Frontend (React)
+cd frontend
+npm run dev
 
----
+# Run tests
+npm test                    # Frontend
+pytest                      # Backend
 
-## Reflection
+# Build for production
+npm run build              # Frontend
+```
 
-### What Went Well
-- ✅ WebSocket implementation was smoother than expected
-- ✅ Connection manager pattern worked perfectly
-- ✅ React hooks made state management clean
-- ✅ Authentication integration was straightforward
-- ✅ Documentation helped clarify thinking
+### Useful VS Code Extensions
+- Python
+- Pylance
+- ES7+ React/Redux/React-Native snippets
+- Tailwind CSS IntelliSense
+- SQLite Viewer
+- Thunder Client (API testing)
+- GitLens
 
-### What Was Challenging
-- ⚠️ Handling edge cases (network drops, race conditions)
-- ⚠️ Debugging WebSocket issues (less tooling than HTTP)
-- ⚠️ Getting typing indicators to debounce properly
-- ⚠️ Understanding async/await patterns initially
-- ⚠️ Testing WebSocket connections
-
-### What I'd Do Differently
-- Start with simpler message types, add complexity later
-- Write tests earlier (test-driven development)
-- Use TypeScript for better type safety
-- Add more comprehensive error handling from start
-- Document as I go, not after
-
-### Skills Gained
-1. **WebSocket expertise** - Can build real-time features
-2. **Async programming** - Understand async/await patterns
-3. **React hooks mastery** - useEffect, useRef, useState
-4. **Security awareness** - JWT, RBAC, input validation
-5. **System design** - Connection management, scaling patterns
+### Learning Resources
+- React Docs: https://react.dev
+- FastAPI Docs: https://fastapi.tiangolo.com
+- Tailwind CSS: https://tailwindcss.com
+- PostgreSQL Tutorial: https://www.postgresqltutorial.com
+- WebSocket Guide: https://javascript.info/websocket
 
 ---
 
-## Next Steps
+## Project Structure Best Practices
 
-### Immediate Improvements
-- [ ] Add message editing feature
-- [ ] Implement read receipts
-- [ ] Add emoji picker
-- [ ] File/image sharing in chat
-- [ ] Search chat history
-
-### Scaling Considerations
-- [ ] Redis pub/sub for multi-server
-- [ ] Message pagination (load older messages)
-- [ ] Connection pooling optimization
-- [ ] CDN for message media
-- [ ] Monitoring and analytics
-
-### Advanced Features
-- [ ] Private messaging (1-on-1 DMs)
-- [ ] User blocking/muting
-- [ ] Message reactions (👍, ❤️, etc.)
-- [ ] Voice/video chat integration
-- [ ] Chatbots for automated responses
+```
+broke_n_beauty_ecommerce/
+├── backend/
+│   ├── app/
+│   │   ├── models/         # Database models
+│   │   ├── schemas/        # Pydantic schemas
+│   │   ├── routers/        # API endpoints
+│   │   ├── auth.py         # Authentication logic
+│   │   ├── db.py          # Database connection
+│   │   └── main.py        # Application entry
+│   ├── tests/             # Backend tests
+│   └── requirements.txt   # Python dependencies
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/    # Reusable components
+│   │   ├── contexts/      # React contexts
+│   │   ├── pages/         # Page components
+│   │   ├── App.jsx        # Main app component
+│   │   └── main.jsx       # Entry point
+│   ├── public/            # Static assets
+│   └── package.json       # Node dependencies
+│
+├── days/                  # Daily documentation
+├── .gitignore            # Git ignore rules
+└── README.md             # Project documentation
+```
 
 ---
 
-## Final Thoughts
+## Final Tips
 
-Building this real-time chat board taught me that WebSockets aren't as intimidating as they seem. The key is understanding the connection lifecycle and proper state management. This feature adds real value to my e-commerce platform and demonstrates advanced full-stack skills.
+### Development Workflow
+1. Plan features with user stories
+2. Write tests first (TDD)
+3. Implement features incrementally
+4. Commit frequently with clear messages
+5. Review and refactor regularly
+6. Document as you go
+7. Deploy early and often
 
-**Most important lesson:** Start simple, test thoroughly, then add features incrementally.
+### Code Quality
+- Use linters (ESLint, Pylint)
+- Follow style guides (PEP 8 for Python, Airbnb for JavaScript)
+- Write meaningful comments
+- Keep functions small and focused
+- Use descriptive variable names
+- Avoid code duplication (DRY principle)
+
+### Debugging Tips
+- Use debugger, don't just console.log
+- Read error messages carefully
+- Check network requests in DevTools
+- Verify environment variables
+- Test in isolation
+- Ask for help when stuck
 
 ---
 
 **Last Updated:** November 6, 2024  
-**Status:** All three tasks completed successfully ✅  
-**Total Hours:** ~40 hours (over 3 weeks)
+**Project:** Broke N Beauty E-commerce Platform  
+**Status:** Production-ready with comprehensive testing ✅
