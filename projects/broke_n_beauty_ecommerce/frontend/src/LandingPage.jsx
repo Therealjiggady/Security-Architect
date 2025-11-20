@@ -54,8 +54,6 @@ export default function LandingPage() {
         muted
         playsInline
         className="background-video"
-        onLoadedData={() => console.log("Video loaded successfully")}
-        onError={(e) => console.error("Video load error:", e.target.src, e)}
       />
       {/* Nav */}
       <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-background/60">
@@ -120,11 +118,11 @@ export default function LandingPage() {
             <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs text-primary">
               New • SmartFit size helper
             </span>
-            <h1 id="hero-heading" className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+            <h1 id="hero-heading" className="mt-3 text-4xl font-bold leading-tight tracking-tight text-white md:text-6xl">
               Live Bold <br /> Move Free.
               <br />
             </h1>
-            <p className="mt-4 text-muted-foreground md:text-lg">
+            <p className="mt-4 text-white/90 md:text-lg">
               From workouts to workdays — every butterfly has its perfect balance.
 
               Find yours in sports bras, shorts, and scrubs with sizing made simple and shipping made quick

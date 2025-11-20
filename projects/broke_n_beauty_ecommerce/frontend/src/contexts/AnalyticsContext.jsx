@@ -13,8 +13,8 @@ class LocalAnalytics {
     this.isLocalhost = window.location.hostname === 'localhost';
     this.isDebug = import.meta.env.VITE_DEBUG_ANALYTICS === 'true';
     
-    // Setup debug mode for localhost
-    if (this.isLocalhost) {
+    // Setup debug mode only if explicitly enabled
+    if (this.isLocalhost && this.isDebug) {
       this.setupDebugMode();
     }
   }

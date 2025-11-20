@@ -1,0 +1,5 @@
+0|id|INTEGER|0||1
+1|email|VARCHAR(255)|1||0
+2|hashed_password|VARCHAR(255)|1||0
+3|full_name|VARCHAR(255)|0||0
+4|created_at|DATETIME|1|CURRENT_TIMESTAMP|0
