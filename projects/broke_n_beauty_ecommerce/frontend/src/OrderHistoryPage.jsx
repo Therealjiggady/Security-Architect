@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { useUser } from './contexts/UserContext';
 
@@ -175,14 +173,12 @@ const OrderHistoryPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navbar />
         <main className="flex-grow container mx-auto px-4 py-8">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             <p className="mt-4 text-gray-600">Loading your orders...</p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -190,7 +186,6 @@ const OrderHistoryPage = () => {
   if (error) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navbar />
         <main className="flex-grow container mx-auto px-4 py-8">
           <div className="text-center">
             <p className="text-red-600 text-lg">{error}</p>
@@ -202,14 +197,12 @@ const OrderHistoryPage = () => {
             </button>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
       <main className="flex-grow container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Order History</h1>
         
@@ -285,13 +278,47 @@ const OrderHistoryPage = () => {
                     ))}
                   </div>
 
+                  {/* Tracking information */}
+                  {order.tracking_number && (
+                    <div className="mt-4 pt-4 border-t">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="text-sm">
+                            <span className="font-semibold">Tracking Number:</span>{' '}
+                            {order.tracking_number}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            <span className="font-semibold">Carrier:</span> {order.carrier}
+                          </p>
+                          {order.tracking_status && (
+                            <p className="text-sm text-gray-600">
+                              <span className="font-semibold">Tracking Status:</span>{' '}
+                              {order.tracking_status}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/order-tracking/${order.id}`);
+                        }}
+                        className="mt-2 w-full px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 text-sm"
+                      >
+                        View Detailed Tracking →
+                      </button>
+                    </div>
+                  )}
+
                   {/* Estimated delivery */}
-                  <div className="mt-4 pt-4 border-t">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Estimated Delivery:</span>{' '}
-                      {getEstimatedDelivery(order.created_at, order.status)}
-                    </p>
-                  </div>
+                  {!order.tracking_number && (
+                    <div className="mt-4 pt-4 border-t">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Estimated Delivery:</span>{' '}
+                        {getEstimatedDelivery(order.created_at, order.status)}
+                      </p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -341,8 +368,6 @@ const OrderHistoryPage = () => {
           </div>
         </div>
       )}
-
-      <Footer />
     </div>
   );
 };

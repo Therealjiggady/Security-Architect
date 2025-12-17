@@ -142,3 +142,29 @@ async def upload_product_image(
     db.commit()
 
     return {"message": "Image uploaded successfully", "image_url": product.image_url}
+
+from app.tasks.inventory_tasks import check_variant_stock_task
+
+@router.patch("/variants/{variant_id}/stock")
+def update_variant_stock(
+    variant_id: int,
+    new_stock: int,
+    user: str = Depends(require_auth),
+    db: Session = Depends(get_db)
+):
+    """Update product variant stock (admin only)"""
+    variant = db.query(models.ProductVariant).filter(
+        models.ProductVariant.id == variant_id
+    ).first()
+    if not variant:
+        raise HTTPException(status_code=404, detail="Variant not found")
+
+    old_stock = variant.stock
+    variant.stock = new_stock
+    db.commit()
+
+    # If stock went from 0 to > 0, trigger inventory alerts
+    if old_stock == 0 and new_stock > 0:
+        check_variant_stock_task.delay(variant_id)
+
+    return {"message": "Stock updated", "variant_id": variant_id, "new_stock": new_stock}

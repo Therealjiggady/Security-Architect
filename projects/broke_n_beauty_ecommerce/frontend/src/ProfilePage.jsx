@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useUser } from './contexts/UserContext';
+import { API_URL } from './config';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = API_URL;
 
 export default function ProfilePage() {
   const { user: contextUser, updateProfile } = useUser();
@@ -89,24 +91,6 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-background/60">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-xl bg-primary/20 ring-1 ring-primary/40 grid place-items-center">
-              <span className="text-primary font-bold">BnB</span>
-            </div>
-            <span className="font-semibold tracking-wide">Broken Beauty</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <a className="hover:text-foreground" href="/">Home</a>
-            <a className="hover:text-foreground" href="/products">Products</a>
-            <a className="hover:text-foreground" href="/cart">Cart</a>
-            <a className="hover:text-primary" href="/profile">Profile</a>
-          </nav>
-        </div>
-      </header>
-
       {/* Main Content */}
       <main className="mx-auto max-w-6xl px-4 py-8">
         <div className="grid gap-8 lg:grid-cols-3">
@@ -226,12 +210,12 @@ export default function ProfilePage() {
                 <div className="text-6xl mb-4">📦</div>
                 <h2 className="text-2xl font-semibold mb-4">No orders yet</h2>
                 <p className="text-muted-foreground mb-6">Your order history will appear here.</p>
-                <a
-                  href="/products"
-                  className="inline-block rounded-2xl px-6 py-3 font-medium transition-colors"
+                <Link
+                  to="/products"
+                  className="inline-block rounded-2xl bg-primary px-6 py-3 font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
                   Start Shopping
-                </a>
+                </Link>
               </div>
             )}
           </div>

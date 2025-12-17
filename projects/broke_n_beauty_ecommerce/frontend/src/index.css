@@ -22,8 +22,8 @@
   --accent-foreground: 0 0% 100%;
   --destructive: 0 93.5484% 81.7647%;
   --destructive-foreground: 0 0% 100%;
-  --border: 267.5676 90.2439% 91.9608%;
-  --input: 267.5676 90.2439% 91.9608%;
+  --border: 0 0% 100%;
+  --input: 0 0% 100%;
   --ring: 255.1351 91.7355% 76.2745%;
   --chart-1: 255.1351 91.7355% 76.2745%;
   --chart-2: 258.3117 89.5349% 66.2745%;
@@ -77,8 +77,8 @@
   --accent-foreground: 0 0% 100%;
   --destructive: 0 93.5484% 81.7647%;
   --destructive-foreground: 0 0% 100%;
-  --border: 272.5000 19.3548% 24.3137%;
-  --input: 272.5000 19.3548% 24.3137%;
+  --border: 0 0% 100%;
+  --input: 0 0% 100%;
   --ring: 255.9036 95.4023% 82.9412%;
   --chart-1: 255.9036 95.4023% 82.9412%;
   --chart-2: 255.1351 91.7355% 76.2745%;
@@ -138,7 +138,7 @@ body {
   opacity: 0.5;
 }
 
-/* Force all text to be white for visibility */
+/* Force most text to be white for visibility */
 * {
   color: white !important;
 }
@@ -163,5 +163,207 @@ nav *, footer *, header * {
 
 /* Ensure card content is white */
 .card *, [class*="card"] * {
+  color: white !important;
+}
+
+/* Make navigation menu items white by default, purple on hover/active */
+nav a, nav button, [role="menuitem"], .navigation-menu a,
+[class*="navigationMenuTrigger"], [class*="navigation"] a,
+header nav a, header nav button, header a, header button {
+  color: white !important;
+  transition: color 0.2s ease;
+}
+
+nav a:hover, nav button:hover, [role="menuitem"]:hover, .navigation-menu a:hover,
+nav a:focus, nav button:focus, [role="menuitem"]:focus, .navigation-menu a:focus,
+nav a:active, nav button:active, [role="menuitem"]:active, .navigation-menu a:active,
+nav a.active, nav button.active, [role="menuitem"].active, .navigation-menu a.active,
+[class*="navigationMenuTrigger"]:hover, [class*="navigation"] a:hover,
+header nav a:hover, header nav button:hover, header a:hover, header button:hover {
+  color: white !important;
+}
+
+/* Specifically target NavigationMenu components and classes */
+[data-radix-navigation-menu] a, [data-radix-navigation-menu] button,
+[data-radix-navigation-menu-trigger], [data-radix-navigation-menu-link] {
+  color: white !important;
+}
+
+[data-radix-navigation-menu] a:hover, [data-radix-navigation-menu] button:hover,
+[data-radix-navigation-menu-trigger]:hover, [data-radix-navigation-menu-link]:hover {
+  color: white !important;
+}
+
+/* Target the specific navigation menu trigger style classes */
+.group.inline-flex.h-9.w-max,
+button.group.inline-flex.h-9.w-max,
+a.group.inline-flex.h-9.w-max {
+  color: white !important;
+}
+
+.group.inline-flex.h-9.w-max:hover,
+button.group.inline-flex.h-9.w-max:hover,
+a.group.inline-flex.h-9.w-max:hover {
+  color: white !important;
+}
+
+/* Force override for all navigation menu trigger styles */
+[class*="navigationMenuTrigger"],
+[class*="navigationMenuTrigger"].text-primary,
+a[class*="text-primary"][href*="/"],
+Link[class*="text-primary"] {
+  color: white !important;
+}
+
+[class*="navigationMenuTrigger"]:hover,
+[class*="navigationMenuTrigger"].text-primary:hover,
+a[class*="text-primary"][href*="/"]:hover,
+Link[class*="text-primary"]:hover {
+  color: white !important;
+}
+
+/* Override any text-primary classes in navigation */
+header .text-primary, nav .text-primary {
+  color: white !important;
+}
+
+header .text-primary:hover, nav .text-primary:hover {
+  color: white !important;
+}
+
+/* Ensure all navigation links are white regardless of other classes */
+header a, header Link, nav a, nav Link,
+nav.text-muted-foreground a, nav .text-muted-foreground a,
+.text-muted-foreground a, a.text-muted-foreground {
+  color: white !important;
+}
+
+header a:hover, header Link:hover, nav a:hover, nav Link:hover,
+nav.text-muted-foreground a:hover, nav .text-muted-foreground a:hover,
+.text-muted-foreground a:hover, a.text-muted-foreground:hover {
+  color: white !important;
+}
+
+/* Specifically target navigation with muted-foreground class */
+nav.hidden.md\\:flex.items-center.gap-6.text-sm.text-muted-foreground a {
+  color: white !important;
+}
+
+nav.hidden.md\\:flex.items-center.gap-6.text-sm.text-muted-foreground a:hover {
+  color: white !important;
+}
+
+/* Target all muted-foreground elements in navigation */
+nav[class*="muted-foreground"] a,
+nav [class*="muted-foreground"] {
+  color: white !important;
+}
+
+nav[class*="muted-foreground"] a:hover {
+  color: white !important;
+}
+
+/* Make Sign In button text white */
+.text-secondary-foreground, Link.text-secondary-foreground, a.text-secondary-foreground {
+  color: white !important;
+}
+
+.text-secondary-foreground:hover, Link.text-secondary-foreground:hover, a.text-secondary-foreground:hover {
+  color: white !important;
+}
+
+/* Specifically target Sign In button on landing page */
+header a[href="/login"], header Link[to="/login"] {
+  color: white !important;
+  background-color: black !important;
+}
+
+header a[href="/login"]:hover, header Link[to="/login"]:hover {
+  color: white !important;
+  background-color: #333333 !important;
+}
+
+/* Override bg-secondary class to black */
+.bg-secondary, Link.bg-secondary, a.bg-secondary {
+  background-color: black !important;
+}
+
+.bg-secondary:hover, Link.bg-secondary:hover, a.bg-secondary:hover {
+  background-color: #333333 !important;
+}
+
+/* Override ALL Button backgrounds to solid black - no escaping */
+button, .btn, [role="button"],
+button[size="lg"], button[variant="default"], button[variant="outline"] {
+  background: black !important;
+  background-color: black !important;
+  color: white !important;
+  border: 2px solid black !important;
+  border-color: black !important;
+}
+
+button:hover, .btn:hover, [role="button"]:hover,
+button[size="lg"]:hover, button[variant="default"]:hover, button[variant="outline"]:hover {
+  background: #333333 !important;
+  background-color: #333333 !important;
+  color: white !important;
+  border: 2px solid #333333 !important;
+  border-color: #333333 !important;
+}
+
+/* Target specific Tailwind classes without escaping */
+.bg-primary {
+  background: black !important;
+  background-color: black !important;
+  color: white !important;
+}
+
+.bg-primary:hover {
+  background: #333333 !important;
+  background-color: #333333 !important;
+  color: white !important;
+}
+
+/* Force all button-like elements to have solid black backgrounds */
+[class*="Button"], [class*="button"], [class*="btn"] {
+  background: black !important;
+  background-color: black !important;
+  color: white !important;
+}
+
+/* Make button text white by default, but keep primary buttons purple */
+button, .btn, [role="button"] {
+  color: white !important;
+}
+
+/* Keep primary/action buttons purple for visibility */
+button[variant="default"], button:not([variant]), .btn-primary {
+  background-color: hsl(var(--primary)) !important;
+  color: white !important;
+}
+
+button[variant="default"]:hover, button:not([variant]):hover, .btn-primary:hover {
+  background-color: hsl(var(--primary) / 0.8) !important;
+  color: white !important;
+}
+
+/* Specifically target Add to Cart buttons */
+button:contains("Add to cart"), button:contains("Add to Cart") {
+  background-color: hsl(var(--primary)) !important;
+  color: white !important;
+}
+
+/* Make sure all card descriptions and feature text is pure white */
+.text-muted-foreground, [class*="muted-foreground"] {
+  color: white !important;
+}
+
+/* Features section specific styling */
+#features .text-sm, #features p, #features [class*="description"] {
+  color: white !important;
+}
+
+/* Card content text should be white */
+[class*="card"] p, [class*="card"] .text-sm, [class*="card"] [class*="description"] {
   color: white !important;
 }

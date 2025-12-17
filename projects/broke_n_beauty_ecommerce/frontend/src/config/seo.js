@@ -125,6 +125,11 @@ export const seoConfig = {
       title: "Contact Broken Beauty - Customer Service & Support",
       description: "Get in touch with Broken Beauty customer service for questions about orders, sizing, returns, or general inquiries. We're here to help!",
       keywords: "contact us, customer service, support, broken beauty help"
+    },
+    dreamWishlist: {
+      title: "Dream Wishlist - Exciting New Products Coming Soon",
+      description: "Check out Broken Beauty's dream collection! See upcoming accessories and gear. Express your interest in headbands, water bottles, hats, and more!",
+      keywords: "dream wishlist, coming soon products, new arrivals, broken beauty accessories, headband, water bottle, wristband, bracelet, hat"
     }
   }
 };

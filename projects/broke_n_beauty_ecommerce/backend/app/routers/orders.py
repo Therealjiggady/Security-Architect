@@ -229,5 +229,105 @@ def update_order_status(
         .options(joinedload(models.Order.items))
         .first()
     )
-    
+
     return updated_order
+
+# Import tracking service and tasks at top of file if not already imported
+from app.services.tracking_service import tracking_service
+from app.tasks.tracking_tasks import update_order_tracking_task
+from datetime import datetime
+from fastapi import Form
+
+@router.post("/{order_id}/tracking")
+def add_tracking_number(
+    order_id: int,
+    tracking_number: str = Form(...),
+    carrier: str = Form(...),
+    email: str = Depends(require_auth),
+    db: Session = Depends(get_db)
+):
+    """Add tracking number to order (admin only or order owner)"""
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    order = db.query(models.Order).filter(models.Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    # Only order owner or admin can add tracking
+    if order.user_id != user.id and user.role != "superuser":
+        raise HTTPException(status_code=403, detail="Unauthorized")
+
+    # Validate carrier
+    valid_carriers = ["UPS", "FEDEX", "USPS"]
+    if carrier.upper() not in valid_carriers:
+        raise HTTPException(status_code=400, detail=f"Carrier must be one of: {valid_carriers}")
+
+    # Create EasyPost tracker
+    tracker_data = tracking_service.create_tracker(tracking_number, carrier)
+    if not tracker_data:
+        raise HTTPException(status_code=500, detail="Failed to create tracker")
+
+    # Update order
+    order.tracking_number = tracking_number
+    order.carrier = carrier.upper()
+    order.easypost_tracker_id = tracker_data["id"]
+    order.tracking_status = tracker_data["status"]
+    order.tracking_last_updated = datetime.utcnow()
+    order.shipped_at = datetime.utcnow()
+    order.status = ModelOrderStatus.SHIPPED
+
+    db.commit()
+    db.refresh(order)
+
+    # Queue background task to poll for updates
+    update_order_tracking_task.delay(order.id)
+
+    return order
+
+@router.get("/{order_id}/tracking")
+def get_tracking_info(
+    order_id: int,
+    email: str = Depends(require_auth),
+    db: Session = Depends(get_db)
+):
+    """Get tracking information for an order"""
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    order = db.query(models.Order).filter(models.Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if order.user_id != user.id and user.role != "superuser":
+        raise HTTPException(status_code=403, detail="Unauthorized")
+
+    if not order.tracking_number:
+        return {"message": "No tracking information available"}
+
+    # Get latest tracking data from EasyPost
+    if order.easypost_tracker_id:
+        tracker_data = tracking_service.retrieve_tracker(order.easypost_tracker_id)
+        if tracker_data:
+            return {
+                "order_id": order.id,
+                "tracking_number": order.tracking_number,
+                "carrier": order.carrier,
+                "status": tracker_data["status"],
+                "est_delivery_date": tracker_data.get("est_delivery_date"),
+                "tracking_url": tracker_data.get("public_url"),
+                "tracking_details": tracker_data.get("tracking_details", []),
+                "last_updated": tracker_data.get("updated_at")
+            }
+
+    # Fallback to database info
+    return {
+        "order_id": order.id,
+        "tracking_number": order.tracking_number,
+        "carrier": order.carrier,
+        "status": order.tracking_status,
+        "tracking_url": tracking_service.get_tracking_url(order.carrier, order.tracking_number),
+        "last_updated": order.tracking_last_updated
+    }

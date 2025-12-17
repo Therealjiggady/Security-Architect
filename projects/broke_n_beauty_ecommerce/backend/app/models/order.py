@@ -33,6 +33,15 @@ class Order(Base):
     total_amount = Column(Numeric(10, 2), nullable=False)
     created_at = Column(DateTime, nullable=False, server_default=func.now())
 
+    # Tracking columns for shipping
+    tracking_number = Column(String(100), nullable=True, index=True)
+    carrier = Column(String(50), nullable=True)  # 'UPS', 'FedEx', 'USPS'
+    easypost_tracker_id = Column(String(100), nullable=True)  # EasyPost tracker ID
+    shipped_at = Column(DateTime, nullable=True)
+    delivered_at = Column(DateTime, nullable=True)
+    tracking_status = Column(String(50), nullable=True)  # 'pre_transit', 'in_transit', 'delivered', etc.
+    tracking_last_updated = Column(DateTime, nullable=True)
+
     # Relationships
     user = relationship("User", backref="orders")
     cart = relationship("Cart", backref="orders")

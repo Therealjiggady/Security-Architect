@@ -1,78 +1,228 @@
-# 🛡️DAE Projects 2025
+# James Johnson's Development Portfolio
 
-Welcome to my **Security Architect** project! This repository brings together everything I’ve learned in **Logic 1**, **Python 1 & 2**, and **Unix 2** through a real-world simulation of a clothing brand's tech stack and support system.
+A comprehensive full-stack development learning repository showcasing my journey from fundamentals to production-ready applications, featuring a complete e-commerce platform and extensive coursework across multiple technologies.
 
-## 📌 Project Summary
+## Overview
 
-This project includes:
-- A SmartFit clothing size recommender GUI (`clover_smartfit_GUI`)
-- An order form system for customer purchases
-- A FAQ pop-up tool for customer tips
-- A support ticket/contact form (CSV-based)
-- User profile/account data stored with file I/O
-- Several backend tools, including list-based filters and recommendation logic
+This repository serves as both a **learning progression tracker** and **portfolio showcase**, containing:
+- 17+ structured learning modules covering full-stack development
+- Production-ready e-commerce platform (Broke N Beauty)
+- Real-world projects with modern tech stacks
+- Comprehensive documentation and study materials
 
----
+## Featured Project: Broke N Beauty E-Commerce Platform
 
-## ✅ Key Course Requirements & Features
+A fully-featured, production-ready SaaS e-commerce platform built with modern web technologies.
 
-### 🔢 Logic 1
+**Live Demo:** [Frontend](https://broke-n-beauty.vercel.app) | [API Docs](https://broke-n-beauty-api.onrender.com/docs)
 
-- **✅ Crafted Algorithm**: Used a 6-step algorithm for clothing size recommendation with `if` conditions.
-- **✅ Flowchart**: Built using standard symbols — Start, Process, Decision, Input/Output, End.
-- **✅ Boolean Logic**: Used BMI logic (height/weight) as a Boolean trigger for size categories.
-- **✅ Conditional Logic**: Integrated `if`, `elif`, `else` for size thresholds and customer filters.
+### Tech Stack
 
-### 🐍 Python 1 & 2
+**Frontend:**
+- React 18 + Vite
+- TailwindCSS + shadcn/ui
+- React Router + Context API
+- TypeScript
 
-- **✅ Descriptive Variables**: Example — `bust_var`, `user_weight`, `size_recommendation`
-- **✅ 3+ Data Types**: `str`, `float`, `list` all used across modules
-- **✅ Decision Structures**: `if-else` used in form validation and size prediction
-- **✅ Repetition**: `while` loop used in retry flows, `for` loop used for FAQ and data iteration
-- **✅ Custom Functions**: `estimate_size_from_height_weight()` and `parse_height()` handle core logic
-- **✅ List Iteration**: Loop over product sizes and FAQs
-- **✅ Code Documentation**: Functions are documented with triple-quote docstrings
-- **✅ Constants**: Defined file paths and unit conversions (e.g., `INCHES_TO_METERS`)
-- **✅ File Operations**: Used CSV for orders, JSON for user profiles, TXT for logs
-- **✅ Exception Handling**: `try-except-else-finally` blocks used in file handling
+**Backend:**
+- FastAPI (Python)
+- SQLAlchemy ORM
+- PostgreSQL / SQLite
+- JWT Authentication
+- WebSocket Support
 
-### 💻 Unix 2
+**Infrastructure:**
+- Render (Backend Hosting)
+- Vercel (Frontend CDN)
+- GitHub Actions (CI/CD)
+- Alembic (Database Migrations)
 
-- **✅ Commands Used**:
-  - `mkdir`, `cp`, `mv`, `rm`, `less` — used in Unix-based development workflow
-- **✅ Arguments & Options**:
-  - Used flags and options with `mv -v`, `rm -r`, etc.
-- **✅ Shell & Kernel Knowledge**:
-  - Verified active shell with `echo $SHELL`, practiced using `zsh` and `bash`
-- **✅ Custom Environment**:
-  - Created an alias for launching Python GUI with `alias smartfit="python3 main.py"`
+### Key Features
 
----
+- **User Authentication** - Secure JWT-based auth with bcrypt password hashing
+- **Product Catalog** - Admin CRUD operations with variants (size, color, stock)
+- **Shopping Cart** - Persistent cart state with React Context
+- **Real-Time Chat** - WebSocket-based messaging system
+- **SmartFit Size Recommender** - AI-powered sizing based on user measurements
+- **Admin Dashboard** - Complete management for products, users, and orders
+- **Payment Integration** - Stripe and PayPal support
+- **Order Tracking** - Full order lifecycle management
 
-## 🧠 How It Works
+[View Full Project Documentation →](./projects/broke_n_beauty_ecommerce/README.md)
 
-1. User launches the GUI application.
-2. They enter body measurements (bust, waist, height/weight).
-3. If height & weight are provided instead of full measurements, BMI logic is used.
-4. Size is calculated using custom logic and displayed.
-5. Order form allows submission of a product request.
-6. User can also:
-   - View FAQs (via messagebox)
-   - Submit help form (stored as CSV)
-   - Store/load profiles and history (via JSON)
+## Repository Structure
 
----
-
-## 📁 Project Structure
-
-```bash
-Security-Architect/
+```
+James-Repo/
+├── projects/
+│   ├── broke_n_beauty_ecommerce/    # Main full-stack e-commerce platform
+│   ├── clover_smartfit_GUI/         # Python GUI for size recommendations
+│   └── number_guessing_game/        # Learning project
 │
-├── clover_smartfit_GUI/          # GUI code for clothing size recommender
-├── order_form.py                 # Order form logic and file saving
-├── support_ticket_form.py        # Contact/help form saves to CSV
-├── faqs_popup.py                 # Displays FAQs in messagebox
-├── user_profiles.json            # Stores past user accounts
-├── README.md                     # You are here!
-[LinkedIn](https://www.linkedin.com/in/james-johnson-63b381367/?profileId=ACoAAFsAZk8B3pLdPd51n0dPIWEbm-1pqNeIGog)
-[Github](https://therealjiggady.github.io/Security-Architect/)
+├── learning/
+│   ├── PLAN.md                      # Study plan and objectives
+│   ├── notes.md                     # Technical notes and best practices
+│   └── tutorial.md                  # WebSocket implementation tutorial
+│
+├── python_1/                        # Python fundamentals and utilities
+├── python_2/                        # Advanced Python concepts
+├── javascript_1/                    # React + Vite + FastAPI integration
+├── javascript_2/                    # React + TailwindCSS projects
+├── expressjs_1/                     # Express.js backend development
+├── nodejs_1/                        # Node.js fundamentals
+├── sql_1/                          # SQL basics and database design
+├── sql_2/                          # Advanced SQL and ORM patterns
+├── logic_1/                        # Algorithms and data structures
+├── design_1/                       # UI/UX design concepts
+├── figma_1/                        # Figma design tool
+├── unix_1/                         # Unix/Linux command line
+├── unix_2/                         # Advanced Unix scripting
+├── cybersecurity_basics_1/         # Security fundamentals
+├── cyber_threats_and_vulnerabilities_1/  # OWASP and threat analysis
+├── version_control_1/              # Git and GitHub workflows
+├── prompt_engineering_1/           # AI prompt engineering
+│
+├── 3 Week/                         # Beginner curriculum materials
+└── 6 Months/                       # Extended learning path
+```
+
+## Learning Path
+
+### Phase 1: Fundamentals (Weeks 1-4)
+- **Programming Basics:** Python, JavaScript fundamentals
+- **Web Basics:** HTML, CSS, basic React
+- **Version Control:** Git and GitHub workflows
+- **Unix/Command Line:** Terminal navigation and scripting
+
+### Phase 2: Backend Development (Weeks 5-12)
+- **Python Web Frameworks:** FastAPI, async patterns
+- **Database Design:** SQL, PostgreSQL, SQLAlchemy ORM
+- **API Development:** RESTful APIs, authentication, WebSockets
+- **Testing:** Unit tests, integration tests, TDD practices
+
+### Phase 3: Frontend Mastery (Weeks 13-20)
+- **Modern React:** Hooks, Context API, component patterns
+- **Styling:** TailwindCSS, responsive design, component libraries
+- **State Management:** Context API, form handling
+- **Real-Time Features:** WebSocket integration
+
+### Phase 4: DevOps & Deployment (Weeks 21-26)
+- **Cloud Hosting:** Render, Vercel deployment
+- **CI/CD:** GitHub Actions automation
+- **Database Migrations:** Alembic workflows
+- **Production Best Practices:** Environment management, logging, monitoring
+
+## Technologies & Skills
+
+### Languages
+- Python
+- JavaScript/TypeScript
+- SQL
+- Bash/Shell Scripting
+
+### Frontend
+- React 18
+- Vite
+- TailwindCSS
+- shadcn/ui
+- React Router
+
+### Backend
+- FastAPI
+- Express.js
+- Node.js
+- SQLAlchemy
+- Pydantic
+
+### Database
+- PostgreSQL
+- SQLite
+- Alembic Migrations
+
+### DevOps & Tools
+- Git/GitHub
+- GitHub Actions
+- Docker
+- Render
+- Vercel
+- VS Code
+
+### Security
+- JWT Authentication
+- bcrypt Password Hashing
+- OWASP Best Practices
+- Threat Analysis
+
+## Quick Start
+
+### Clone the Repository
+```bash
+git clone https://github.com/yourusername/James-Repo.git
+cd James-Repo
+```
+
+### Run the Main E-Commerce Project
+```bash
+# Backend Setup
+cd projects/broke_n_beauty_ecommerce/backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python seed_production.py
+uvicorn app.main:app --reload
+
+# Frontend Setup (in new terminal)
+cd projects/broke_n_beauty_ecommerce/frontend
+npm install
+npm run dev
+```
+
+Visit `http://localhost:5173` to view the application.
+
+[View Detailed Setup Guide →](./projects/broke_n_beauty_ecommerce/README.md)
+
+## Documentation
+
+- **[Learning Plan](./learning/PLAN.md)** - Detailed study objectives and timeline
+- **[Technical Notes](./learning/notes.md)** - Best practices and patterns learned
+- **[WebSocket Tutorial](./learning/tutorial.md)** - Real-time chat implementation guide
+- **[Project Documentation](./projects/broke_n_beauty_ecommerce/README.md)** - Complete e-commerce setup
+- **[Deployment Guide](./projects/broke_n_beauty_ecommerce/DEPLOYMENT.md)** - Production deployment steps
+
+## Projects
+
+### 1. Broke N Beauty E-Commerce Platform
+Full-stack SaaS platform with authentication, real-time chat, payment integration, and admin dashboard.
+
+**Stack:** React, FastAPI, PostgreSQL, WebSockets
+**Status:** Production-ready, deployed on Render + Vercel
+
+### 2. Clover SmartFit GUI
+Python desktop application for clothing size recommendations using BMI calculations.
+
+**Stack:** Python, Tkinter, CSV
+**Status:** Complete
+
+### 3. Number Guessing Game
+Learning project demonstrating Python fundamentals and game logic.
+
+**Stack:** Python
+**Status:** Complete
+
+## Current Focus
+
+Working on enhancing the Broke N Beauty platform with:
+- Advanced product filtering and search
+- Enhanced admin analytics dashboard
+- Performance optimizations
+- Additional payment gateway integrations
+
+## Connect With Me
+
+**LinkedIn:** [James Johnson](https://www.linkedin.com/in/james-johnson-63b381367/?profileId=ACoAAFsAZk8B3pLdPd51n0dPIWEbm-1pqNeIGog)
+**GitHub:** [therealjiggady](https://therealjiggady.github.io/Security-Architect/)
+
+---
+
+**License:** MIT
+**Last Updated:** December 2025

@@ -1,14 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import { useCart } from '../contexts/CartContext';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
   const { user } = useUser();
   const { addToCart } = useCart();
   const [saved, setSaved] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+
+  // Track product view when component mounts
+  useEffect(() => {
+    const trackProductView = async () => {
+      if (user && product.id && user.token) {
+        try {
+          await fetch(`http://localhost:8000/recently-viewed/${product.id}`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${user.token}`
+            }
+          });
+        } catch (error) {
+          // Silently fail - tracking is not critical
+          console.debug('Failed to track product view:', error);
+        }
+      }
+    };
+
+    trackProductView();
+  }, []);
 
   // Organize functions: Create addToWishlist(productId, userId) returning success/fail
   const addToWishlist = async (productId, userId) => {
@@ -61,7 +84,8 @@ const ProductCard = ({ product }) => {
 
   const imageUrl = getImageUrl(product);
 
-  const handleSaveToWishlist = async () => {
+  const handleSaveToWishlist = async (e) => {
+    e.stopPropagation(); // Prevent navigation to detail page
     if (!user) return;
     // Onclick reaction: Trigger wishlist add function
     const success = await addToWishlist(product.id, user.id);
@@ -72,7 +96,8 @@ const ProductCard = ({ product }) => {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // Prevent navigation to detail page
     addToCart(product);
     setAddedToCart(true);
     // Reset the "Added!" text after 2 seconds
@@ -80,8 +105,8 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Card className={`group overflow-hidden rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors ${saved ? 'data-saved="true"' : ''}`} data-saved={saved ? "true" : undefined}>
-      <CardHeader>
+    <Card className={`group overflow-hidden rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer ${saved ? 'data-saved="true"' : ''}`} data-saved={saved ? "true" : undefined}>
+      <CardHeader onClick={() => navigate(`/products/${product.id}`)}>
         <div className="aspect-[4/3] overflow-hidden">
           <img
             src={imageUrl}
@@ -90,7 +115,7 @@ const ProductCard = ({ product }) => {
           />
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent onClick={() => navigate(`/products/${product.id}`)} className="cursor-pointer">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-medium text-lg">{product.name}</h3>
           <span className="text-primary font-semibold">${product.price}</span>

@@ -18,6 +18,9 @@ from app.routers import sizing as sizing_router
 from app.routers import orders as orders_router
 from app.routers import chat as chat_router
 from app.routers import payments as payments_router
+from app.routers import reviews as reviews_router
+from app.routers import recently_viewed as recently_viewed_router
+from app.routers import inventory_alerts as inventory_alerts_router
 
 # Configure logging
 logging.basicConfig(
@@ -47,6 +50,11 @@ app = FastAPI(
 static_dir = Path("static/images")
 static_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/static/images", StaticFiles(directory="static/images"), name="images")
+
+# Mount static files for review images
+review_images_dir = Path(settings.REVIEW_IMAGE_DIR)
+review_images_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/static/review_images", StaticFiles(directory=settings.REVIEW_IMAGE_DIR), name="review_images")
 
 # Add CORS middleware with environment-based configuration
 app.add_middleware(
@@ -110,3 +118,6 @@ app.include_router(sizing_router.router)
 app.include_router(orders_router.router)
 app.include_router(chat_router.router)
 app.include_router(payments_router.router)
+app.include_router(reviews_router.router)
+app.include_router(recently_viewed_router.router)
+app.include_router(inventory_alerts_router.router)

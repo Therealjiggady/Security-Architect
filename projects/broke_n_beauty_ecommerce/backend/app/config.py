@@ -74,7 +74,16 @@ class Settings:
     # External Services
     SENTRY_DSN: Optional[str] = os.getenv("SENTRY_DSN")
     REDIS_URL: Optional[str] = os.getenv("REDIS_URL")
-    
+    EASYPOST_API_KEY: Optional[str] = os.getenv("EASYPOST_API_KEY")
+
+    # Review Settings
+    REVIEW_IMAGE_DIR: str = os.getenv("REVIEW_IMAGE_DIR", "static/review_images")
+    MAX_REVIEW_IMAGES: int = int(os.getenv("MAX_REVIEW_IMAGES", "5"))
+
+    # Recently Viewed Settings
+    RECENTLY_VIEWED_LIMIT: int = int(os.getenv("RECENTLY_VIEWED_LIMIT", "20"))
+    RECENTLY_VIEWED_DISPLAY: int = int(os.getenv("RECENTLY_VIEWED_DISPLAY", "10"))
+
     # Server
     PORT: int = int(os.getenv("PORT", "8000"))
     HOST: str = os.getenv("HOST", "0.0.0.0")

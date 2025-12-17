@@ -86,25 +86,6 @@ export default function WishlistPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-background/60">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-xl bg-primary/20 ring-1 ring-primary/40 grid place-items-center">
-              <span className="text-primary font-bold">BnB</span>
-            </div>
-            <span className="font-semibold tracking-wide">Broke N Beauty</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <a className="hover:text-foreground" href="/">Home</a>
-            <a className="hover:text-foreground" href="/products">Products</a>
-            <a className="hover:text-foreground" href="/cart">Cart</a>
-            <a className="hover:text-primary" href="/wishlist">Wishlist ({wishlistItems.length})</a>
-            <a className="hover:text-foreground" href="/profile">Profile</a>
-          </nav>
-        </div>
-      </header>
-
       {/* Main Content */}
       <main className="mx-auto max-w-6xl px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">My Wishlist</h1>

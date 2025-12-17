@@ -4,7 +4,6 @@ import { useUser } from './contexts/UserContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
-import Navbar from './components/Navbar';
 import { API_URL } from './config';
 
 const API_BASE = API_URL;
@@ -294,8 +293,6 @@ export default function ChatPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
-      
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Card>
           <CardHeader>
